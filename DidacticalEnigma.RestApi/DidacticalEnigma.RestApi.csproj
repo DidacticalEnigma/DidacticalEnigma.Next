@@ -5,15 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DidacticalEnigma.Core" Version="0.9.6" />
+    <PackageReference Include="DidacticalEnigma.Core" Version="0.9.6.3" />
     <PackageReference Include="Gu.Inject" Version="0.1.0-dev" />
-    <PackageReference Include="JDict" Version="0.9.6" />
+    <PackageReference Include="JDict" Version="0.9.6.3" />
     <PackageReference Include="Optional" Version="4.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0" />
     <PackageReference Include="TinyIndex" Version="0.4.0" />
-    <PackageReference Include="Utility" Version="0.9.6" />
+    <PackageReference Include="Utility" Version="0.9.7" />
   </ItemGroup>
 
 

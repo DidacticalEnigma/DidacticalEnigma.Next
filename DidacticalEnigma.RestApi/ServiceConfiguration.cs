@@ -28,7 +28,7 @@ namespace DidacticalEnigma.RestApi
             kernel.BindFactory(() => new Kradfile(Path.Combine(dataDir, "character", "kradfile1_plus_2_utf8"), Encoding.UTF8));
             kernel.BindFactory(() => new Radkfile(Path.Combine(dataDir, "character", "radkfile1_plus_2_utf8"), Encoding.UTF8));
             kernel.BindFactory(() => JMDictLookup.Create(Path.Combine(dataDir, "dictionaries", "JMdict_e.gz"), Path.Combine(dataDir, "dictionaries", "JMdict_e.cache")));
-            kernel.BindFactory(() => Jnedict.Create(Path.Combine(dataDir, "dictionaries", "JMnedict.xml.gz"), Path.Combine(dataDir, "dictionaries", "JMnedict.xml.cache")));
+            kernel.BindFactory(() => JMNedictLookup.Create(Path.Combine(dataDir, "dictionaries", "JMnedict.xml.gz"), Path.Combine(dataDir, "dictionaries", "JMnedict.xml.cache")));
             kernel.BindFactory(() =>
                 new FrequencyList(Path.Combine(dataDir, "other", "word_form_frequency_list.txt"), Encoding.UTF8));
             kernel.BindFactory(() => new Tanaka(Path.Combine(dataDir, "corpora", "examples.utf.gz"), Encoding.UTF8));
@@ -106,7 +106,7 @@ namespace DidacticalEnigma.RestApi
                 new KeyValuePair<string, IDataSource>(null, new CharacterDataSource(get.Get<IKanjiProperties>(), get.Get<IKanaProperties>())),
                 new KeyValuePair<string, IDataSource>(null, new CharacterStrokeOrderDataSource()),
                 new KeyValuePair<string, IDataSource>(null, new JMDictDataSource(get.Get<JMDictLookup>(), get.Get<IKanaProperties>())),
-                new KeyValuePair<string, IDataSource>(null, new JNeDictDataSource(get.Get<Jnedict>())),
+                new KeyValuePair<string, IDataSource>(null, new JNeDictDataSource(get.Get<JMNedictLookup>())),
                 new KeyValuePair<string, IDataSource>(null, new VerbConjugationDataSource(get.Get<JMDictLookup>())),
                 new KeyValuePair<string, IDataSource>(null, new WordFrequencyRatingDataSource(get.Get<FrequencyList>())),
                 new KeyValuePair<string, IDataSource>(null, new PartialExpressionJMDictDataSource(get.Get<IdiomDetector>())),
