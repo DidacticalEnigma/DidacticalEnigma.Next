@@ -20,9 +20,9 @@ namespace DidacticalEnigma.RestApi.InternalServices
             {
                 foreach (var (inner, innerIndex) in outer.Indexed())
                 {
+                    position = fullText.IndexOf(inner.RawWord, position, StringComparison.InvariantCulture);
                     positionInformation.Add(
                         KeyValuePair.Create(position, (outerIndex, innerIndex)));
-                    position += inner.RawWord.Length;
                 }
             }
 
@@ -33,7 +33,14 @@ namespace DidacticalEnigma.RestApi.InternalServices
 
         public IReadOnlyList<IReadOnlyList<Core.Models.LanguageService.WordInfo>> WordInformation { get; }
 
-        public (int wordPosition, int outerIndex, int innerIndex) GetIndicesAtPosition(int position)
+        public ParsedTextCursor GetCursor(int position)
+        {
+            var (wordPosition, outerIndex, innerIndex) = GetIndicesAtPosition(position);
+
+            return new ParsedTextCursor(this, outerIndex, innerIndex, position - wordPosition);
+        }
+        
+        private (int wordPosition, int outerIndex, int innerIndex) GetIndicesAtPosition(int position)
         {
             if(position < 0)
                 throw new ArgumentException(nameof(position));

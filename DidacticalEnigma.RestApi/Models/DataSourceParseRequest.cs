@@ -12,5 +12,7 @@ namespace DidacticalEnigma.RestApi.Models
         public string Id { get; set; }
 
         public int Position { get; set; }
+        
+        public int? PositionEnd { get; set; }
     }
 }

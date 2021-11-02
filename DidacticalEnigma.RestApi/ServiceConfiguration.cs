@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DidacticalEnigma.Core.Models;
 using DidacticalEnigma.Core.Models.DataSources;
+using DidacticalEnigma.Core.Models.HighLevel.KanjiLookupService;
 using DidacticalEnigma.Core.Models.LanguageService;
 using Gu.Inject;
 using JDict;
@@ -90,6 +91,12 @@ namespace DidacticalEnigma.RestApi
                 using (var reader = System.IO.File.OpenText(Path.Combine(dataDir, "character", "radkfile1_plus_2_utf8")))
                     return new KanjiRadicalLookup(Radkfile.Parse(reader), get.Get<KanjiDict>());
             });
+            kernel.Bind<IKanjiLookupService, KanjiLookupService>();
+            kernel.BindFactory(get => new KanjiLookupService(
+                get.Get<KanjiRadicalLookup>(),
+                get.Get<IRadicalSearcher>(),
+                get.Get<IKanjiProperties>(),
+                CreateTextRadicalMappings(get.Get<KanjiRadicalLookup>().AllRadicals, get.Get<RadkfileKanjiAliveCorrelator>())));
             kernel.BindFactory<IJGramLookup>(get => new JGramLookup(
                 Path.Combine(dataDir, "dictionaries", "jgram"),
                 Path.Combine(dataDir, "dictionaries", "jgram_lookup"),

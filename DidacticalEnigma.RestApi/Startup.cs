@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text.Json.Serialization;
 using DidacticalEnigma.Core.Models.DataSources;
+using DidacticalEnigma.Core.Models.Formatting;
+using DidacticalEnigma.Core.Models.HighLevel.KanjiLookupService;
 using DidacticalEnigma.Core.Models.LanguageService;
 using DidacticalEnigma.RestApi.InternalServices;
 using Microsoft.AspNetCore.Builder;
@@ -53,7 +55,8 @@ namespace DidacticalEnigma.RestApi
             services.AddSingleton(_ => kernel.Get<IRadicalSearcher>());
             services.AddSingleton(_ => kernel.Get<IKanjiRadicalLookup>());
             services.AddSingleton(_ => kernel.Get<IAutoGlosser>());
-            services.AddSingleton<RichFormattingRenderer>();
+            services.AddSingleton(_ => kernel.Get<IKanjiLookupService>());
+            services.AddSingleton<XmlRichFormattingRenderer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

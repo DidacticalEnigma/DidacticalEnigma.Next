@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using DidacticalEnigma.Core.Models.DataSources;
+using DidacticalEnigma.Core.Models.Formatting;
 using DidacticalEnigma.Core.Models.LanguageService;
 using DidacticalEnigma.RestApi.InternalServices;
 using DidacticalEnigma.RestApi.Models;
@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Optional.Unsafe;
 using Swashbuckle.AspNetCore.Annotations;
 using Utility.Utils;
+using WordInfo = DidacticalEnigma.Core.Models.LanguageService.WordInfo;
 
 namespace DidacticalEnigma.RestApi.Controllers
 {
@@ -30,7 +31,7 @@ namespace DidacticalEnigma.RestApi.Controllers
         public async Task<ActionResult<Dictionary<string, DataSourceParseResponse>>> RequestInformation(
             [FromBody] DataSourceParseRequest request,
             [FromServices] IStash<ParsedText> stash,
-            [FromServices] RichFormattingRenderer renderer,
+            [FromServices] XmlRichFormattingRenderer renderer,
             [FromServices] DataSourceDispatcher dataSourceDispatcher)
         {
             var parsedTextOpt = stash.Get(request.Id);
@@ -40,7 +41,9 @@ namespace DidacticalEnigma.RestApi.Controllers
             }
 
             var parsedText = parsedTextOpt.ValueOrFailure();
-            var dataSourceRequest = DataSourceRequestFromParsedText(parsedText, request.Position);
+            var dataSourceRequest = request.PositionEnd != null 
+                ? DataSourceRequestFromParsedText(parsedText, request.Position, request.PositionEnd.Value)
+                : DataSourceRequestFromParsedText(parsedText, request.Position);
 
             var requestedDataSources = request.RequestedDataSources.Distinct();
             var result = new Dictionary<string, DataSourceParseResponse>();
@@ -60,28 +63,38 @@ namespace DidacticalEnigma.RestApi.Controllers
             return result;
         }
 
-        private Request DataSourceRequestFromParsedText(ParsedText text, int position)
+        private Request DataSourceRequestFromParsedText(ParsedText text, int position, int positionEnd)
         {
-            var (wordPosition, outerIndex, innerIndex) = text.GetIndicesAtPosition(position);
-            var wordInfo = text.WordInformation[outerIndex][innerIndex];
+            var cursor = text.GetCursor(position);
+            var wordInfo = new WordInfo(text.FullText.SubstringFromTo(position, positionEnd));
 
             return new Request(
-                char.ConvertFromUtf32(wordInfo.RawWord.AsCodePoints().ElementAt(position - wordPosition)),
+                cursor.CurrentCharacter,
                 wordInfo,
                 wordInfo.RawWord,
                 () => text.FullText,
-                SubsequentWords());
+                SubsequentWords(cursor));
+        }
 
-            IEnumerable<string> SubsequentWords()
+        private Request DataSourceRequestFromParsedText(ParsedText text, int position)
+        {
+            var cursor = text.GetCursor(position);
+
+            return new Request(
+                cursor.CurrentCharacter,
+                cursor.CurrentWord,
+                cursor.CurrentWord.RawWord,
+                () => text.FullText,
+                SubsequentWords(cursor));
+        }
+        
+        IEnumerable<string> SubsequentWords(ParsedTextCursor cursor)
+        {
+            cursor = cursor.Clone();
+            do
             {
-                for (int i = outerIndex; i < text.WordInformation.Count; i++)
-                {
-                    for (int j = (i == outerIndex) ? innerIndex : 0; j < text.WordInformation[i].Count; j++)
-                    {
-                        yield return text.WordInformation[i][j].RawWord;
-                    }
-                }
-            }
+                yield return cursor.CurrentWord.RawWord;
+            } while (cursor.MoveNextWord());
         }
     }
 }
