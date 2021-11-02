@@ -10,6 +10,9 @@ namespace DidacticalEnigma.RestApi.Models
     {
         [Required]
         public IEnumerable<IEnumerable<Models.WordInfo>> WordInformation { get; set; }
+        
+        [Required]
+        public IReadOnlyDictionary<string, IReadOnlyList<SimilarLetter>> SimilarLetters { get; set; }
 
         [Required]
         public string Identifier { get; set; }

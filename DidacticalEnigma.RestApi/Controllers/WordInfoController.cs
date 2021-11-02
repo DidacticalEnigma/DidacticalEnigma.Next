@@ -35,7 +35,8 @@ namespace DidacticalEnigma.RestApi.Controllers
         public WordInfoResponse Post(
             [FromQuery] string fullText,
             [FromServices] ISentenceParser parser,
-            [FromServices] IStash<ParsedText> stash)
+            [FromServices] IStash<ParsedText> stash,
+            [FromServices] IRelated related)
         {
             var parsedText = new ParsedText(fullText,
                 parser.BreakIntoSentences(fullText)
@@ -52,7 +53,25 @@ namespace DidacticalEnigma.RestApi.Controllers
                             DictionaryForm = word.DictionaryForm,
                             Reading = word.Reading,
                             Text = word.RawWord
-                        }))
+                        })),
+                SimilarLetters = fullText.AsCodePoints()
+                    .Distinct()
+                    .Select(cp =>
+                    {
+                        var codePoint = CodePoint.FromInt(cp);
+                        return new KeyValuePair<string, IReadOnlyList<SimilarLetter>>(
+                            codePoint.ToString(),
+                            related.FindRelated(codePoint)
+                                .SelectMany(g =>
+                                    g.Select(letter => new SimilarLetter()
+                                    {
+                                        Category = g.Key,
+                                        Description = letter.ToLongString(),
+                                        Letter = letter.ToString()
+                                    }))
+                                .ToList());
+                    })
+                    .ToDictionary()
             };
         }
 

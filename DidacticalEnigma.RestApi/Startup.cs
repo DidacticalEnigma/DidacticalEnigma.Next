@@ -56,6 +56,7 @@ namespace DidacticalEnigma.RestApi
             services.AddSingleton(_ => kernel.Get<IKanjiRadicalLookup>());
             services.AddSingleton(_ => kernel.Get<IAutoGlosser>());
             services.AddSingleton(_ => kernel.Get<IKanjiLookupService>());
+            services.AddSingleton(_ => kernel.Get<IRelated>());
             services.AddSingleton<XmlRichFormattingRenderer>();
         }
 
