@@ -48,8 +48,7 @@ namespace DidacticalEnigma.RestApi
             var config = rawConfig.Get<ServiceConfiguration>();
 
             var kernel = ServiceConfiguration.Configure(config.DataDirectory);
-
-            services.AddSingleton<DataSourceDispatcher>(new DataSourceDispatcher(kernel.Get<IEnumerable<KeyValuePair<string, IDataSource>>>()));
+            
             services.AddSingleton<IStash<ParsedText>>(new Stash<ParsedText>(TimeSpan.FromMinutes(5)));
             services.AddSingleton(_ => kernel.Get<ISentenceParser>());
             services.AddSingleton(_ => kernel.Get<IRadicalSearcher>());
@@ -57,7 +56,8 @@ namespace DidacticalEnigma.RestApi
             services.AddSingleton(_ => kernel.Get<IAutoGlosser>());
             services.AddSingleton(_ => kernel.Get<IKanjiLookupService>());
             services.AddSingleton(_ => kernel.Get<IRelated>());
-            services.AddSingleton<XmlRichFormattingRenderer>();
+            services.AddSingleton(_ => kernel.Get<DataSourceDispatcher>());
+            services.AddSingleton(_ => kernel.Get<XmlRichFormattingRenderer>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
