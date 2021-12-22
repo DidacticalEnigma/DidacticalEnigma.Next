@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DidacticalEnigma.Core.Models.DataSources;
@@ -41,9 +42,7 @@ namespace DidacticalEnigma.RestApi.Controllers
             var result = new List<DataSourceParseResponse>();
             foreach (var position in request.Positions)
             {
-                var dataSourceRequest = position.PositionEnd != null
-                    ? DataSourceRequestFromParsedText(parsedText, position.Position, position.PositionEnd.Value)
-                    : DataSourceRequestFromParsedText(parsedText, position.Position);
+                var dataSourceRequest = DataSourceRequestFromParsedText(parsedText, position.Position, position.PositionEnd);
 
                 var requestedDataSources = request.RequestedDataSources.Distinct();
                 foreach (var identifier in requestedDataSources)
@@ -67,27 +66,19 @@ namespace DidacticalEnigma.RestApi.Controllers
             return result;
         }
 
-        private Request DataSourceRequestFromParsedText(ParsedText text, int position, int positionEnd)
+        private Request DataSourceRequestFromParsedText(ParsedText text, int position, int? positionEnd)
         {
+            position = Math.Clamp(position, 0, text.FullText.Length - 1);
+            positionEnd = positionEnd != null ? Math.Clamp(positionEnd.Value, 0, text.FullText.Length) : null;
             var cursor = text.GetCursor(position);
-            var wordInfo = new WordInfo(text.FullText.SubstringFromTo(position, positionEnd));
+            var wordInfo = positionEnd != null
+                ? new WordInfo(text.FullText.SubstringFromTo(position, positionEnd.Value))
+                : cursor.CurrentWord;
 
             return new Request(
                 cursor.CurrentCharacter,
                 wordInfo,
                 wordInfo.RawWord,
-                () => text.FullText,
-                SubsequentWords(cursor));
-        }
-
-        private Request DataSourceRequestFromParsedText(ParsedText text, int position)
-        {
-            var cursor = text.GetCursor(position);
-
-            return new Request(
-                cursor.CurrentCharacter,
-                cursor.CurrentWord,
-                cursor.CurrentWord.RawWord,
                 () => text.FullText,
                 SubsequentWords(cursor));
         }
