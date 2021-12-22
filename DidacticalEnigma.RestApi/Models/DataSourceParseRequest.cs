@@ -9,10 +9,8 @@ namespace DidacticalEnigma.RestApi.Models
     {
         public IReadOnlyCollection<string> RequestedDataSources { get; set; }
 
-        public string Id { get; set; }
+        public string Text { get; set; }
 
-        public int Position { get; set; }
-        
-        public int? PositionEnd { get; set; }
+        public IReadOnlyCollection<DataSourceParseRequestPosition> Positions { get; set; }
     }
 }

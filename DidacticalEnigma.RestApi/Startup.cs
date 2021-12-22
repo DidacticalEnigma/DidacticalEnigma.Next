@@ -46,7 +46,6 @@ namespace DidacticalEnigma.RestApi
 
             var kernel = ServiceConfiguration.Configure(config.DataDirectory);
             
-            services.AddSingleton<IStash<ParsedText>>(new Stash<ParsedText>(TimeSpan.FromMinutes(5)));
             services.AddSingleton(_ => kernel.Get<ISentenceParser>());
             services.AddSingleton(_ => kernel.Get<IRadicalSearcher>());
             services.AddSingleton(_ => kernel.Get<IKanjiRadicalLookup>());

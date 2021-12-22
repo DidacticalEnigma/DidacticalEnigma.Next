@@ -28,36 +28,40 @@ namespace DidacticalEnigma.RestApi.Controllers
 
         [HttpPost("request")]
         [SwaggerOperation(OperationId = "RequestInformationFromDataSources")]
-        public async Task<ActionResult<Dictionary<string, DataSourceParseResponse>>> RequestInformation(
+        public async Task<ActionResult<IEnumerable<DataSourceParseResponse>>> RequestInformation(
             [FromBody] DataSourceParseRequest request,
-            [FromServices] IStash<ParsedText> stash,
             [FromServices] XmlRichFormattingRenderer renderer,
+            [FromServices] ISentenceParser parser,
             [FromServices] DataSourceDispatcher dataSourceDispatcher)
         {
-            var parsedTextOpt = stash.Get(request.Id);
-            if (!parsedTextOpt.HasValue)
+            var parsedText = new ParsedText(request.Text,
+                parser.BreakIntoSentences(request.Text)
+                    .Select(x => x.ToList())
+                    .ToList());
+            var result = new List<DataSourceParseResponse>();
+            foreach (var position in request.Positions)
             {
-                return this.Conflict();
-            }
+                var dataSourceRequest = position.PositionEnd != null
+                    ? DataSourceRequestFromParsedText(parsedText, position.Position, position.PositionEnd.Value)
+                    : DataSourceRequestFromParsedText(parsedText, position.Position);
 
-            var parsedText = parsedTextOpt.ValueOrFailure();
-            var dataSourceRequest = request.PositionEnd != null 
-                ? DataSourceRequestFromParsedText(parsedText, request.Position, request.PositionEnd.Value)
-                : DataSourceRequestFromParsedText(parsedText, request.Position);
-
-            var requestedDataSources = request.RequestedDataSources.Distinct();
-            var result = new Dictionary<string, DataSourceParseResponse>();
-            foreach (var identifier in requestedDataSources)
-            {
-                var answerOpt = await dataSourceDispatcher.GetAnswer(
-                    identifier,
-                    dataSourceRequest);
-                result[identifier] = new DataSourceParseResponse()
+                var requestedDataSources = request.RequestedDataSources.Distinct();
+                foreach (var identifier in requestedDataSources)
                 {
-                    Context = answerOpt
-                        .Map(a => renderer.Render(a).OuterXml)
-                        .ValueOr(null as string)
-                };
+                    var answerOpt = await dataSourceDispatcher.GetAnswer(
+                        identifier,
+                        dataSourceRequest);
+                    result.Add(new DataSourceParseResponse()
+                    {
+                        Position = position.Position,
+                        PositionEnd = position.PositionEnd,
+                        DataSource = identifier,
+                        Context = answerOpt
+                            .Map(a => renderer.Render(a).OuterXml)
+                            .ValueOr(null as string),
+                        Error = !answerOpt.HasValue ? "nothing found" : null
+                    });
+                }
             }
 
             return result;
