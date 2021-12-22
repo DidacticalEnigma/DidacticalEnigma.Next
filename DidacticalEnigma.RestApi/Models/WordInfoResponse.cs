@@ -13,8 +13,5 @@ namespace DidacticalEnigma.RestApi.Models
         
         [Required]
         public IReadOnlyDictionary<string, IReadOnlyList<SimilarLetter>> SimilarLetters { get; set; }
-
-        [Required]
-        public string Identifier { get; set; }
     }
 }
