@@ -1,0 +1,263 @@
+@font-face {
+	font-family: "IPAexGothic";
+	src: url("./fonts/ipaexg.ttf");
+}
+@font-face {
+	font-family: "IPAexMincho";
+	src: url("./fonts/ipaexm.ttf");
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 300;
+    src: url("./fonts/OpenSans-LightItalic.ttf");
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 400;
+    src: url("./fonts/OpenSans-Italic.ttf");
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 600;
+    src: url("./fonts/OpenSans-SemiBoldItalic.ttf");
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 700;
+    src: url("./fonts/OpenSans-BoldItalic.ttf");
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 800;
+    src: url("./fonts/OpenSans-ExtraBoldItalic.ttf");
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 300;
+    src: url("./fonts/OpenSans-Light.ttf");
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url("./fonts/OpenSans-Regular.ttf");
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: url("./fonts/OpenSans-SemiBold.ttf");
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: url("./fonts/OpenSans-Bold.ttf");
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 800;
+    src: url("./fonts/OpenSans-ExtraBold.ttf");
+}
+@font-face {
+    font-family: 'Kanji Stroke Orders';
+    font-style: normal;
+    font-weight: 300;
+    src: url("./fonts/KanjiStrokeOrders_v4.004.ttf");
+}
+body {
+    font-family: "Segoe UI", "Open Sans", "IPAexGothic";
+    -webkit-font-smoothing: antialiased;
+    width: 99vw;
+    height: 99vh;
+    margin: 0.5vh 0.5vw;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+.kanjifont {
+    font-family: "Kanji Stroke Orders";
+}
+.japanese-input {
+    
+}
+.grid {
+    display: grid;
+    height: 100%;
+}
+.data-sources {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+.data-source-vsplit {
+    display: flex;
+    flex: initial;
+    flex-direction: row;
+    height: 100%;
+    overflow: hidden;
+}
+.data-source-hsplit {
+    display: flex;
+    flex: initial;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+.data-source-viewer {
+    height: 100%;
+    flex: initial;
+    display: flex;
+    flex-direction: column;
+}
+.data-source-viewer-header {
+    flex: initial;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+.data-source-text {
+    overflow-y: scroll;
+}
+.data-source-viewer-header-button {
+    flex: 0 1;
+}
+.data-source-viewer-header-selector {
+    flex: auto;
+    min-width: 0;
+    width: 100%;
+}
+.data-source-split-dragger {
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    flex: initial;
+}
+.data-source-split-dragger-horizontal {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+    cursor: row-resize;
+    min-height: 6px;
+}
+.data-source-split-dragger-vertical {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+    cursor: col-resize;
+    min-width: 6px;
+}
+.radicals {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.radicals .radicals-optionsbar {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+input.radicals-searchbox {
+    margin: 2px 0px 2px 0px;
+    padding: 0.3em;
+}
+.radicals .radicals-bottom {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    overflow: auto;
+}
+.radicals .radicals-optionsbar .left-group {
+    float: left;
+    text-align: left;
+}
+.radicals .radicals-optionsbar .right-group {
+    float: right;
+    text-align: right;
+}
+.radicals .radicals-radicalselector {
+    grid-column: 1;
+    overflow-y: scroll;
+}
+.radicals .radicals-kanjiresults {
+    grid-column: 2;
+    overflow-y: scroll;
+}
+.radicals-radicalselectoroption {
+    width: 3em;
+    height: 3em;
+    font-size: 1.2em;
+    text-align: center;
+}
+.radicals-kanjiresult {
+    width: 3em;
+    height: 3em;
+    font-size: 1.2em;
+    text-align: center;
+}
+.radicals-radicalselected {
+    color: red;
+}
+.tabcontrol {
+    display: flex;
+    flex-direction: column;
+}
+.tabcontrol-header {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+.tabcontrol-tabcontent {
+    flex-grow: 1;
+}
+.tabcontrol-header button {
+    float: left;
+}
+.tabcontrol-header:after {
+    content: "."; 
+    visibility: hidden; 
+    display: block; 
+    height: 0; 
+    clear: both;
+}
+.tabcontrol-tabcontent {
+    display: none;
+}
+.tabcontrol-tabcontent-selected {
+    display: block;
+    height: 100%;
+    overflow: auto;
+}
+.textelement-extrasmall
+{
+	font-size: xx-small;
+}
+.textelement-small
+{
+	font-size: x-small;
+}
+.textelement-medium
+{
+	font-size: small;
+}
+.textelement-normal
+{
+	font-size: medium;
+}
+.textelement-large
+{
+	font-size: large;
+}
+.textelement-extralarge
+{
+	font-size: larger;
+}
+.textelement-humonguous
+{
+	font-size: 96px;
+}
+.textelement-emphasis
+{
+	font-weight: bold;
+}

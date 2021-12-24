@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>10</LangVersion>
+    <OutputType>WinExe</OutputType>
+    <SpaRoot>Client\</SpaRoot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DidacticalEnigma.Core" Version="0.9.7.3" />
+    <PackageReference Include="DidacticalEnigma.IoCModule" Version="0.9.2" />
+    <PackageReference Include="Gu.Inject" Version="0.3.9" />
+    <PackageReference Include="JDict" Version="0.9.7.2" />
+    <PackageReference Include="Optional" Version="4.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="SharpWebview" Version="0.6.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0" />
+    <PackageReference Include="TinyIndex" Version="0.5.0" />
+    <PackageReference Include="Utility" Version="0.9.7" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Content Remove="$(SpaRoot)**" />
+    <None Remove="$(SpaRoot)**" />
+    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <Target Name="NpmInstall" Inputs="Client/package.json" Outputs="Client/node_modules/.install-stamp">
+    <!--
+        Use npm install or npm ci depending on RestorePackagesWithLockFile value.
+        Uncomment the following lines if you want to use this feature:
+
+        <PropertyGroup>
+          <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        </PropertyGroup>
+     -->
+    <Exec Command="npm ci" Condition="$(RestorePackagesWithLockFile) == 'true'" WorkingDirectory="Client/" />
+    <Exec Command="npm install" Condition="$(RestorePackagesWithLockFile) != 'true'" WorkingDirectory="Client/" />
+
+    <!-- Write the stamp file, so incremental builds work -->
+    <Touch Files="Client/node_modules/.install-stamp" AlwaysCreate="true" />
+  </Target>
+
+  <Target Name="NpmRunBuild" DependsOnTargets="NpmInstall" BeforeTargets="BeforeBuild">
+    <Exec Command="npm run build" WorkingDirectory="Client/" />
+  </Target>
+
+  <ItemGroup>
+    <Folder Include="Client" />
+    <Folder Include="Protos" />
+  </ItemGroup>
+
+</Project>
