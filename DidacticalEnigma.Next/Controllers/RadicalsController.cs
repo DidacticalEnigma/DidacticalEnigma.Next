@@ -36,10 +36,10 @@ namespace DidacticalEnigma.Next.Controllers
         [SwaggerOperation(OperationId = "SelectRadicals")]
         public ActionResult<KanjiLookupResult> SelectRadicals(
             [FromServices] IKanjiLookupService lookupService,
-            [FromQuery(Name = "query")] string query,
-            [FromQuery(Name = "sort")] string sort,
-            [FromQuery(Name = "select")] string select = null,
-            [FromQuery(Name = "deselect")] string deselect = null)
+            [FromQuery(Name = "query")] string? query,
+            [FromQuery(Name = "sort")] string? sort,
+            [FromQuery(Name = "select")] string? select = null,
+            [FromQuery(Name = "deselect")] string? deselect = null)
         {
             var selectedRadicalsOpt = lookupService.SelectRadicals(query, sort, @select, deselect);
 
