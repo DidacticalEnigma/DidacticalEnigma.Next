@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -13,34 +14,48 @@ namespace DidacticalEnigma.Next.Auth;
 
 public class AuthenticationSecretHandler : AuthenticationHandler<AuthenticationSecretConfig>
 {
-    [NotNull] private readonly SecretProvider secretProvider;
+    [NotNull] private readonly LaunchConfiguration launchConfiguration;
 
     public AuthenticationSecretHandler(
         IOptionsMonitor<AuthenticationSecretConfig> options,
         ILoggerFactory logger,
         UrlEncoder encoder,
         ISystemClock clock,
-        SecretProvider secretProvider)
+        LaunchConfiguration launchConfiguration)
         : base(options, logger, encoder, clock)
     {
-        this.secretProvider = secretProvider;
+        this.launchConfiguration = launchConfiguration;
     }
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         var content = Request.Cookies["secret"] ?? Request.Query["secret"];
-        if (secretProvider.UnsafeDebugMode ||
-            CryptographicOperations.FixedTimeEquals(
-                MemoryMarshal.AsBytes(content.AsSpan()),
-                MemoryMarshal.AsBytes(secretProvider.Secret.AsSpan())))
+        bool hasMatchingSecret = CryptographicOperations.FixedTimeEquals(
+            MemoryMarshal.AsBytes(content.AsSpan()),
+            MemoryMarshal.AsBytes(launchConfiguration.Secret.AsSpan()));
+        
+        if (launchConfiguration.UnsafeDebugMode ||
+            launchConfiguration.PublicMode ||
+            hasMatchingSecret)
         {
-            var claims = new[] { new Claim(ClaimTypes.Name, "user") };
+            var claims = new List<Claim>()
+            {
+                
+            };
+            if (hasMatchingSecret || launchConfiguration.UnsafeDebugMode)
+            {
+                claims.Add(new Claim(ClaimTypes.Name, "user"));
+            }
+            else
+            {
+                claims.Add(new Claim(ClaimTypes.Anonymous, "true"));
+            }
             var identity = new ClaimsIdentity(claims, Scheme.Name);
             var principal = new ClaimsPrincipal(identity);
             var ticket = new AuthenticationTicket(principal, Scheme.Name);
-            if (!Options.AnonymousMode)
+            if (!launchConfiguration.PublicMode)
             {
-                Response.Cookies.Append("secret", secretProvider.Secret);
+                Response.Cookies.Append("secret", launchConfiguration.Secret);
             }
 
             return AuthenticateResult.Success(ticket);

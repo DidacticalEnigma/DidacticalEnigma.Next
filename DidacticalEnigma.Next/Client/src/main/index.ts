@@ -5,6 +5,7 @@ import { radicalControlAttachJs } from "./radicalControl";
 import { dataSourceGridAttachJs, dataSourceGridLookup } from "./dataSourceGrid";
 import { japaneseInputAttachJs } from "./japaneseInput";
 import {WordInfoLookup} from "./wordInfoLookup";
+import {projectWindowAttachJs} from "./projectWindow";
 
 window.addEventListener('load', async () => {
   const radicalLookup = new RadicalLookup();
@@ -12,9 +13,12 @@ window.addEventListener('load', async () => {
   const wordInfoLookup = new WordInfoLookup();
 
   tabControlAttachJs();
-  await radicalControlAttachJs(radicalLookup);
-  await dataSourceGridAttachJs(dataSourceLookup);
-  japaneseInputAttachJs(wordInfoLookup, async (text, position, _) => {
+  projectWindowAttachJs();
+  const task1 = radicalControlAttachJs(radicalLookup);
+  const task2 = dataSourceGridAttachJs(dataSourceLookup);
+  await task1;
+  await task2;
+  await japaneseInputAttachJs(wordInfoLookup, async (text, position, _) => {
     const dataSources = document.querySelector(".tabcontrol-tabcontent-selected .data-sources");
     if(dataSources) {
       await dataSourceGridLookup(dataSources, dataSourceLookup, text, position);

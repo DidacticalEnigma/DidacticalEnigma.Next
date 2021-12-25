@@ -1,12 +1,15 @@
 ﻿using System.Net;
 using DidacticalEnigma.Core.Models.HighLevel;
 using DidacticalEnigma.Core.Models.HighLevel.KanjiLookupService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace DidacticalEnigma.Next.Controllers
 {
+    [ApiController]
     [Route("radicals")]
+    [Authorize("AllowAnonymous")]
     public class RadicalsController : Controller
     {
         [HttpGet("list")]

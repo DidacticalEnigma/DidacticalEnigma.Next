@@ -1,4 +1,5 @@
 using System;
+using System.Security.Claims;
 using System.Text.Json.Serialization;
 using DidacticalEnigma.Core.Models.DataSources;
 using DidacticalEnigma.Core.Models.Formatting;
@@ -28,6 +29,9 @@ namespace DidacticalEnigma.Next
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var rawLaunchConfiguration = Configuration.GetSection(LaunchConfiguration.SectionName);
+            var launchConfiguration = rawLaunchConfiguration.Get<LaunchConfiguration>();
+            
             services.AddAuthentication(AuthenticationSecretConfig.Scheme)
                 .AddScheme<AuthenticationSecretConfig, AuthenticationSecretHandler>(
                     AuthenticationSecretConfig.Scheme,
@@ -35,12 +39,24 @@ namespace DidacticalEnigma.Next
 
             services.AddAuthorization(options =>
             {
-                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                var rejectAnonymousPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .RequireClaim(ClaimTypes.Name)
+                    .Build();
+                
+                var allowAnonymousPolicy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
                     .Build();
-                options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
+                
+                options.AddPolicy("AllowAnonymous", allowAnonymousPolicy);
+                options.AddPolicy("RejectAnonymous", rejectAnonymousPolicy);
+
+                var defaultPolicy = launchConfiguration.PublicMode
+                    ? allowAnonymousPolicy
+                    : rejectAnonymousPolicy;
+                
+                options.DefaultPolicy = defaultPolicy;
+                options.FallbackPolicy = defaultPolicy;
             });
             
             services
@@ -81,13 +97,17 @@ namespace DidacticalEnigma.Next
                 () =>
                 {
                     var addressesFeature = app.ServerFeatures.Get<IServerAddressesFeature>() ?? throw new InvalidOperationException();
-                    var secretProvider = app.ApplicationServices.GetRequiredService<SecretProvider>() ?? throw new InvalidOperationException();
+                    var secretProvider = app.ApplicationServices.GetRequiredService<LaunchConfiguration>() ?? throw new InvalidOperationException();
                     foreach(var address in addressesFeature.Addresses)
                     {
                         var uri = new Uri(address);
                         if (uri.IsLoopback)
                         {
-                            secretProvider.Port = uri.Port;
+                            secretProvider.LocalAddress = uri;
+                        }
+                        else
+                        {
+                            secretProvider.UnsafeDebugMode = false;
                         }
                     }
                 });

@@ -7,6 +7,7 @@ using DidacticalEnigma.Core.Models.Formatting;
 using DidacticalEnigma.Core.Models.LanguageService;
 using DidacticalEnigma.Next.InternalServices;
 using DidacticalEnigma.Next.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Utility.Utils;
@@ -16,6 +17,7 @@ namespace DidacticalEnigma.Next.Controllers
 {
     [ApiController]
     [Route("dataSource")]
+    [Authorize("AllowAnonymous")]
     public class DataSourceController : ControllerBase
     {
         [HttpGet("list")]

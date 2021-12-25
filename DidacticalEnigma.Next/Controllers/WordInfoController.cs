@@ -4,6 +4,7 @@ using System.Linq;
 using DidacticalEnigma.Core.Models.LanguageService;
 using DidacticalEnigma.Next.InternalServices;
 using DidacticalEnigma.Next.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Utility.Utils;
@@ -12,6 +13,7 @@ namespace DidacticalEnigma.Next.Controllers
 {
     [ApiController]
     [Route("wordInfo")]
+    [Authorize("AllowAnonymous")]
     public class WordInfoController : ControllerBase
     {
         [HttpGet]
