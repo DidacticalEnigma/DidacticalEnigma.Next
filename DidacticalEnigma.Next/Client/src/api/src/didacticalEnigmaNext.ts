@@ -14,6 +14,9 @@ import {
   ListRadicalsResponse,
   SelectRadicalsOptionalParams,
   SelectRadicalsResponse,
+  LoadSessionOptionalParams,
+  LoadSessionResponse,
+  SaveSessionOptionalParams,
   GetWordInformationOptionalParams,
   GetWordInformationResponse
 } from "./models";
@@ -67,6 +70,18 @@ export class DidacticalEnigmaNext extends DidacticalEnigmaNextContext {
     options?: SelectRadicalsOptionalParams
   ): Promise<SelectRadicalsResponse> {
     return this.sendOperationRequest({ options }, selectRadicalsOperationSpec);
+  }
+
+  /** @param options The options parameters. */
+  loadSession(
+    options?: LoadSessionOptionalParams
+  ): Promise<LoadSessionResponse> {
+    return this.sendOperationRequest({ options }, loadSessionOperationSpec);
+  }
+
+  /** @param options The options parameters. */
+  saveSession(options?: SaveSessionOptionalParams): Promise<void> {
+    return this.sendOperationRequest({ options }, saveSessionOperationSpec);
   }
 
   /** @param options The options parameters. */
@@ -163,6 +178,28 @@ const selectRadicalsOperationSpec: coreClient.OperationSpec = {
   ],
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.accept],
+  serializer
+};
+const loadSessionOperationSpec: coreClient.OperationSpec = {
+  path: "/session",
+  httpMethod: "GET",
+  responses: {
+    200: {
+      bodyMapper: Mappers.ProgramConfigurationGetResult
+    }
+  },
+  urlParameters: [Parameters.$host],
+  headerParameters: [Parameters.accept],
+  serializer
+};
+const saveSessionOperationSpec: coreClient.OperationSpec = {
+  path: "/session",
+  httpMethod: "POST",
+  responses: { 200: {} },
+  requestBody: Parameters.body1,
+  urlParameters: [Parameters.$host],
+  headerParameters: [Parameters.contentType],
+  mediaType: "json",
   serializer
 };
 const getWordInformationOperationSpec: coreClient.OperationSpec = {

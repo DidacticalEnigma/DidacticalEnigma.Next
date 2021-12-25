@@ -321,6 +321,27 @@ export const RadicalState: coreClient.CompositeMapper = {
   }
 };
 
+export const ProgramConfigurationGetResult: coreClient.CompositeMapper = {
+  type: {
+    name: "Composite",
+    className: "ProgramConfigurationGetResult",
+    modelProperties: {
+      aboutSection: {
+        serializedName: "aboutSection",
+        type: {
+          name: "String"
+        }
+      },
+      version: {
+        serializedName: "version",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
 export const WordInfoResponse: coreClient.CompositeMapper = {
   type: {
     name: "Composite",

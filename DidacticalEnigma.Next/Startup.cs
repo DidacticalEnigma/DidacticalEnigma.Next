@@ -88,6 +88,7 @@ namespace DidacticalEnigma.Next
             services.AddSingleton(_ => kernel.Get<IRelated>());
             services.AddSingleton(_ => kernel.Get<DataSourceDispatcher>());
             services.AddSingleton(_ => kernel.Get<XmlRichFormattingRenderer>());
+            services.AddSingleton(_ => kernel.Get<DisclaimersGetter>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -6,12 +6,17 @@ import { dataSourceGridAttachJs, dataSourceGridLookup } from "./dataSourceGrid";
 import { japaneseInputAttachJs } from "./japaneseInput";
 import {WordInfoLookup} from "./wordInfoLookup";
 import {projectWindowAttachJs} from "./projectWindow";
+import {api} from "./api";
+import {aboutSectionAttachJs} from "./aboutSection";
 
 window.addEventListener('load', async () => {
   const radicalLookup = new RadicalLookup();
   const dataSourceLookup = new DataSourceLookup();
   const wordInfoLookup = new WordInfoLookup();
+  
+  const sessionConfig = await api.loadSession();
 
+  aboutSectionAttachJs(sessionConfig);
   tabControlAttachJs();
   projectWindowAttachJs();
   const task1 = radicalControlAttachJs(radicalLookup);

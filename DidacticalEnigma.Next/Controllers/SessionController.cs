@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
+using DidacticalEnigma.Core.Models.LanguageService;
 using DidacticalEnigma.Next.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,13 @@ public class SessionController : ControllerBase
     [Authorize("AllowAnonymous")]
     [HttpGet]
     [SwaggerOperation(OperationId = "LoadSession")]
-    public async Task<ActionResult<ProgramConfiguration>> LoadSession()
+    public async Task<ActionResult<ProgramConfigurationGetResult>> LoadSession(
+        [FromServices] DisclaimersGetter disclaimersGetter)
     {
-        var defaultConfig = new ProgramConfiguration()
+        var defaultConfig = new ProgramConfigurationGetResult()
         {
-
+            AboutSection = disclaimersGetter.GetDisclaimers(),
+            Version = disclaimersGetter.GetVersion()
         };
         if (HttpContext.User.HasClaim(claim => claim.Type == ClaimTypes.Anonymous))
         {
@@ -32,7 +35,7 @@ public class SessionController : ControllerBase
     [Authorize("RejectAnonymous")]
     [HttpPost]
     [SwaggerOperation(OperationId = "SaveSession")]
-    public async Task<ActionResult> SaveSession(ProgramConfiguration configuration)
+    public async Task<ActionResult> SaveSession(ProgramConfigurationSetRequest configuration)
     {
         return Ok();
     }

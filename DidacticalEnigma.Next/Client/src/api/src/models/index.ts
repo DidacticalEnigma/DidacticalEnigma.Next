@@ -57,6 +57,11 @@ export interface RadicalState {
   isSelected: boolean;
 }
 
+export interface ProgramConfigurationGetResult {
+  aboutSection?: string;
+  version?: string;
+}
+
 export interface WordInfoResponse {
   wordInformation: WordInfo[][];
   /** Dictionary of <components·14obqe6·schemas·wordinforesponse·properties·similarletters·additionalproperties> */
@@ -141,6 +146,19 @@ export interface SelectRadicalsOptionalParams
 
 /** Contains response data for the selectRadicals operation. */
 export type SelectRadicalsResponse = KanjiLookupResult;
+
+/** Optional parameters. */
+export interface LoadSessionOptionalParams
+  extends coreClient.OperationOptions {}
+
+/** Contains response data for the loadSession operation. */
+export type LoadSessionResponse = ProgramConfigurationGetResult;
+
+/** Optional parameters. */
+export interface SaveSessionOptionalParams extends coreClient.OperationOptions {
+  /** Any object */
+  body?: Record<string, unknown>;
+}
 
 /** Optional parameters. */
 export interface GetWordInformationOptionalParams

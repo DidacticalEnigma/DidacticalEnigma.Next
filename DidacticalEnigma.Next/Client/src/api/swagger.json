@@ -159,6 +159,52 @@
         }
       }
     },
+    "/session": {
+      "get": {
+        "tags": [
+          "Session"
+        ],
+        "operationId": "LoadSession",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ProgramConfigurationGetResult"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Session"
+        ],
+        "operationId": "SaveSession",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/ProgramConfigurationSetRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/wordInfo": {
       "get": {
         "tags": [
@@ -236,22 +282,6 @@
         }
       }
     },
-    "DataSourceParseRequestPosition": {
-      "required": [
-        "position"
-      ],
-      "type": "object",
-      "properties": {
-        "position": {
-          "format": "int32",
-          "type": "integer"
-        },
-        "positionEnd": {
-          "format": "int32",
-          "type": "integer"
-        }
-      }
-    },
     "DataSourceParseRequest": {
       "type": "object",
       "properties": {
@@ -269,6 +299,22 @@
           "items": {
             "$ref": "#/definitions/DataSourceParseRequestPosition"
           }
+        }
+      }
+    },
+    "DataSourceParseRequestPosition": {
+      "required": [
+        "position"
+      ],
+      "type": "object",
+      "properties": {
+        "position": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "positionEnd": {
+          "format": "int32",
+          "type": "integer"
         }
       }
     },
@@ -318,6 +364,31 @@
         }
       }
     },
+    "KanjiLookupResult": {
+      "required": [
+        "kanji",
+        "newQuery",
+        "radicals"
+      ],
+      "type": "object",
+      "properties": {
+        "newQuery": {
+          "type": "string"
+        },
+        "kanji": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "radicals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RadicalState"
+          }
+        }
+      }
+    },
     "ListRadicalsResult": {
       "required": [
         "possibleRadicals",
@@ -346,6 +417,20 @@
         }
       }
     },
+    "ProgramConfigurationGetResult": {
+      "type": "object",
+      "properties": {
+        "aboutSection": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "ProgramConfigurationSetRequest": {
+      "type": "object"
+    },
     "RadicalState": {
       "required": [
         "isAvailable",
@@ -365,28 +450,22 @@
         }
       }
     },
-    "KanjiLookupResult": {
+    "SimilarLetter": {
       "required": [
-        "kanji",
-        "newQuery",
-        "radicals"
+        "category",
+        "description",
+        "letter"
       ],
       "type": "object",
       "properties": {
-        "newQuery": {
+        "letter": {
           "type": "string"
         },
-        "kanji": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "description": {
+          "type": "string"
         },
-        "radicals": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/RadicalState"
-          }
+        "category": {
+          "type": "string"
         }
       }
     },
@@ -416,25 +495,6 @@
             "Particle",
             "Pronoun"
           ],
-          "type": "string"
-        }
-      }
-    },
-    "SimilarLetter": {
-      "required": [
-        "category",
-        "description",
-        "letter"
-      ],
-      "type": "object",
-      "properties": {
-        "letter": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "category": {
           "type": "string"
         }
       }

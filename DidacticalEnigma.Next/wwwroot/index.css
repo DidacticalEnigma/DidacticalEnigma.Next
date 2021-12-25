@@ -184,6 +184,9 @@ button[disabled] {
     height: 100%;
     overflow: hidden;
 }
+.about-section {
+    white-space: pre-line;
+}
 .data-source-viewer {
     height: 100%;
     flex: initial;

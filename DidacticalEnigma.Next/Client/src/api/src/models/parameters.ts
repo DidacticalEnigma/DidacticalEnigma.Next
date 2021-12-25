@@ -96,6 +96,17 @@ export const deselect: OperationQueryParameter = {
   }
 };
 
+export const body1: OperationParameter = {
+  parameterPath: ["options", "body"],
+  mapper: {
+    serializedName: "body",
+    type: {
+      name: "Dictionary",
+      value: { type: { name: "any" } }
+    }
+  }
+};
+
 export const fullText: OperationQueryParameter = {
   parameterPath: ["options", "fullText"],
   mapper: {
