@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using DidacticalEnigma.Next.Auth;
+using DidacticalEnigma.Next.InternalServices;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,10 +31,19 @@ namespace DidacticalEnigma.Next
                 services.AddSingleton(launchConfiguration);
             });
 
-            var task = hostBuilder.Build().RunAsync(cancellationTokenSource.Token);
+            var webHost = hostBuilder.Build();
+            
+            var startupTasks = webHost.Services.GetServices<IStartupTask>();
+            var tasks = new List<Task>();
+            tasks.Add(webHost.RunAsync(cancellationTokenSource.Token));
+
             if (launchConfiguration?.HeadlessMode == true)
             {
-                await task;
+                foreach (var startupTask in startupTasks)
+                {
+                    tasks.Add(startupTask.ExecuteAsync(cancellationTokenSource.Token));
+                }
+                await Task.WhenAll(tasks);
             }
             else
             {
@@ -58,7 +69,7 @@ namespace DidacticalEnigma.Next
                 }
 
                 cancellationTokenSource.Cancel();
-                await task;
+                await Task.WhenAll(tasks);
             }
         }
 

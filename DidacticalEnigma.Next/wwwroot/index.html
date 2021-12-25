@@ -10,7 +10,22 @@
 
 <body>
   <div class="grid" style="grid-template-rows: 22% 78%;">
-    <div class="japanese-input"></div>
+    <div class="tabcontrol">
+      <div class="tabcontrol-header">
+        <div class="tabcontrol-tab tabcontrol-tab-selected" data-tabname="Scratchpad"></div>
+        <div class="tabcontrol-tab " data-tabname="Main"></div>
+        <div class="tabcontrol-tab" data-tabname="Clipboard"></div>
+      </div>
+      <div class="tabcontrol-tabcontent tabcontrol-tabcontent-selected">
+        <div class="japanese-input"></div>
+      </div>
+      <div class="tabcontrol-tabcontent">
+        <div class="japanese-input"></div>
+      </div>
+      <div class="tabcontrol-tabcontent">
+        <div class="japanese-input"></div>
+      </div>
+    </div>
     <div class="tabcontrol" style="grid-row: 2">
       <div class="tabcontrol-header">
         <div class="tabcontrol-tab" data-tabname="Project"></div>

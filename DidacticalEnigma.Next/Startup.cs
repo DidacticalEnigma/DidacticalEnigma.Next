@@ -6,12 +6,15 @@ using DidacticalEnigma.Core.Models.Formatting;
 using DidacticalEnigma.Core.Models.HighLevel.KanjiLookupService;
 using DidacticalEnigma.Core.Models.LanguageService;
 using DidacticalEnigma.Next.Auth;
+using DidacticalEnigma.Next.Extensions;
+using DidacticalEnigma.Next.InternalServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
@@ -82,13 +85,16 @@ namespace DidacticalEnigma.Next
             
             services.AddSingleton(_ => kernel.Get<ISentenceParser>());
             services.AddSingleton(_ => kernel.Get<IRadicalSearcher>());
-            services.AddSingleton(_ => kernel.Get<IKanjiRadicalLookup>());
             services.AddSingleton(_ => kernel.Get<IAutoGlosser>());
             services.AddSingleton(_ => kernel.Get<IKanjiLookupService>());
             services.AddSingleton(_ => kernel.Get<IRelated>());
             services.AddSingleton(_ => kernel.Get<DataSourceDispatcher>());
             services.AddSingleton(_ => kernel.Get<XmlRichFormattingRenderer>());
             services.AddSingleton(_ => kernel.Get<DisclaimersGetter>());
+            
+            services
+                .AddStartupTask<WarmupServicesStartupTask>()
+                .TryAddSingleton(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
