@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DidacticalEnigma.Core.Models.LanguageService;
 using DidacticalEnigma.Next.InternalServices;
@@ -32,7 +33,8 @@ namespace DidacticalEnigma.Next.Controllers
                         {
                             DictionaryForm = word.DictionaryForm,
                             Reading = word.Reading,
-                            Text = word.RawWord
+                            Text = word.RawWord,
+                            Type = Map(word.EstimatedPartOfSpeech)
                         })),
                 SimilarLetters = fullText.AsCodePoints()
                     .Distinct()
@@ -53,6 +55,21 @@ namespace DidacticalEnigma.Next.Controllers
                     })
                     .ToDictionary()
             };
+        }
+
+        private WordType Map(PartOfSpeech estimatedPartOfSpeech)
+        {
+            switch (estimatedPartOfSpeech)
+            {
+                case PartOfSpeech.Noun:
+                    return WordType.Noun;
+                case PartOfSpeech.Particle:
+                    return WordType.Particle;
+                case PartOfSpeech.Verb:
+                    return WordType.Verb;
+                default:
+                    return WordType.Other;
+            }
         }
     }
 }

@@ -1,3 +1,3 @@
 export * from "./models";
-export { DidacticalEnigmaRestApi } from "./didacticalEnigmaRestApi";
-export { DidacticalEnigmaRestApiContext } from "./didacticalEnigmaRestApiContext";
+export { DidacticalEnigmaNext } from "./didacticalEnigmaNext";
+export { DidacticalEnigmaNextContext } from "./didacticalEnigmaNextContext";

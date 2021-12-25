@@ -54,6 +54,7 @@ namespace DidacticalEnigma.Next
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "DidacticalEnigma.Next", Version = "v1"});
                 c.EnableAnnotations();
+                c.UseInlineDefinitionsForEnums();
             });
 
             var rawConfig = Configuration.GetSection(ServiceConfiguration.ConfigurationName);

@@ -1,8 +1,8 @@
 {
-  "name": "didacticalEnigmaRestApi",
+  "name": "didacticalEnigmaNext",
   "sdk-type": "mgmt",
   "author": "Microsoft Corporation",
-  "description": "A generated SDK for DidacticalEnigmaRestApi.",
+  "description": "A generated SDK for DidacticalEnigmaNext.",
   "version": "1.0.0-beta.1",
   "engines": { "node": ">=12.0.0" },
   "dependencies": {
@@ -14,7 +14,7 @@
   "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist-esm/index.js",
-  "types": "./types/didacticalEnigmaRestApi.d.ts",
+  "types": "./types/didacticalEnigmaNext.d.ts",
   "devDependencies": {
     "@microsoft/api-extractor": "^7.18.11",
     "@rollup/plugin-commonjs": "11.0.2",

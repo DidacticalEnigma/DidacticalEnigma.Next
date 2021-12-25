@@ -19,6 +19,7 @@ namespace DidacticalEnigma.Next
             using var cancellationTokenSource = new CancellationTokenSource();
             var secretProvider = new SecretProvider();
             secretProvider.UnsafeDebugMode = true;
+            secretProvider.LaunchWebView = true;
             secretProvider.Port = 7000;
             var hostBuilder = CreateHostBuilder(new [] {"--urls", $"http://127.0.0.1:{secretProvider.Port}"});
             hostBuilder.ConfigureServices(services =>
@@ -27,7 +28,7 @@ namespace DidacticalEnigma.Next
             });
 
             var task = hostBuilder.Build().RunAsync(cancellationTokenSource.Token);
-            if (secretProvider.UnsafeDebugMode)
+            if (!secretProvider.LaunchWebView)
             {
                 await task;
             }
@@ -36,7 +37,7 @@ namespace DidacticalEnigma.Next
                 using(var webview = new Webview())
                 {
                     webview
-                        .SetTitle("DidacticalEnigma.Next")             
+                        .SetTitle("DidacticalEnigma.Next")
                         .SetSize(1024, 768, WebviewHint.None)
                         .SetSize(800, 600, WebviewHint.Min)
                         .Navigate(new UrlContent($"http://127.0.0.1:{secretProvider.Port}?secret={HttpUtility.UrlEncode(secretProvider.Secret)}"))

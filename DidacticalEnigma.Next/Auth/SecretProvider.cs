@@ -15,6 +15,8 @@ public class SecretProvider
     
     public bool UnsafeDebugMode { get; set; }
     
+    public bool LaunchWebView { get; set; }
+    
     public string Secret { get; }
     
     public int Port { get; set; }

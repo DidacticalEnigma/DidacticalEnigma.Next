@@ -1,15 +1,15 @@
 import * as coreClient from "@azure/core-client";
-import { DidacticalEnigmaRestApiOptionalParams } from "./models";
+import { DidacticalEnigmaNextOptionalParams } from "./models";
 
-export class DidacticalEnigmaRestApiContext extends coreClient.ServiceClient {
+export class DidacticalEnigmaNextContext extends coreClient.ServiceClient {
   $host: string;
 
   /**
-   * Initializes a new instance of the DidacticalEnigmaRestApiContext class.
+   * Initializes a new instance of the DidacticalEnigmaNextContext class.
    * @param $host server parameter
    * @param options The parameter options
    */
-  constructor($host: string, options?: DidacticalEnigmaRestApiOptionalParams) {
+  constructor($host: string, options?: DidacticalEnigmaNextOptionalParams) {
     if ($host === undefined) {
       throw new Error("'$host' cannot be null");
     }
@@ -18,11 +18,11 @@ export class DidacticalEnigmaRestApiContext extends coreClient.ServiceClient {
     if (!options) {
       options = {};
     }
-    const defaults: DidacticalEnigmaRestApiOptionalParams = {
+    const defaults: DidacticalEnigmaNextOptionalParams = {
       requestContentType: "application/json; charset=utf-8"
     };
 
-    const packageDetails = `azsdk-js-didacticalEnigmaRestApi/1.0.0-beta.1`;
+    const packageDetails = `azsdk-js-didacticalEnigmaNext/1.0.0-beta.1`;
     const userAgentPrefix =
       options.userAgentOptions && options.userAgentOptions.userAgentPrefix
         ? `${options.userAgentOptions.userAgentPrefix} ${packageDetails}`

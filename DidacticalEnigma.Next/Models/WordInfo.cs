@@ -1,16 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DidacticalEnigma.Next.Models
+namespace DidacticalEnigma.Next.Models;
+
+public class WordInfo
 {
-    public class WordInfo
-    {
-        [Required]
-        public string Text { get; set; }
+    [Required]
+    public string Text { get; set; }
 
-        [Required]
-        public string DictionaryForm { get; set; }
+    [Required]
+    public string DictionaryForm { get; set; }
 
-        [Required]
-        public string Reading { get; set; }
-    }
+    [Required]
+    public string Reading { get; set; }
+        
+    [Required]
+    public WordType Type { get; set; }
 }

@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "DidacticalEnigma.RestApi",
+    "title": "DidacticalEnigma.Next",
     "version": "v1"
   },
   "paths": {
@@ -394,7 +394,8 @@
       "required": [
         "dictionaryForm",
         "reading",
-        "text"
+        "text",
+        "type"
       ],
       "type": "object",
       "properties": {
@@ -405,6 +406,16 @@
           "type": "string"
         },
         "reading": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "Other",
+            "Noun",
+            "Verb",
+            "Particle",
+            "Pronoun"
+          ],
           "type": "string"
         }
       }

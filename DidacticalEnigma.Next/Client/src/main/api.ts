@@ -1,8 +1,8 @@
-import { DidacticalEnigmaRestApi } from "../api/src/didacticalEnigmaRestApi";
+import { DidacticalEnigmaNext } from "../api/src/didacticalEnigmaNext";
 
 const url = new URL(window.location.href);
 
-export const api : DidacticalEnigmaRestApi = new DidacticalEnigmaRestApi(
+export const api : DidacticalEnigmaNext = new DidacticalEnigmaNext(
     url.origin,{
         allowInsecureConnection: true
     });

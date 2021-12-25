@@ -72,6 +72,11 @@
     font-weight: 300;
     src: url("./fonts/KanjiStrokeOrders_v4.004.ttf");
 }
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 body {
     font-family: "Segoe UI", "Open Sans", "IPAexGothic";
     -webkit-font-smoothing: antialiased;
@@ -80,12 +85,80 @@ body {
     margin: 0.5vh 0.5vw;
     overflow-x: hidden;
     overflow-y: hidden;
+    background-color: #333;
+    color: #fff;
+}
+.verb-highlight {
+    color: lightpink;
+}
+.noun-highlight {
+    color: lightblue;
+}
+.particle-highlight {
+    color: deepskyblue;
 }
 .kanjifont {
     font-family: "Kanji Stroke Orders";
 }
 .japanese-input {
-    
+    font-size: 24px;
+}
+input {
+    background-color: #333;
+    color: #fff;
+}
+:root {
+    --select-border: #777;
+    --select-focus: blue;
+    --select-arrow: var(--select-border);
+}
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: transparent;
+    border: none;
+    padding: 0 1em 0 0;
+    margin: 0;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
+    outline: none;
+    color: #fff;
+}
+.select {
+    width: 100%;
+    border: 1px solid var(--select-border);
+    padding: 0.15em;
+    background-color: #333;
+    grid-template-areas: "select";
+    align-items: center;
+    display: grid;
+}
+.select::after {
+    content: "";
+    width: 0.8em;
+    height: 0.5em;
+    background-color: var(--select-arrow);
+    clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+    justify-self: end;
+}
+.select select {
+    grid-area: select;
+}
+.select:after {
+    grid-area: select;
+}
+button {
+    background-color: #333;
+    color: #fff;
+}
+button[disabled] {
+    color: #666;
+}
+.tabcontrol-tab-selected button {
+    color: #666;
 }
 .grid {
     display: grid;
@@ -141,11 +214,13 @@ body {
     flex: initial;
 }
 .data-source-split-dragger-horizontal {
+    background-color: #111;
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
     cursor: row-resize;
     min-height: 6px;
 }
 .data-source-split-dragger-vertical {
+    background-color: #111;
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
     cursor: col-resize;
     min-width: 6px;

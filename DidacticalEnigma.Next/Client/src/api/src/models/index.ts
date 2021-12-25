@@ -67,6 +67,7 @@ export interface WordInfo {
   text: string;
   dictionaryForm: string;
   reading: string;
+  type: WordInfoType;
 }
 
 export interface SimilarLetter {
@@ -74,6 +75,28 @@ export interface SimilarLetter {
   description: string;
   category: string;
 }
+
+/** Known values of {@link WordInfoType} that the service accepts. */
+export enum KnownWordInfoType {
+  Other = "Other",
+  Noun = "Noun",
+  Verb = "Verb",
+  Particle = "Particle",
+  Pronoun = "Pronoun"
+}
+
+/**
+ * Defines values for WordInfoType. \
+ * {@link KnownWordInfoType} can be used interchangeably with WordInfoType,
+ *  this enum contains the known values that the service supports.
+ * ### Known values supported by the service
+ * **Other** \
+ * **Noun** \
+ * **Verb** \
+ * **Particle** \
+ * **Pronoun**
+ */
+export type WordInfoType = string;
 
 /** Optional parameters. */
 export interface RunAutomaticGlossOptionalParams
@@ -129,7 +152,7 @@ export interface GetWordInformationOptionalParams
 export type GetWordInformationResponse = WordInfoResponse;
 
 /** Optional parameters. */
-export interface DidacticalEnigmaRestApiOptionalParams
+export interface DidacticalEnigmaNextOptionalParams
   extends coreClient.ServiceClientOptions {
   /** Overrides client endpoint. */
   endpoint?: string;

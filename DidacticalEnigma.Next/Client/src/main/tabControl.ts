@@ -1,4 +1,4 @@
-import { zipShortest } from "./utility";
+import {findFirstParentWithClass, zipShortest} from "./utility";
 
 export function tabControlAttachJs() {
     for (const tabControl of document.getElementsByClassName("tabcontrol")) {
@@ -11,6 +11,16 @@ export function tabControlAttachJs() {
             button.addEventListener("click", function () {
                 const currentlySelected = tabControl.getElementsByClassName("tabcontrol-tabcontent-selected")[0];
                 currentlySelected.classList.remove("tabcontrol-tabcontent-selected");
+                const selectedTab = findFirstParentWithClass(button, "tabcontrol-header")
+                    ?.getElementsByClassName("tabcontrol-tab-selected")[0];
+                if(selectedTab) {
+                    selectedTab.classList.remove("tabcontrol-tab-selected");
+                }
+                
+                const newSelectedTab = findFirstParentWithClass(button, "tabcontrol-tab");
+                if(newSelectedTab) {
+                    newSelectedTab.classList.add("tabcontrol-tab-selected");
+                }
 
                 tabContent.classList.add("tabcontrol-tabcontent-selected");
             });

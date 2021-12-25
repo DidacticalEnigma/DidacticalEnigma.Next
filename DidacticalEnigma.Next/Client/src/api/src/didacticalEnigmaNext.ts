@@ -1,9 +1,9 @@
 import * as coreClient from "@azure/core-client";
 import * as Parameters from "./models/parameters";
 import * as Mappers from "./models/mappers";
-import { DidacticalEnigmaRestApiContext } from "./didacticalEnigmaRestApiContext";
+import { DidacticalEnigmaNextContext } from "./didacticalEnigmaNextContext";
 import {
-  DidacticalEnigmaRestApiOptionalParams,
+  DidacticalEnigmaNextOptionalParams,
   RunAutomaticGlossOptionalParams,
   RunAutomaticGlossResponse,
   ListDataSourcesOptionalParams,
@@ -18,13 +18,13 @@ import {
   GetWordInformationResponse
 } from "./models";
 
-export class DidacticalEnigmaRestApi extends DidacticalEnigmaRestApiContext {
+export class DidacticalEnigmaNext extends DidacticalEnigmaNextContext {
   /**
-   * Initializes a new instance of the DidacticalEnigmaRestApi class.
+   * Initializes a new instance of the DidacticalEnigmaNext class.
    * @param $host server parameter
    * @param options The parameter options
    */
-  constructor($host: string, options?: DidacticalEnigmaRestApiOptionalParams) {
+  constructor($host: string, options?: DidacticalEnigmaNextOptionalParams) {
     super($host, options);
   }
 

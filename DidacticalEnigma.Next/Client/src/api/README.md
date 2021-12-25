@@ -4,7 +4,7 @@ This package contains an isomorphic SDK (runs both in Node.js and in browsers) f
 
 
 
-[Package (NPM)](https://www.npmjs.com/package/didacticalEnigmaRestApi) |
+[Package (NPM)](https://www.npmjs.com/package/didacticalEnigmaNext) |
 [Samples](https://github.com/Azure-Samples/azure-samples-js-management)
 
 ## Getting started
@@ -15,12 +15,12 @@ This package contains an isomorphic SDK (runs both in Node.js and in browsers) f
 - Latest versions of Safari, Chrome, Edge and Firefox.
 
 
-### Install the `didacticalEnigmaRestApi` package
+### Install the `didacticalEnigmaNext` package
 
 Install the Service client library for JavaScript with `npm`:
 
 ```bash
-npm install didacticalEnigmaRestApi
+npm install didacticalEnigmaNext
 ```
 
 
@@ -30,7 +30,7 @@ To use this client library in the browser, first you need to use a bundler. For 
 
 ## Key concepts
 
-### DidacticalEnigmaRestApi
+### DidacticalEnigmaNext
 
-`DidacticalEnigmaRestApi` is the primary interface for developers using the Service client library. Explore the methods on this client object to understand the different features of the Service service that you can access.
+`DidacticalEnigmaNext` is the primary interface for developers using the Service client library. Explore the methods on this client object to understand the different features of the Service service that you can access.
 

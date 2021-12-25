@@ -58,20 +58,26 @@ function createViewer(dataSources: ListDataSourcesResponse, identifier? : string
                         }
                     }),
                     makeElement({
-                        tagName: "select",
-                        classes: ["data-source-viewer-header-selector"],
-                        elements: map(dataSources, (dataSource) => {
-                            const attributes : [[string, string]] = [["value", dataSource.identifier]];
-                            if(dataSource.identifier == identifier) {
-                                attributes.push(["selected", "selected"]);
-                            }
-                            
-                            return makeElement({
-                                tagName: "option",
-                                attributes: attributes,
-                                innerText: dataSource.friendlyName
-                            });
-                        })
+                        tagName: "div",
+                        classes: ["select"],
+                        elements: [
+                            makeElement({
+                                tagName: "select",
+                                classes: ["data-source-viewer-header-selector"],
+                                elements: map(dataSources, (dataSource) => {
+                                    const attributes : [[string, string]] = [["value", dataSource.identifier]];
+                                    if(dataSource.identifier == identifier) {
+                                        attributes.push(["selected", "selected"]);
+                                    }
+
+                                    return makeElement({
+                                        tagName: "option",
+                                        attributes: attributes,
+                                        innerText: dataSource.friendlyName
+                                    });
+                                })
+                            })
+                        ]
                     }),
                     makeElement({
                         tagName: "button",
@@ -246,13 +252,13 @@ function closeSplit(dataSourceViewer: HTMLElement) {
 export async function dataSourceGridLookup(dataSourceGrid: Element, dataSourceLookup: DataSourceLookup, text: string, position: number) {
     const viewers = dataSourceGrid.getElementsByClassName("data-source-viewer");
     const dataSourceIdentifiers = filter(
-        map(viewers, (viewer) => (viewer.getElementsByClassName("data-source-viewer-header-selector")[0] as HTMLSelectElement).selectedOptions[0].value),
+        map(viewers, (viewer) => (viewer.getElementsByTagName("select")[0]).selectedOptions[0].value),
         notNull);
 
     const result = await dataSourceLookup.lookup(text, position, dataSourceIdentifiers);
 
     for (const viewer of viewers) {
-        const dataIdentifier = (viewer.getElementsByClassName("data-source-viewer-header-selector")[0] as HTMLSelectElement).selectedOptions[0].value;
+        const dataIdentifier = (viewer.getElementsByTagName("select")[0]).selectedOptions[0].value;
         if (dataIdentifier == null) {
             continue;
         }

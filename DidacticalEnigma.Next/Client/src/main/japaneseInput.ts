@@ -1,12 +1,36 @@
-import { findFirstParentWithClass } from "./utility";
+import {findFirstParentWithClass} from "./utility";
+import {WordInfoLookup} from "./wordInfoLookup";
+//import {KnownWordInfoType, WordInfoType} from "../api/src";
 
+/*function mapWordTypeToClassList(type: WordInfoType) {
+    switch (type) {
+        case KnownWordInfoType.Verb:
+            return ["verb-highlight"]
+        case KnownWordInfoType.Noun:
+            return ["noun-highlight"]
+        case KnownWordInfoType.Particle:
+            return ["particle-highlight"]
+        default:
+            return [];
+    }
+}*/
 
-export async function japaneseInputAttachJs(onchange: (text: string, position: number, positionEnd?: number) => Promise<void>) {
+export async function japaneseInputAttachJs(_: WordInfoLookup, onchange: (text: string, position: number, positionEnd?: number) => Promise<void>) {
     for(const element of document.getElementsByClassName("japanese-input")) {
         const japaneseInput = element as HTMLElement;
+        japaneseInput.setAttribute("spellcheck", "false")
         japaneseInput.setAttribute("contenteditable", "");
-        japaneseInput.addEventListener("input", (_) => {
-            
+        japaneseInput.addEventListener("input", async (_) => {
+            /*const words = await wordInfoLookup.getWordInfo(japaneseInput.innerText);
+            removeAllChildElements(japaneseInput);
+            japaneseInput.innerText = "";
+            for (const word of words) {
+                japaneseInput.appendChild(makeElement({
+                    tagName: "span",
+                    classes: mapWordTypeToClassList(word.type),
+                    innerText: word.text
+                }))
+            }*/
         });
     }
 

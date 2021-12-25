@@ -388,6 +388,13 @@ export const WordInfo: coreClient.CompositeMapper = {
         type: {
           name: "String"
         }
+      },
+      type: {
+        serializedName: "type",
+        required: true,
+        type: {
+          name: "String"
+        }
       }
     }
   }
