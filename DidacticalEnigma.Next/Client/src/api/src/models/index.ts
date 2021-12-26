@@ -33,6 +33,23 @@ export interface DataSourceParseResponse {
   error?: string;
 }
 
+export interface KanaResult {
+  hiragana?: KanaBoard;
+  katakana?: KanaBoard;
+}
+
+export interface KanaBoard {
+  width: number;
+  height: number;
+  layout: "TopToBottomLeftToRight";
+  characters: KanaCharacter[];
+}
+
+export interface KanaCharacter {
+  kana?: string;
+  romaji?: string;
+}
+
 export interface ListRadicalsResult {
   possibleRadicals: string[];
   radicalInformation: ExtendedRadicalInformation[];
@@ -133,6 +150,12 @@ export interface RequestInformationFromDataSourcesOptionalParams
 
 /** Contains response data for the requestInformationFromDataSources operation. */
 export type RequestInformationFromDataSourcesResponse = DataSourceParseResponse[];
+
+/** Optional parameters. */
+export interface ListKanaOptionalParams extends coreClient.OperationOptions {}
+
+/** Contains response data for the listKana operation. */
+export type ListKanaResponse = KanaResult;
 
 /** Optional parameters. */
 export interface ListRadicalsOptionalParams

@@ -95,6 +95,27 @@
         }
       }
     },
+    "/kana/list": {
+      "get": {
+        "tags": [
+          "Kana"
+        ],
+        "operationId": "ListKana",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/KanaResult"
+            }
+          }
+        }
+      }
+    },
     "/radicals/list": {
       "get": {
         "tags": [
@@ -361,6 +382,59 @@
         },
         "alternativeDisplay": {
           "type": "string"
+        }
+      }
+    },
+    "KanaBoard": {
+      "required": [
+        "characters",
+        "height",
+        "layout",
+        "width"
+      ],
+      "type": "object",
+      "properties": {
+        "width": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "height": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "layout": {
+          "enum": [
+            "TopToBottomLeftToRight"
+          ],
+          "type": "string"
+        },
+        "characters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/KanaCharacter"
+          }
+        }
+      }
+    },
+    "KanaCharacter": {
+      "type": "object",
+      "properties": {
+        "kana": {
+          "type": "string"
+        },
+        "romaji": {
+          "type": "string"
+        }
+      }
+    },
+    "KanaResult": {
+      "type": "object",
+      "properties": {
+        "hiragana": {
+          "$ref": "#/definitions/KanaBoard"
+        },
+        "katakana": {
+          "$ref": "#/definitions/KanaBoard"
         }
       }
     },

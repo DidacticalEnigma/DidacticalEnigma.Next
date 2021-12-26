@@ -10,6 +10,8 @@ import {
   ListDataSourcesResponse,
   RequestInformationFromDataSourcesOptionalParams,
   RequestInformationFromDataSourcesResponse,
+  ListKanaOptionalParams,
+  ListKanaResponse,
   ListRadicalsOptionalParams,
   ListRadicalsResponse,
   SelectRadicalsOptionalParams,
@@ -56,6 +58,11 @@ export class DidacticalEnigmaNext extends DidacticalEnigmaNextContext {
       { options },
       requestInformationFromDataSourcesOperationSpec
     );
+  }
+
+  /** @param options The options parameters. */
+  listKana(options?: ListKanaOptionalParams): Promise<ListKanaResponse> {
+    return this.sendOperationRequest({ options }, listKanaOperationSpec);
   }
 
   /** @param options The options parameters. */
@@ -148,6 +155,18 @@ const requestInformationFromDataSourcesOperationSpec: coreClient.OperationSpec =
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.accept, Parameters.contentType],
   mediaType: "json",
+  serializer
+};
+const listKanaOperationSpec: coreClient.OperationSpec = {
+  path: "/kana/list",
+  httpMethod: "GET",
+  responses: {
+    200: {
+      bodyMapper: Mappers.KanaResult
+    }
+  },
+  urlParameters: [Parameters.$host],
+  headerParameters: [Parameters.accept],
   serializer
 };
 const listRadicalsOperationSpec: coreClient.OperationSpec = {

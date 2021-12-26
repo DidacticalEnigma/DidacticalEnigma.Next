@@ -174,6 +174,94 @@ export const DataSourceParseResponse: coreClient.CompositeMapper = {
   }
 };
 
+export const KanaResult: coreClient.CompositeMapper = {
+  type: {
+    name: "Composite",
+    className: "KanaResult",
+    modelProperties: {
+      hiragana: {
+        serializedName: "hiragana",
+        type: {
+          name: "Composite",
+          className: "KanaBoard"
+        }
+      },
+      katakana: {
+        serializedName: "katakana",
+        type: {
+          name: "Composite",
+          className: "KanaBoard"
+        }
+      }
+    }
+  }
+};
+
+export const KanaBoard: coreClient.CompositeMapper = {
+  type: {
+    name: "Composite",
+    className: "KanaBoard",
+    modelProperties: {
+      width: {
+        serializedName: "width",
+        required: true,
+        type: {
+          name: "Number"
+        }
+      },
+      height: {
+        serializedName: "height",
+        required: true,
+        type: {
+          name: "Number"
+        }
+      },
+      layout: {
+        defaultValue: "TopToBottomLeftToRight",
+        isConstant: true,
+        serializedName: "layout",
+        type: {
+          name: "String"
+        }
+      },
+      characters: {
+        serializedName: "characters",
+        required: true,
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "KanaCharacter"
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
+export const KanaCharacter: coreClient.CompositeMapper = {
+  type: {
+    name: "Composite",
+    className: "KanaCharacter",
+    modelProperties: {
+      kana: {
+        serializedName: "kana",
+        type: {
+          name: "String"
+        }
+      },
+      romaji: {
+        serializedName: "romaji",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
 export const ListRadicalsResult: coreClient.CompositeMapper = {
   type: {
     name: "Composite",
