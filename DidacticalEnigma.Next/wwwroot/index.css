@@ -102,6 +102,7 @@ body {
 }
 .japanese-input {
     font-size: 24px;
+    height: 100%;
 }
 input {
     background-color: #333;
@@ -201,6 +202,7 @@ button[disabled] {
 }
 .data-source-text {
     overflow-y: scroll;
+    height: 100%;
 }
 .data-source-viewer-header-button {
     flex: 0 1;

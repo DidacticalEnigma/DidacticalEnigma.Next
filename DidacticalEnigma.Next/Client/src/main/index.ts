@@ -20,7 +20,7 @@ window.addEventListener('load', async () => {
   tabControlAttachJs();
   projectWindowAttachJs();
   const task1 = radicalControlAttachJs(radicalLookup);
-  const task2 = dataSourceGridAttachJs(dataSourceLookup);
+  const task2 = dataSourceGridAttachJs(sessionConfig, dataSourceLookup);
   await task1;
   await task2;
   await japaneseInputAttachJs(wordInfoLookup, async (text, position, _) => {

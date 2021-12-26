@@ -3,7 +3,10 @@ import {
   OperationURLParameter,
   OperationQueryParameter
 } from "@azure/core-client";
-import { DataSourceParseRequest as DataSourceParseRequestMapper } from "../models/mappers";
+import {
+  DataSourceParseRequest as DataSourceParseRequestMapper,
+  ProgramConfigurationSetRequest as ProgramConfigurationSetRequestMapper
+} from "../models/mappers";
 
 export const accept: OperationParameter = {
   parameterPath: "accept",
@@ -98,13 +101,7 @@ export const deselect: OperationQueryParameter = {
 
 export const body1: OperationParameter = {
   parameterPath: ["options", "body"],
-  mapper: {
-    serializedName: "body",
-    type: {
-      name: "Dictionary",
-      value: { type: { name: "any" } }
-    }
-  }
+  mapper: ProgramConfigurationSetRequestMapper
 };
 
 export const fullText: OperationQueryParameter = {

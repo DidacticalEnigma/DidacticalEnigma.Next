@@ -15,6 +15,7 @@ export function generateHtmlFromRichFormatting(rawInputDocument : string) {
         }
         aElement.setAttribute("href", target);
         aElement.innerText = text;
+        aElement.setAttribute("target", "_blank");
         pElement.appendChild(aElement);
         result.appendChild(pElement);
       }

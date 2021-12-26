@@ -8,6 +8,7 @@ using DidacticalEnigma.Core.Models.LanguageService;
 using DidacticalEnigma.Next.Auth;
 using DidacticalEnigma.Next.Extensions;
 using DidacticalEnigma.Next.InternalServices;
+using DidacticalEnigma.Next.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 
 namespace DidacticalEnigma.Next
@@ -74,6 +76,14 @@ namespace DidacticalEnigma.Next
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "DidacticalEnigma.Next", Version = "v1"});
                 c.EnableAnnotations();
                 c.UseInlineDefinitionsForEnums();
+                c.UseAllOfForInheritance();
+                c.UseOneOfForPolymorphism();
+                
+                c.MapType<Length>(() => new OpenApiSchema
+                {
+                    Type = "string",
+                    Example = new OpenApiString("2*")
+                });
             });
 
             var rawConfig = Configuration.GetSection(ServiceConfiguration.ConfigurationName);

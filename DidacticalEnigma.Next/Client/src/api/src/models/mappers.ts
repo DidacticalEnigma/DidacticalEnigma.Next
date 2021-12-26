@@ -326,16 +326,58 @@ export const ProgramConfigurationGetResult: coreClient.CompositeMapper = {
     name: "Composite",
     className: "ProgramConfigurationGetResult",
     modelProperties: {
+      isDefault: {
+        serializedName: "isDefault",
+        required: true,
+        type: {
+          name: "Boolean"
+        }
+      },
       aboutSection: {
         serializedName: "aboutSection",
+        required: true,
         type: {
           name: "String"
         }
       },
       version: {
         serializedName: "version",
+        required: true,
         type: {
           name: "String"
+        }
+      },
+      dataSourceGridLayouts: {
+        serializedName: "dataSourceGridLayouts",
+        required: true,
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "any"
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
+export const ProgramConfigurationSetRequest: coreClient.CompositeMapper = {
+  type: {
+    name: "Composite",
+    className: "ProgramConfigurationSetRequest",
+    modelProperties: {
+      dataSourceGridLayouts: {
+        serializedName: "dataSourceGridLayouts",
+        required: true,
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "any"
+            }
+          }
         }
       }
     }

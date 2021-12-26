@@ -27,19 +27,20 @@ export async function radicalControlAttachJs(radicalLookup: RadicalLookup) {
             radicalSearchCriteriaSelect.appendChild(option);
         }
 
-        for (const radical of radicalsResult.possibleRadicals) {
+        for (const radical of radicalsResult.radicalInformation) {
             const button = document.createElement("button");
             button.setAttribute("class", "radicals-radicalselectoroption");
-            button.innerText = radical;
+            button.innerText = radical.alternativeDisplay;
+            button.setAttribute("data-radical", radical.radical);
             button.addEventListener("click", async function () {
                 let queryText = radicalSearchEditBox.value;
                 if (!button.classList.contains("radicals-radicalselected"))
                 {
-                    await updateKanjiResults(radicalRoot, radicalLookup, queryText, radicalSearchCriteriaSelect.selectedOptions[0].value, button.innerText, undefined);
+                    await updateKanjiResults(radicalRoot, radicalLookup, queryText, radicalSearchCriteriaSelect.selectedOptions[0].value, button.getAttribute("data-radical") ?? undefined, undefined);
                 }
                 else
                 {
-                    await updateKanjiResults(radicalRoot, radicalLookup, queryText, radicalSearchCriteriaSelect.selectedOptions[0].value, undefined, button.innerText);
+                    await updateKanjiResults(radicalRoot, radicalLookup, queryText, radicalSearchCriteriaSelect.selectedOptions[0].value, undefined, button.getAttribute("data-radical") ?? undefined);
                 }
             });
             radicalSelector.appendChild(button);
@@ -76,7 +77,7 @@ async function updateKanjiResults(
     const radicals = new Map<string, RadicalState>(map(result.radicals, radical => [radical.radical, radical]));
 
     for (const radical of radicalRoot.getElementsByClassName("radicals-radicalselectoroption")) {
-        const radicalText = (radical as HTMLButtonElement).innerText;
+        const radicalText = radical.getAttribute("data-radical") ?? "";
         if (radicals.get(radicalText)?.isAvailable) {
             radical.removeAttribute("disabled");
         }

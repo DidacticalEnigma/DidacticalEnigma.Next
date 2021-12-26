@@ -418,18 +418,40 @@
       }
     },
     "ProgramConfigurationGetResult": {
+      "required": [
+        "aboutSection",
+        "dataSourceGridLayouts",
+        "isDefault",
+        "version"
+      ],
       "type": "object",
       "properties": {
+        "isDefault": {
+          "type": "boolean"
+        },
         "aboutSection": {
           "type": "string"
         },
         "version": {
           "type": "string"
+        },
+        "dataSourceGridLayouts": {
+          "type": "array",
+          "items": { }
         }
       }
     },
     "ProgramConfigurationSetRequest": {
-      "type": "object"
+      "required": [
+        "dataSourceGridLayouts"
+      ],
+      "type": "object",
+      "properties": {
+        "dataSourceGridLayouts": {
+          "type": "array",
+          "items": { }
+        }
+      }
     },
     "RadicalState": {
       "required": [

@@ -58,8 +58,14 @@ export interface RadicalState {
 }
 
 export interface ProgramConfigurationGetResult {
-  aboutSection?: string;
-  version?: string;
+  isDefault: boolean;
+  aboutSection: string;
+  version: string;
+  dataSourceGridLayouts: any[];
+}
+
+export interface ProgramConfigurationSetRequest {
+  dataSourceGridLayouts: any[];
 }
 
 export interface WordInfoResponse {
@@ -156,8 +162,7 @@ export type LoadSessionResponse = ProgramConfigurationGetResult;
 
 /** Optional parameters. */
 export interface SaveSessionOptionalParams extends coreClient.OperationOptions {
-  /** Any object */
-  body?: Record<string, unknown>;
+  body?: ProgramConfigurationSetRequest;
 }
 
 /** Optional parameters. */
