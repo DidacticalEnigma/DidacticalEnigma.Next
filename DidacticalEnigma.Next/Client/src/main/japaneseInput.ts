@@ -1,8 +1,8 @@
-import {findFirstParentWithClass} from "./utility";
+import {makeElement, removeAllChildElements} from "./utility";
 import {WordInfoLookup} from "./wordInfoLookup";
-//import {KnownWordInfoType, WordInfoType} from "../api/src";
+import {KnownWordInfoType, WordInfoType} from "../api/src";
 
-/*function mapWordTypeToClassList(type: WordInfoType) {
+function mapWordTypeToClassList(type: WordInfoType) {
     switch (type) {
         case KnownWordInfoType.Verb:
             return ["verb-highlight"]
@@ -13,41 +13,53 @@ import {WordInfoLookup} from "./wordInfoLookup";
         default:
             return [];
     }
-}*/
+}
 
-export async function japaneseInputAttachJs(_: WordInfoLookup, onchange: (text: string, position: number, positionEnd?: number) => Promise<void>) {
+export async function japaneseInputAttachJs(wordInfoLookup: WordInfoLookup, onchange: (text: string, position: number, positionEnd?: number) => Promise<void>) {
     for(const element of document.getElementsByClassName("japanese-input")) {
         const japaneseInput = element as HTMLElement;
-        japaneseInput.setAttribute("spellcheck", "false")
-        japaneseInput.setAttribute("contenteditable", "");
-        japaneseInput.addEventListener("input", async (_) => {
-            /*const words = await wordInfoLookup.getWordInfo(japaneseInput.innerText);
-            removeAllChildElements(japaneseInput);
-            japaneseInput.innerText = "";
-            for (const word of words) {
-                japaneseInput.appendChild(makeElement({
-                    tagName: "span",
-                    classes: mapWordTypeToClassList(word.type),
-                    innerText: word.text
-                }))
-            }*/
+        const textAreaElement = makeElement({
+            tagName: "textarea",
+            classes: ["editor"],
+            attributes: [["spellcheck", "false"]],
         });
-    }
+        const divElement = makeElement({
+            tagName: "div",
+            classes: ["highlighter"]
+        });
 
-    document.addEventListener("selectionchange", (_) => {
-        const sel = document.getSelection();
-        if(sel) {
-            console.log(sel);
-            const japaneseInput = findFirstParentWithClass(sel.anchorNode, "japanese-input");
-            if(!japaneseInput) {
+        async function send() {
+            if(textAreaElement.value.length === 0) {
                 return;
             }
-            const text = japaneseInput.innerText;
-            if(text.length === 0) {
-                return;
-            }
-            
-            onchange(japaneseInput.innerText, sel.anchorOffset, sel.focusOffset);
+
+            await onchange(textAreaElement.value, textAreaElement.selectionStart, textAreaElement.selectionEnd);
         }
-    });
+        
+        async function highlight() {
+            removeAllChildElements(divElement);
+            divElement.innerText = textAreaElement.value;
+            const result = await wordInfoLookup.getWordInfo(textAreaElement.value);
+            divElement.innerText = "";
+            for (const line of result) {
+                for(const word of line) {
+                    divElement.appendChild(makeElement({
+                        tagName: "span",
+                        classes: mapWordTypeToClassList(word.type),
+                        innerText: word.text
+                    }));
+                }
+                divElement.appendChild(makeElement({
+                    tagName: "br"
+                }));
+            }
+        }
+        
+        textAreaElement.addEventListener("click", send);
+        textAreaElement.addEventListener("focus", send);
+        textAreaElement.addEventListener("input", highlight);
+        
+        japaneseInput.appendChild(textAreaElement);
+        japaneseInput.appendChild(divElement);
+    }
 }

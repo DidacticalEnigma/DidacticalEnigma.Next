@@ -2,15 +2,15 @@ import { DataSourceLookup } from "./dataSourceLookup";
 import { map, filter } from "lodash";
 import {notNull, makeElement, findFirstParentWithClass, zipShortest} from "./utility";
 import { generateHtmlFromRichFormatting } from "./richFormatting"
-import {ListDataSourcesResponse, LoadSessionResponse} from "../api/src";
+import {ListDataSourcesResponse} from "../api/src";
 import { Config } from "./config";
 
-export async function dataSourceGridAttachJs(sessionConfig: LoadSessionResponse, dataSourceLookup: DataSourceLookup) {
+export async function dataSourceGridAttachJs(layouts: any[], dataSourceLookup: DataSourceLookup) {
     const dataSources = await dataSourceLookup.listDataSources();
 
     const dataSourceElements = document.getElementsByClassName("data-sources");
 
-    for(const [dataSourceElement, rawLayout] of zipShortest(dataSourceElements, sessionConfig.dataSourceGridLayouts)) {
+    for(const [dataSourceElement, rawLayout] of zipShortest(dataSourceElements, layouts)) {
         const config = new Config(rawLayout);
         const tree = config.makeTree<HTMLElement, HTMLElement>(
             (root) => root,

@@ -417,6 +417,10 @@
       }
     },
     "KanaCharacter": {
+      "required": [
+        "kana",
+        "romaji"
+      ],
       "type": "object",
       "properties": {
         "kana": {
@@ -428,6 +432,10 @@
       }
     },
     "KanaResult": {
+      "required": [
+        "hiragana",
+        "katakana"
+      ],
       "type": "object",
       "properties": {
         "hiragana": {

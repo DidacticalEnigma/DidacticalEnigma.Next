@@ -34,8 +34,8 @@ export interface DataSourceParseResponse {
 }
 
 export interface KanaResult {
-  hiragana?: KanaBoard;
-  katakana?: KanaBoard;
+  hiragana: KanaBoard;
+  katakana: KanaBoard;
 }
 
 export interface KanaBoard {
@@ -46,8 +46,8 @@ export interface KanaBoard {
 }
 
 export interface KanaCharacter {
-  kana?: string;
-  romaji?: string;
+  kana: string;
+  romaji: string;
 }
 
 export interface ListRadicalsResult {

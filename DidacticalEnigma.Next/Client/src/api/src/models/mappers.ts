@@ -248,12 +248,14 @@ export const KanaCharacter: coreClient.CompositeMapper = {
     modelProperties: {
       kana: {
         serializedName: "kana",
+        required: true,
         type: {
           name: "String"
         }
       },
       romaji: {
         serializedName: "romaji",
+        required: true,
         type: {
           name: "String"
         }

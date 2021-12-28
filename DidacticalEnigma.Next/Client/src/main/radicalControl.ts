@@ -3,7 +3,7 @@ import { RadicalLookup } from "./radicalLookup";
 import { map } from "lodash";
 import { RadicalState } from "../api/src";
 
-export async function radicalControlAttachJs(radicalLookup: RadicalLookup) {
+export async function radicalControlAttachJs(radicalLookup: RadicalLookup, callback: (text: string) => void) {
     const radicalsResult = await radicalLookup.getRadicals();
 
     for (const radicalRoot of document.getElementsByClassName("radicals")) {
@@ -16,7 +16,7 @@ export async function radicalControlAttachJs(radicalLookup: RadicalLookup) {
                 return;
             
             const queryText = radicalSearchEditBox.value;
-            await updateKanjiResults(radicalRoot, radicalLookup, queryText);
+            await updateKanjiResults(radicalRoot, radicalLookup, queryText, undefined, undefined, undefined, callback);
             return true;
         });
 
@@ -36,18 +36,25 @@ export async function radicalControlAttachJs(radicalLookup: RadicalLookup) {
                 let queryText = radicalSearchEditBox.value;
                 if (!button.classList.contains("radicals-radicalselected"))
                 {
-                    await updateKanjiResults(radicalRoot, radicalLookup, queryText, radicalSearchCriteriaSelect.selectedOptions[0].value, button.getAttribute("data-radical") ?? undefined, undefined);
+                    await updateKanjiResults(radicalRoot, radicalLookup, queryText, radicalSearchCriteriaSelect.selectedOptions[0].value, button.getAttribute("data-radical") ?? undefined, undefined, callback);
                 }
                 else
                 {
-                    await updateKanjiResults(radicalRoot, radicalLookup, queryText, radicalSearchCriteriaSelect.selectedOptions[0].value, undefined, button.getAttribute("data-radical") ?? undefined);
+                    await updateKanjiResults(radicalRoot, radicalLookup, queryText, radicalSearchCriteriaSelect.selectedOptions[0].value, undefined, button.getAttribute("data-radical") ?? undefined, callback);
                 }
             });
             radicalSelector.appendChild(button);
         }
 
         radicalSearchCriteriaSelect.addEventListener("change", async function(){
-            await updateKanjiResults(radicalRoot, radicalLookup, radicalSearchEditBox.value, radicalSearchCriteriaSelect.selectedOptions[0].value);
+            await updateKanjiResults(
+                radicalRoot,
+                radicalLookup,
+                radicalSearchEditBox.value,
+                radicalSearchCriteriaSelect.selectedOptions[0].value,
+                undefined,
+                undefined,
+                callback);
         });
     }
 }
@@ -56,9 +63,10 @@ async function updateKanjiResults(
     radicalRoot: Element,
     radicalLookup: RadicalLookup,
     queryText: string,
-    sortCriterion?: string,
-    select?: string,
-    deselect?: string) {
+    sortCriterion: string | undefined,
+    select: string | undefined,
+    deselect: string | undefined,
+    callback: (text: string) => void) {
     const result = await radicalLookup.selectRadicals(queryText, sortCriterion, select, deselect);
 
     const kanjiResultElementsRootDiv = radicalRoot.getElementsByClassName("radicals-kanjiresults")[0];
@@ -67,6 +75,9 @@ async function updateKanjiResults(
     removeAllChildElements(kanjiResultElementsRootDiv);
     for (const kanji of result.kanji) {
         const kanjiButton = document.createElement("button");
+        kanjiButton.addEventListener("click", _ => {
+            callback(kanji);
+        })
 
         kanjiButton.setAttribute("class", "radicals-kanjiresult");
         kanjiButton.innerText = kanji;

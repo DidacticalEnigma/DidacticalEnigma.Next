@@ -51,8 +51,8 @@ export class Config {
     private makeRatio(leftDimension: string, rightDimension: string) : number {
         leftDimension = leftDimension.replace("*", "");
         rightDimension = rightDimension.replace("*", "");
-        const left = parseInt(leftDimension, 10);
-        const right = parseInt(rightDimension, 10);
+        const left = parseFloat(leftDimension);
+        const right = parseFloat(rightDimension);
         return left / (left + right);
     }
 }

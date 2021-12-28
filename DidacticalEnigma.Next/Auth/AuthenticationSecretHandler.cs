@@ -42,7 +42,11 @@ public class AuthenticationSecretHandler : AuthenticationHandler<AuthenticationS
             {
                 
             };
-            if (hasMatchingSecret || launchConfiguration.UnsafeDebugMode)
+            if (launchConfiguration.PublicMode)
+            {
+                claims.Add(new Claim(ClaimTypes.Anonymous, "true"));
+            }
+            else if (hasMatchingSecret || launchConfiguration.UnsafeDebugMode)
             {
                 claims.Add(new Claim(ClaimTypes.Name, "user"));
             }
