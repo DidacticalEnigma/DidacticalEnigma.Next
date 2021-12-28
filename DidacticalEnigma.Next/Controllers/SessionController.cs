@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Optional;
 using Optional.Collections;
 using Optional.Unsafe;
 using Swashbuckle.AspNetCore.Annotations;
@@ -37,7 +38,7 @@ public class SessionController : ControllerBase
     public async Task<ActionResult<ProgramConfigurationGetResult>> LoadSession(
         [FromServices] DisclaimersGetter disclaimersGetter)
     {
-        var layouts = new[]
+        var layouts = new Element[3]
         {
             new Root()
             {
@@ -83,40 +84,28 @@ public class SessionController : ControllerBase
             return config;
         }
 
-        try
-        {
-            using var file = System.IO.File.OpenRead(Path.Combine(dataConfig.ConfigDirectory, "view.config"));
-            layouts[0] = await JsonSerializer.DeserializeAsync<Element>(file) ?? throw new JsonException("invalid data");
-            config.IsDefault = false;
-        }
-        catch (Exception e)
-        {
-            this.logger.LogError(e, "failed to load the file");
-        }
+        layouts[0] = await LoadAtPath("view.config", layouts[0]);
+        layouts[1] = await LoadAtPath("view_2.config", layouts[1]);
+        layouts[2] = await LoadAtPath("view_3.config", layouts[2]);
 
-        try
-        {
-            using var file = System.IO.File.OpenRead(Path.Combine(dataConfig.ConfigDirectory, "view_2.config"));
-            layouts[1] = await JsonSerializer.DeserializeAsync<Element>(file) ?? throw new JsonException("invalid data");
-            config.IsDefault = false;
-        }
-        catch (Exception e)
-        {
-            this.logger.LogError(e, "failed to load the file");
-        }
-
-        try
-        {
-            using var file = System.IO.File.OpenRead(Path.Combine(dataConfig.ConfigDirectory, "view_3.config"));
-            layouts[2] = await JsonSerializer.DeserializeAsync<Element>(file) ?? throw new JsonException("invalid data");
-            config.IsDefault = false;
-        }
-        catch (Exception e)
-        {
-            this.logger.LogError(e, "failed to load the file");
-        }
-        
         return config;
+        
+        async Task<Element> LoadAtPath(string configFileName, Element defaultValue)
+        {
+            try
+            {
+                await using var file = System.IO.File.OpenRead(Path.Combine(dataConfig.ConfigDirectory, configFileName));
+                var result = await JsonSerializer.DeserializeAsync<Element>(file) ?? throw new JsonException("invalid data");
+                config.IsDefault = false;
+                return result;
+            }
+            catch (Exception e)
+            {
+                this.logger.LogError(e, "failed to load the file");
+            }
+
+            return defaultValue;
+        }
     }
 
     [Authorize("RejectAnonymous")]
@@ -124,23 +113,18 @@ public class SessionController : ControllerBase
     [SwaggerOperation(OperationId = "SaveSession")]
     public async Task<ActionResult> SaveSession(ProgramConfigurationSetRequest configuration)
     {
-        var first = configuration.DataSourceGridLayouts.ElementAtOrNone(0);
-        var second = configuration.DataSourceGridLayouts.ElementAtOrNone(1);
-        var third = configuration.DataSourceGridLayouts.ElementAtOrNone(2);
-        if (first.HasValue)
+        await TryWrite("view.config", 0);
+        await TryWrite("view_2.config", 1);
+        await TryWrite("view_3.config", 2);
+
+        async Task TryWrite(string configFilePath, int index)
         {
-            await using var file = System.IO.File.OpenWrite(Path.Combine(dataConfig.ConfigDirectory, "view.config"));
-            await JsonSerializer.SerializeAsync(file, first.ValueOrFailure());
-        }
-        if (second.HasValue)
-        {
-            await using var file = System.IO.File.OpenWrite(Path.Combine(dataConfig.ConfigDirectory, "view_2.config"));
-            await JsonSerializer.SerializeAsync(file, second.ValueOrFailure());
-        }
-        if (third.HasValue)
-        {
-            await using var file = System.IO.File.OpenWrite(Path.Combine(dataConfig.ConfigDirectory, "view_3.config"));
-            await JsonSerializer.SerializeAsync(file, third.ValueOrFailure());
+            var opt = configuration.DataSourceGridLayouts.ElementAtOrNone(index);
+            if (opt.HasValue)
+            {
+                await using var file = System.IO.File.Create(Path.Combine(dataConfig.ConfigDirectory, configFilePath));
+                await JsonSerializer.SerializeAsync(file, opt.ValueOrFailure());
+            }
         }
 
         return Ok();
