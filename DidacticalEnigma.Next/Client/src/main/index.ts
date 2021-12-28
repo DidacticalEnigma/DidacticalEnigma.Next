@@ -59,13 +59,19 @@ window.addEventListener('load', async () => {
     const config = new DataSourceLayoutConfig(dataSources, saveLayoutConfigCallback);
     const layouts = map(document.getElementsByClassName("data-sources"), (element) =>
         config.serialize(element as HTMLElement))
-    const promise = api.saveSession({
-      body: {
-        dataSourceGridLayouts: layouts
-      }
-    });
-    await promise;
-  }, 500);
+    if(isPrivateMode) {
+      await api.saveSession({
+        body: {
+          dataSourceGridLayouts: layouts
+        }
+      });
+    }
+    else {
+      window.localStorage.setItem(
+          "configuration-layouts",
+          JSON.stringify(layouts));
+    }
+  }, 100);
 
   async function saveLayoutConfigCallback() {
     await saveLayoutConfigThrottler.doAction();

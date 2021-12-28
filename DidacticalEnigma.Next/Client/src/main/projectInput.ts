@@ -1,6 +1,8 @@
 import {makeElement, removeAllChildElements} from "./utility";
 import {WordInfoResponse} from "../api/src";
 
+const columnCount = 3;
+
 export function projectInputAttachJs() {
     const elements = document.getElementsByClassName("project-input");
     for (const element of elements) {
@@ -17,7 +19,7 @@ export function projectInputAttachJs() {
                     tagName: "div",
                     classes: ["similar-characters-picker"],
                     andAlso: (element) => {
-                        addPadding(element);
+                        addPadding(element, columnCount);
                     }
                 }),
                 makeElement({
@@ -52,7 +54,8 @@ export function projectInputAttachJs() {
             children: [
                 makeElement({
                     tagName: "textarea",
-                    classes: ["editor"]
+                    classes: ["editor"],
+                    attributes: [["placeholder", " English"]]
                 }),
                 makeElement({
                     tagName: "div",
@@ -63,9 +66,9 @@ export function projectInputAttachJs() {
     }
 }
 
-function addPadding(charactersPickerElement: Element) {
+function addPadding(charactersPickerElement: Element, count: number) {
     // add a few dummy buttons for consistent padding
-    for(let i = 0; i < 3; ++i) {
+    for(let i = 0; i < count; ++i) {
         charactersPickerElement.appendChild(makeElement({
             tagName: "button",
             innerText: "や",
@@ -98,5 +101,6 @@ export function updateSimilarCharactersPicker(
             }
         }))
     }
-    addPadding(charactersPickerElement);
+    
+    addPadding(charactersPickerElement, columnCount - Math.min(columnCount, similarLetters.length));
 }

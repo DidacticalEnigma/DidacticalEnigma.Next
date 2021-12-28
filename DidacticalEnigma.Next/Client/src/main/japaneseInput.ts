@@ -25,7 +25,7 @@ export async function japaneseInputAttachJs(
         const textAreaElement = makeElement({
             tagName: "textarea",
             classes: ["editor"],
-            attributes: [["spellcheck", "false"]],
+            attributes: [["spellcheck", "false"], ["placeholder", " Japanese"]],
         });
         const divElement = makeElement({
             tagName: "div",
