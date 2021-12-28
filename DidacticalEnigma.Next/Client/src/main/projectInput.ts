@@ -22,7 +22,7 @@ export function projectInputAttachJs() {
                     classes: ["editor"]
                 }),
                 makeElement({
-                    tagName: "textarea",
+                    tagName: "div",
                     classes: ["highlighter"]
                 })
             ]
