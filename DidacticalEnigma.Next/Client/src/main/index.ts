@@ -2,7 +2,7 @@ import { tabControlAttachJs } from "./tabControl";
 import { RadicalLookup } from "./radicalLookup";
 import { DataSourceLookup } from "./dataSourceLookup";
 import { radicalControlAttachJs } from "./radicalControl";
-import { dataSourceGridAttachJs, dataSourceGridLookup } from "./dataSourceGrid";
+import {dataSourceGridAttachJs, dataSourceGridLookup, DataSourceLayoutConfig} from "./dataSourceGrid";
 import {japaneseInputAttachJs, japaneseInputInsertText, japaneseInputReplaceText} from "./japaneseInput";
 import {WordInfoLookup} from "./wordInfoLookup";
 import {projectWindowAttachJs} from "./projectWindow";
@@ -11,6 +11,9 @@ import {aboutSectionAttachJs} from "./aboutSection";
 import {kanaBoardAttachJs} from "./kanaBoard";
 import {projectInputAttachJs, updateSimilarCharactersPicker} from "./projectInput";
 import {WordInfoResponse} from "../api/src";
+import {settingsPanelAttachJs} from "./settingsPanel";
+import {map} from "lodash";
+import {promiseDelay} from "./utility";
 
 window.addEventListener('load', async () => {
   const radicalLookup = new RadicalLookup();
@@ -52,11 +55,29 @@ window.addEventListener('load', async () => {
     await japaneseInputInsertText(wordInfoLookup, text, similarCharactersRefresh);
   }
   
+  const saveLayoutConfigThrottler = new Throttler(async () => {
+    const config = new DataSourceLayoutConfig(dataSources, saveLayoutConfigCallback);
+    const layouts = map(document.getElementsByClassName("data-sources"), (element) =>
+        config.serialize(element as HTMLElement))
+    const promise = api.saveSession({
+      body: {
+        dataSourceGridLayouts: layouts
+      }
+    });
+    await promise;
+  }, 500);
+
+  async function saveLayoutConfigCallback() {
+    await saveLayoutConfigThrottler.doAction();
+  }
+
+  settingsPanelAttachJs(sessionConfig);
   aboutSectionAttachJs(sessionConfig);
   projectInputAttachJs();
   tabControlAttachJs();
   projectWindowAttachJs();
-  const dataSourceGridLoadPromise = dataSourceGridAttachJs(dataLayouts, dataSourceLookup);
+  const dataSources = await dataSourceLookup.listDataSources();
+  const dataSourceGridLoadPromise = dataSourceGridAttachJs(dataLayouts, dataSources, saveLayoutConfigCallback);
   await japaneseInputAttachJs(wordInfoLookup, async (text, position, positionEnd) => {
     const result = await wordInfoLookup.getWordInfo(text);
     const charactersRefreshPromise = similarCharactersRefresh(text.substring(position,
@@ -86,3 +107,27 @@ window.addEventListener('load', async () => {
     loadingElement.classList.add("loading-screen-loaded")
   }
 });
+
+class Throttler
+{
+  private _action: () => Promise<void>;
+  private _throttleTime: number;
+  private _requestId: number;
+  
+  public constructor(action: () => Promise<void>, throttleTime: number) {
+    this._action = action;
+    this._throttleTime = throttleTime;
+    this._requestId = 0;
+  }
+  
+  public async doAction() {
+    this._requestId++;
+    const beforeThrottleRequestId = this._requestId;
+    await promiseDelay(this._throttleTime);
+    const afterThrottleRequestId = this._requestId;
+    if(beforeThrottleRequestId !== afterThrottleRequestId) {
+      return;
+    }
+    await this._action();
+  }
+}

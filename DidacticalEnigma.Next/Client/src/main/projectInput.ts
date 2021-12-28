@@ -12,7 +12,7 @@ export function projectInputAttachJs() {
         projectInputElement.appendChild(makeElement({
             tagName: "div",
             classes: ["project-input-center-panel"],
-            elements: [
+            children: [
                 makeElement({
                     tagName: "div",
                     classes: ["similar-characters-picker"],
@@ -23,14 +23,24 @@ export function projectInputAttachJs() {
                 makeElement({
                     tagName: "div",
                     classes: ["project-input-center-panel-footer"],
-                    elements: [
+                    children: [
                         makeElement({
                             tagName: "button",
-                            innerText: "Previous"
+                            children: [
+                                makeElement({
+                                    tagName: "i",
+                                    classes: ["fas", "fa-arrow-left"]
+                                })
+                            ]
                         }),
                         makeElement({
                             tagName: "button",
-                            innerText: "Next"
+                            children: [
+                                makeElement({
+                                    tagName: "i",
+                                    classes: ["fas", "fa-arrow-right"]
+                                })
+                            ]
                         })
                     ]
                 })
@@ -39,7 +49,7 @@ export function projectInputAttachJs() {
         projectInputElement.appendChild(makeElement({
             tagName: "div",
             classes: ["english-input"],
-            elements: [
+            children: [
                 makeElement({
                     tagName: "textarea",
                     classes: ["editor"]

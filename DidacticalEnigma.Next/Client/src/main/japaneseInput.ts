@@ -20,7 +20,6 @@ export async function japaneseInputAttachJs(
     onchange: (text: string, position: number, positionEnd?: number) => Promise<void>,
     onWordInfoChange: (selectedText: string, result: WordInfoResponse) => Promise<void>) {
     
-    
     for(const element of document.getElementsByClassName("japanese-input")) {
         const japaneseInput = element as HTMLElement;
         const textAreaElement = makeElement({

@@ -26,8 +26,8 @@ export function notNull<TValue>(value: TValue | null): value is TValue {
     return value !== null;
 }
 
-export function makeElement<K extends keyof HTMLElementTagNameMap>(elementDescription: {tagName: K, attributes?: Iterable<[string, string]>, classes?: Iterable<string>, elements?: Iterable<Element>, innerText?: string, andAlso?: (element: HTMLElementTagNameMap[K]) => void}): HTMLElementTagNameMap[K];
-export function makeElement(elementDescription: {tagName: string, attributes?: Iterable<[string, string]>, classes?: Iterable<string>, elements?: Iterable<Element>, innerText?: string, andAlso?: (element: HTMLElement) => void}) {
+export function makeElement<K extends keyof HTMLElementTagNameMap>(elementDescription: {tagName: K, attributes?: Iterable<[string, string]>, classes?: Iterable<string>, children?: Iterable<Node>, innerText?: string, andAlso?: (element: HTMLElementTagNameMap[K]) => void}): HTMLElementTagNameMap[K];
+export function makeElement(elementDescription: {tagName: string, attributes?: Iterable<[string, string]>, classes?: Iterable<string>, children?: Iterable<Node>, innerText?: string, andAlso?: (element: HTMLElement) => void}) {
     const element = document.createElement(elementDescription.tagName);
 
     if(elementDescription.classes) {
@@ -42,9 +42,9 @@ export function makeElement(elementDescription: {tagName: string, attributes?: I
         }
     }
 
-    if(elementDescription.elements) {
-        for(const el of elementDescription.elements) {
-            element.appendChild(el);
+    if(elementDescription.children) {
+        for(const el of elementDescription.children) {
+            element.append(el);
         }
     }
 

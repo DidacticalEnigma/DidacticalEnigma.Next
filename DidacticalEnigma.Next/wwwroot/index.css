@@ -287,6 +287,10 @@ button[disabled] {
 }
 .project-input-center-panel .project-input-center-panel-footer {
     flex: initial;
+    display: flex;
+}
+.project-input-center-panel .project-input-center-panel-footer * {
+    flex: auto;
 }
 .english-input {
     position: relative;
@@ -354,6 +358,9 @@ input.radicals-searchbox {
     height: 3em;
     font-size: 1.2em;
     text-align: center;
+}
+.radicals-radicalselectoroption-hidden {
+    display: none;
 }
 .radicals-kanjiresult {
     width: 3em;

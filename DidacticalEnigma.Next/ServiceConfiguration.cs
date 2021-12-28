@@ -8,6 +8,8 @@ namespace DidacticalEnigma.Next
         public const string ConfigurationName = "DataConfiguration";
 
         public string DataDirectory { get; set; }
+        
+        public string ConfigDirectory { get; set; }
 
         public static Kernel Configure(string dataDir)
         {

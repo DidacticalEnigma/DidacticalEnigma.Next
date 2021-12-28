@@ -11,9 +11,10 @@ export async function radicalControlAttachJs(radicalLookup: RadicalLookup, callb
         const radicalSelector = radicalRoot.getElementsByClassName("radicals-radicalselector")[0];
         const radicalSearchEditBox = radicalRoot.getElementsByClassName("radicals-searchbox")[0] as HTMLInputElement;
         const radicalSearchCriteriaSelect = radicalRoot.getElementsByClassName("radicals-sort-criteria")[0] as HTMLSelectElement;
+        const hideRadicalCheckbox = radicalRoot.querySelector("input[type=checkbox]") as HTMLInputElement;
 
         radicalResetButton.addEventListener("click", async (_) => {
-            await updateKanjiResults(radicalRoot, radicalLookup, "", undefined, undefined, undefined, callback);
+            await updateKanjiResults(radicalRoot, radicalLookup, "", undefined, hideRadicalCheckbox.checked, undefined, undefined, callback);
         });
         
         radicalSearchEditBox.addEventListener("keydown", async function(ev) {
@@ -21,7 +22,7 @@ export async function radicalControlAttachJs(radicalLookup: RadicalLookup, callb
                 return;
             
             const queryText = radicalSearchEditBox.value;
-            await updateKanjiResults(radicalRoot, radicalLookup, queryText, undefined, undefined, undefined, callback);
+            await updateKanjiResults(radicalRoot, radicalLookup, queryText, undefined, hideRadicalCheckbox.checked, undefined, undefined, callback);
             return true;
         });
 
@@ -41,11 +42,11 @@ export async function radicalControlAttachJs(radicalLookup: RadicalLookup, callb
                 let queryText = radicalSearchEditBox.value;
                 if (!button.classList.contains("radicals-radicalselected"))
                 {
-                    await updateKanjiResults(radicalRoot, radicalLookup, queryText, radicalSearchCriteriaSelect.selectedOptions[0].value, button.getAttribute("data-radical") ?? undefined, undefined, callback);
+                    await updateKanjiResults(radicalRoot, radicalLookup, queryText, radicalSearchCriteriaSelect.selectedOptions[0].value, hideRadicalCheckbox.checked, button.getAttribute("data-radical") ?? undefined, undefined, callback);
                 }
                 else
                 {
-                    await updateKanjiResults(radicalRoot, radicalLookup, queryText, radicalSearchCriteriaSelect.selectedOptions[0].value, undefined, button.getAttribute("data-radical") ?? undefined, callback);
+                    await updateKanjiResults(radicalRoot, radicalLookup, queryText, radicalSearchCriteriaSelect.selectedOptions[0].value, hideRadicalCheckbox.checked, undefined, button.getAttribute("data-radical") ?? undefined, callback);
                 }
             });
             radicalSelector.appendChild(button);
@@ -57,6 +58,19 @@ export async function radicalControlAttachJs(radicalLookup: RadicalLookup, callb
                 radicalLookup,
                 radicalSearchEditBox.value,
                 radicalSearchCriteriaSelect.selectedOptions[0].value,
+                hideRadicalCheckbox.checked,
+                undefined,
+                undefined,
+                callback);
+        });
+
+        hideRadicalCheckbox.addEventListener("change", async function(){
+            await updateKanjiResults(
+                radicalRoot,
+                radicalLookup,
+                radicalSearchEditBox.value,
+                radicalSearchCriteriaSelect.selectedOptions[0].value,
+                hideRadicalCheckbox.checked,
                 undefined,
                 undefined,
                 callback);
@@ -69,6 +83,7 @@ async function updateKanjiResults(
     radicalLookup: RadicalLookup,
     queryText: string,
     sortCriterion: string | undefined,
+    hideNonMatchingComponents: boolean,
     select: string | undefined,
     deselect: string | undefined,
     callback: (text: string) => void) {
@@ -96,9 +111,16 @@ async function updateKanjiResults(
         const radicalText = radical.getAttribute("data-radical") ?? "";
         if (radicals.get(radicalText)?.isAvailable) {
             radical.removeAttribute("disabled");
+            radical.classList.remove("radicals-radicalselectoroption-hidden");
         }
         else {
             radical.setAttribute("disabled", "");
+            if(hideNonMatchingComponents) {
+                radical.classList.add("radicals-radicalselectoroption-hidden");
+            }
+            else {
+                radical.classList.remove("radicals-radicalselectoroption-hidden");
+            }
         }
 
         if (radicals.get(radicalText)?.isSelected) {
