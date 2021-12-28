@@ -35,25 +35,21 @@ window.addEventListener('load', async () => {
     dataLayouts = sessionConfig.dataSourceGridLayouts;
   }
   
-  function insertText(text: string) {
-    console.log(text);
-  }
-  
   aboutSectionAttachJs(sessionConfig);
   tabControlAttachJs();
   projectWindowAttachJs();
-  kanaBoardAttachJs(document.getElementsByClassName("kana-board-hiragana")[0] as HTMLDivElement, kana.hiragana, insertText);
-  kanaBoardAttachJs(document.getElementsByClassName("kana-board-katakana")[0] as HTMLDivElement, kana.katakana, insertText);
-  const task1 = radicalControlAttachJs(radicalLookup, insertText);
-  const task2 = dataSourceGridAttachJs(dataLayouts, dataSourceLookup);
-  await task1;
-  await task2;
-  await japaneseInputAttachJs(wordInfoLookup, async (text, position, _) => {
+  const dataSourceGridLoadPromise = dataSourceGridAttachJs(dataLayouts, dataSourceLookup);
+  const insertText = await japaneseInputAttachJs(wordInfoLookup, async (text, position, _) => {
     const dataSources = document.querySelector(".tabcontrol-tabcontent-selected .data-sources");
     if(dataSources) {
       await dataSourceGridLookup(dataSources, dataSourceLookup, text, position);
     }
-  })
+  });
+  kanaBoardAttachJs(document.getElementsByClassName("kana-board-hiragana")[0] as HTMLDivElement, kana.hiragana, insertText);
+  kanaBoardAttachJs(document.getElementsByClassName("kana-board-katakana")[0] as HTMLDivElement, kana.katakana, insertText);
+  const radicalControlLoadPromise = radicalControlAttachJs(radicalLookup, insertText);
+  await dataSourceGridLoadPromise;
+  await radicalControlLoadPromise;
   
   const loadedElements = document.getElementsByClassName("loaded-content");
   for(const loadedElement of loadedElements) {
