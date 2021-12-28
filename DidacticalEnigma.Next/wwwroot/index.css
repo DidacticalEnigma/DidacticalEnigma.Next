@@ -257,6 +257,53 @@ button[disabled] {
     cursor: col-resize;
     min-width: 6px;
 }
+.project-input {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+.project-input .japanese-input {
+    flex: auto;
+}
+.project-input .similar-characters-picker {
+    flex: initial;
+}
+.project-input .english-input {
+    flex: auto;
+}
+.similar-characters-picker {
+    display: flex;
+    /*! flex-direction: column; */
+    overflow-y: scroll;
+    font-size: 24px;
+    flex-direction: column;
+}
+.english-input {
+    position: relative;
+    font-size: 24px;
+    height: 100%;
+}
+.english-input .editor, .english-input .highlighter {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+}
+.english-input .highlighter {
+    margin: 4px 4px;
+    z-index: 0;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+}
+.english-input .editor {
+    color: white;
+    background: transparent;
+    caret-color: white;
+    resize: none;
+    border-width: 2px;
+    border-color: #777;
+    z-index: 1;
+}
 .radicals {
     display: flex;
     flex-direction: column;
@@ -320,6 +367,16 @@ input.radicals-searchbox {
 }
 .tabcontrol-header button {
     float: left;
+    margin-right: -10px;
+    z-index: 1;
+    padding-right: 20px;
+    border-top-right-radius: 2em;
+    /*! padding-left: 10px; */
+    position: relative;
+    padding-left: 10px;
+}
+.tabcontrol-tab-selected button {
+    z-index: 2;
 }
 .tabcontrol-header:after {
     content: "."; 
