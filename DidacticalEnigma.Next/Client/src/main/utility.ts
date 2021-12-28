@@ -84,3 +84,7 @@ export function findFirstParentWithClass(element: Node | null, className: string
 
     return current;
 }
+
+export function promiseDelay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

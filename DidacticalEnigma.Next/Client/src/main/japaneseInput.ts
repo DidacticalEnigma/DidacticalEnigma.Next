@@ -1,4 +1,4 @@
-import {makeElement, removeAllChildElements} from "./utility";
+import {makeElement, promiseDelay, removeAllChildElements} from "./utility";
 import {WordInfoLookup} from "./wordInfoLookup";
 import {KnownWordInfoType, WordInfoType} from "../api/src";
 
@@ -17,9 +17,22 @@ function mapWordTypeToClassList(type: WordInfoType) {
 
 export async function japaneseInputAttachJs(wordInfoLookup: WordInfoLookup, onchange: (text: string, position: number, positionEnd?: number) => Promise<void>) {
     async function highlightJapaneseInput(divElement: HTMLDivElement, textAreaElement: HTMLTextAreaElement) {
+        const lastHighlightId = parseInt(textAreaElement.getAttribute("last-highlight-id") ?? "0", 10);
+        await promiseDelay(50);
+        const currentHighlightId = parseInt(textAreaElement.getAttribute("last-highlight-id") ?? "0", 10);
+        if(lastHighlightId !== currentHighlightId) {
+            return;
+        }
         removeAllChildElements(divElement);
         divElement.innerText = textAreaElement.value;
+        if(!textAreaElement.value) {
+            return;
+        }
         const result = await wordInfoLookup.getWordInfo(textAreaElement.value);
+        const postQueryHighlightId = parseInt(textAreaElement.getAttribute("last-highlight-id") ?? "0", 10);
+        if(postQueryHighlightId !== lastHighlightId) {
+            return;
+        }
         divElement.innerText = "";
         for (const line of result) {
             for (const word of line) {
@@ -33,6 +46,7 @@ export async function japaneseInputAttachJs(wordInfoLookup: WordInfoLookup, onch
                 tagName: "br"
             }));
         }
+        textAreaElement.setAttribute("last-highlight-id", (postQueryHighlightId + 1).toString());
     }    
     
     for(const element of document.getElementsByClassName("japanese-input")) {
