@@ -11,7 +11,30 @@ export function projectInputAttachJs() {
         }));
         projectInputElement.appendChild(makeElement({
             tagName: "div",
-            classes: ["similar-characters-picker"]
+            classes: ["project-input-center-panel"],
+            elements: [
+                makeElement({
+                    tagName: "div",
+                    classes: ["similar-characters-picker"],
+                    andAlso: (element) => {
+                        addPadding(element);
+                    }
+                }),
+                makeElement({
+                    tagName: "div",
+                    classes: ["project-input-center-panel-footer"],
+                    elements: [
+                        makeElement({
+                            tagName: "button",
+                            innerText: "Previous"
+                        }),
+                        makeElement({
+                            tagName: "button",
+                            innerText: "Next"
+                        })
+                    ]
+                })
+            ]
         }));
         projectInputElement.appendChild(makeElement({
             tagName: "div",
@@ -30,17 +53,30 @@ export function projectInputAttachJs() {
     }
 }
 
+function addPadding(charactersPickerElement: Element) {
+    // add a few dummy buttons for consistent padding
+    for(let i = 0; i < 3; ++i) {
+        charactersPickerElement.appendChild(makeElement({
+            tagName: "button",
+            innerText: "や",
+            andAlso: (element) => {
+                element.style.color = "transparent";
+                element.style.backgroundColor = "transparent";
+                element.style.borderColor = "transparent";
+            }
+        }))
+    }
+}
+
 export function updateSimilarCharactersPicker(
     charactersPickerElement: Element,
     selectedText: string,
     wordInfoResponse: WordInfoResponse,
     onSimilarCharacterClick: (text: string) => Promise<void>) {
     removeAllChildElements(charactersPickerElement);
-    if(selectedText.length === 0) {
-        return;
-    }
     const letter = selectedText.substring(0, 1);
-    for (const similarCharacter of wordInfoResponse.similarLetters[letter]) {
+    const similarLetters = wordInfoResponse.similarLetters[letter] ?? [];
+    for (const similarCharacter of similarLetters) {
         charactersPickerElement.appendChild(makeElement({
             tagName: "button",
             innerText: similarCharacter.letter,
@@ -52,4 +88,5 @@ export function updateSimilarCharactersPicker(
             }
         }))
     }
+    addPadding(charactersPickerElement);
 }

@@ -7,10 +7,15 @@ export async function radicalControlAttachJs(radicalLookup: RadicalLookup, callb
     const radicalsResult = await radicalLookup.getRadicals();
 
     for (const radicalRoot of document.getElementsByClassName("radicals")) {
+        const radicalResetButton = radicalRoot.getElementsByClassName("radicals-reset-button")[0] as HTMLButtonElement;
         const radicalSelector = radicalRoot.getElementsByClassName("radicals-radicalselector")[0];
         const radicalSearchEditBox = radicalRoot.getElementsByClassName("radicals-searchbox")[0] as HTMLInputElement;
         const radicalSearchCriteriaSelect = radicalRoot.getElementsByClassName("radicals-sort-criteria")[0] as HTMLSelectElement;
 
+        radicalResetButton.addEventListener("click", async (_) => {
+            await updateKanjiResults(radicalRoot, radicalLookup, "", undefined, undefined, undefined, callback);
+        });
+        
         radicalSearchEditBox.addEventListener("keydown", async function(ev) {
             if (ev.key !== "Enter")
                 return;

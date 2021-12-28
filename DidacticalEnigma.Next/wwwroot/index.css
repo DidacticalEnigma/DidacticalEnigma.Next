@@ -272,11 +272,21 @@ button[disabled] {
     flex: auto;
 }
 .similar-characters-picker {
-    display: flex;
-    /*! flex-direction: column; */
+    display: grid;
     overflow-y: scroll;
     font-size: 24px;
+    grid-template-columns: repeat(3, min-content);
+    grid-auto-rows: min-content;
+}
+.project-input-center-panel .similar-characters-picker {
+    flex: auto;
+}
+.project-input-center-panel {
+    display: flex;
     flex-direction: column;
+}
+.project-input-center-panel .project-input-center-panel-footer {
+    flex: initial;
 }
 .english-input {
     position: relative;
