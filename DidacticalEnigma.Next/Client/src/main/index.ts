@@ -14,6 +14,9 @@ import {WordInfoResponse} from "../api/src";
 import {settingsPanelAttachJs} from "./settingsPanel";
 import {map} from "lodash";
 import {promiseDelay} from "./utility";
+import {shim} from "globalthis"
+
+shim();
 
 window.addEventListener('load', async () => {
   const radicalLookup = new RadicalLookup();
@@ -38,6 +41,10 @@ window.addEventListener('load', async () => {
   }
   else {
     dataLayouts = sessionConfig.dataSourceGridLayouts;
+  }
+  
+  globalThis.clipboardNotification = function(content: string) {
+    console.log(content);
   }
 
   async function replaceText(text: string) {
@@ -93,7 +100,7 @@ window.addEventListener('load', async () => {
     ), result);
     const dataSources = document.querySelector(".tabcontrol-tabcontent-selected .data-sources");
     if(dataSources) {
-      await dataSourceGridLookup(dataSources, dataSourceLookup, text, position);
+      await dataSourceGridLookup(dataSources, dataSourceLookup, text, position, positionEnd);
     }
     await charactersRefreshPromise;
   }, similarCharactersRefresh);

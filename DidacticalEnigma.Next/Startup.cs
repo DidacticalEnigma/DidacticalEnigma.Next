@@ -1,11 +1,13 @@
 using System;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
+using ClipwatchSharp;
 using DidacticalEnigma.Core.Models.DataSources;
 using DidacticalEnigma.Core.Models.Formatting;
 using DidacticalEnigma.Core.Models.HighLevel.KanjiLookupService;
 using DidacticalEnigma.Core.Models.LanguageService;
 using DidacticalEnigma.Next.Auth;
+using DidacticalEnigma.Next.Controllers;
 using DidacticalEnigma.Next.Extensions;
 using DidacticalEnigma.Next.InternalServices;
 using DidacticalEnigma.Next.Models;
@@ -101,6 +103,9 @@ namespace DidacticalEnigma.Next
             services.AddSingleton(_ => kernel.Get<DataSourceDispatcher>());
             services.AddSingleton(_ => kernel.Get<XmlRichFormattingRenderer>());
             services.AddSingleton(_ => kernel.Get<DisclaimersGetter>());
+            services.AddSingleton<ClipboardWatcher>();
+            
+            services.AddScoped<ProjectHandler>();
             
             services
                 .AddStartupTask<WarmupServicesStartupTask>()

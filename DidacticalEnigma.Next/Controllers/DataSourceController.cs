@@ -73,7 +73,7 @@ namespace DidacticalEnigma.Next.Controllers
             position = Math.Clamp(position, 0, text.FullText.Length - 1);
             positionEnd = positionEnd != null ? Math.Clamp(positionEnd.Value, 0, text.FullText.Length) : null;
             var cursor = text.GetCursor(position);
-            var wordInfo = positionEnd != null
+            var wordInfo = positionEnd != null && position != positionEnd
                 ? new WordInfo(text.FullText.SubstringFromTo(position, positionEnd.Value))
                 : cursor.CurrentWord;
 

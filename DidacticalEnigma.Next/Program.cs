@@ -6,7 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using DidacticalEnigma.Next.Auth;
+using DidacticalEnigma.Next.Controllers;
 using DidacticalEnigma.Next.InternalServices;
+using DidacticalEnigma.Next.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,9 +30,11 @@ namespace DidacticalEnigma.Next
             {
                 var section = context.Configuration.GetSection(LaunchConfiguration.SectionName);
                 launchConfiguration = section.Get<LaunchConfiguration>();
-                launchConfiguration.UnsafeDebugMode = false;
+                launchConfiguration.UnsafeDebugMode = true;
                 launchConfiguration.Secret = LaunchConfiguration.GenerateSecret();
                 services.AddSingleton(launchConfiguration);
+                services.AddSingleton(serviceProvider =>
+                    new Webview(debug: launchConfiguration?.UnsafeDebugMode == true, interceptExternalLinks: true));
             });
 
             var webHost = hostBuilder.Build();
@@ -57,17 +61,17 @@ namespace DidacticalEnigma.Next
                     }
                     catch (Exception)
                     {
-                        Console.WriteLine("Failed to initalize native dialogs library, attempting to run in restricted mode");
+                        Console.WriteLine("Failed to initialize native dialogs library, attempting to run in restricted mode");
                         throw;
                     }
                 }
                 
-                using(var webview = new Webview(debug: launchConfiguration?.UnsafeDebugMode == true, interceptExternalLinks: true))
+                using(var webview = webHost.Services.GetRequiredService<Webview>())
                 {
                     webview.SetTitle("DidacticalEnigma.Next");
                     webview.SetSize(1024, 768, WebviewHint.None);
                     webview.SetSize(800, 600, WebviewHint.Min);
-                    SetupFFI(webview);
+                    SetupFFI(webview, webHost.Services);
                     if (launchConfiguration != null)
                     {
                         var builder = new UriBuilder(launchConfiguration.LocalAddress)
@@ -89,7 +93,7 @@ namespace DidacticalEnigma.Next
             }
         }
 
-        private static void SetupFFI(Webview webview)
+        private static void SetupFFI(Webview webview, IServiceProvider serviceProvider)
         {
             string? lastOpenDirectory = null;
             webview.Bind("fileOpenDialog", (id, req) =>
@@ -101,6 +105,27 @@ namespace DidacticalEnigma.Next
                 }
                 webview.Return(id, RPCResult.Success, JsonSerializer.Serialize(result));
             });
+            webview.Bind("switchToProject", Callback);
+
+            async void Callback(string id, string req)
+            {
+                var opts = new JsonSerializerOptions()
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+                try
+                {
+                    using var scope = serviceProvider.CreateScope();
+                    var request = JsonSerializer.Deserialize<SwitchToProjectRequest[]>(req, opts);
+                    var handler = scope.ServiceProvider.GetRequiredService<ProjectHandler>();
+                    var result = await handler.SwitchToProject(request?[0] ?? throw new ArgumentNullException());
+                    webview.Return(id, RPCResult.Success, JsonSerializer.Serialize(result, opts));
+                }
+                catch (Exception ex)
+                {
+                    webview.Return(id, RPCResult.Error, JsonSerializer.Serialize(new { Message = ex.Message, Error = ex.GetType().FullName }, opts));
+                }
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

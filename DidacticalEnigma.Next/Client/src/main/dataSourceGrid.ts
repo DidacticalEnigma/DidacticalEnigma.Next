@@ -393,13 +393,13 @@ function closeSplit(dataSourceViewer: HTMLElement) {
     }
 }
 
-export async function dataSourceGridLookup(dataSourceGrid: Element, dataSourceLookup: DataSourceLookup, text: string, position: number) {
+export async function dataSourceGridLookup(dataSourceGrid: Element, dataSourceLookup: DataSourceLookup, text: string, position: number, positionEnd: number | undefined) {
     const viewers = dataSourceGrid.getElementsByClassName("data-source-viewer");
     const dataSourceIdentifiers = filter(
         map(viewers, (viewer) => (viewer.getElementsByTagName("select")[0]).selectedOptions[0].value),
         notNull);
 
-    const result = await dataSourceLookup.lookup(text, position, dataSourceIdentifiers);
+    const result = await dataSourceLookup.lookup(text, position, positionEnd, dataSourceIdentifiers);
 
     for (const viewer of viewers) {
         const dataIdentifier = (viewer.getElementsByTagName("select")[0]).selectedOptions[0].value;

@@ -100,6 +100,18 @@ body {
 .kanjifont {
     font-family: "Kanji Stroke Orders";
 }
+*::-webkit-scrollbar {
+    width: 12px;
+}
+*::-webkit-scrollbar-track {
+    background: #2a2a2c;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #7d7d7e;
+    border-radius: 20px;
+    border: 3px solid #2a2a2c;
+}
 .japanese-input {
     position: relative;
     font-size: 24px;
@@ -149,6 +161,9 @@ select {
     line-height: inherit;
     outline: none;
     color: #fff;
+}
+select option {
+    color: initial;
 }
 .select {
     width: 100%;
@@ -412,31 +427,31 @@ input.radicals-searchbox {
 }
 .textelement-extrasmall
 {
-	font-size: xx-small;
+	font-size: 9px;
 }
 .textelement-small
 {
-	font-size: x-small;
+	font-size: 12px;
 }
 .textelement-medium
 {
-	font-size: small;
+	font-size: 14px;
 }
 .textelement-normal
 {
-	font-size: medium;
+	font-size: 16px;
 }
 .textelement-large
 {
-	font-size: large;
+	font-size: 24px;
 }
 .textelement-extralarge
 {
-	font-size: larger;
+	font-size: 48px;
 }
 .textelement-humonguous
 {
-	font-size: 96px;
+	font-size: 120px;
 }
 .textelement-emphasis
 {

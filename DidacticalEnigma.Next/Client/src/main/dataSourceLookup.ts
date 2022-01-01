@@ -6,11 +6,11 @@ export class DataSourceLookup {
         return await api.listDataSources();
     }
 
-    public async lookup(text: string, position: number, dataSourceIdentifiers: string[]) {
+    public async lookup(text: string, position: number, positionEnd: number | undefined, dataSourceIdentifiers: string[]) {
         const result = await api.requestInformationFromDataSources({
             body: {
                 text: text,
-                positions: [{ position: position }],
+                positions: [{ position: position, positionEnd: positionEnd }],
                 requestedDataSources: dataSourceIdentifiers
             }
         });
