@@ -65,33 +65,40 @@ async function highlightJapaneseInput(
         return;
     }
     removeAllChildElements(divElement);
-    divElement.innerText = textAreaElement.value;
+    const newText = textAreaElement.value;
+    divElement.innerText = newText;
     if(!textAreaElement.value) {
         return;
     }
-    const result = await wordInfoLookup.getWordInfo(textAreaElement.value);
+    const result = await wordInfoLookup.getWordInfo(newText);
     const postQueryHighlightId = parseInt(textAreaElement.getAttribute("last-highlight-id") ?? "0", 10);
     if(postQueryHighlightId !== lastHighlightId) {
         return;
     }
-    const selectedText = textAreaElement.value.substring(textAreaElement.selectionStart,
+    const selectedText = newText.substring(textAreaElement.selectionStart,
         textAreaElement.selectionStart == textAreaElement.selectionEnd
             ? textAreaElement.selectionStart + 1
             : textAreaElement.selectionEnd
     );
     await onWordInfoChange(selectedText, result);
     divElement.innerText = "";
+    let index = 0;
     for (const line of result.wordInformation) {
         for (const word of line) {
+            const newIndex = newText.indexOf(word.text, index);
+            if(index !== newIndex) {
+                divElement.appendChild(makeElement({
+                    tagName: "span",
+                    innerText: newText.substring(index, newIndex)
+                }));
+            }
+            index = newIndex + word.text.length;
             divElement.appendChild(makeElement({
                 tagName: "span",
                 classes: mapWordTypeToClassList(word.type),
                 innerText: word.text
             }));
         }
-        divElement.appendChild(makeElement({
-            tagName: "br"
-        }));
     }
     textAreaElement.setAttribute("last-highlight-id", (postQueryHighlightId + 1).toString());
 }
