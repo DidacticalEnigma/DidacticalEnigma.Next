@@ -1,6 +1,6 @@
 namespace DidacticalEnigma.Next.Models;
 
-public class SwitchToProjectResponse
+public class SwitchToProjectResult
 {
     
 }

@@ -9,6 +9,7 @@ using DidacticalEnigma.Next.Auth;
 using DidacticalEnigma.Next.Controllers;
 using DidacticalEnigma.Next.InternalServices;
 using DidacticalEnigma.Next.Models;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -105,8 +106,50 @@ namespace DidacticalEnigma.Next
                 }
                 webview.Return(id, RPCResult.Success, JsonSerializer.Serialize(result));
             });
-            webview.Bind("switchToProject", Callback);
-
+            webview.Bind("switchToProject",
+                CreateRpcCallback<
+                    IProjectHandler,
+                    SwitchToProjectRequest,
+                    SwitchToProjectResult>(
+                    webview,
+                    serviceProvider,
+                    async (service, request) => await service.SwitchToProject(request)));
+            webview.Bind("openProject",
+                CreateRpcCallback<
+                    IProjectHandler,
+                    OpenProjectRequest,
+                    OpenProjectResult>(
+                    webview,
+                    serviceProvider,
+                    async (service, request) => await service.OpenProject(request)));
+            webview.Bind("listProjects",
+                CreateRpcCallback<
+                    IProjectHandler,
+                    ProjectListRequest,
+                    ProjectListResult>(
+                    webview,
+                    serviceProvider,
+                    async (service, request) => await service.ListOpenProjects(request)));
+            webview.Bind("listProjectTypes",
+                CreateRpcCallback<
+                    IProjectHandler,
+                    ProjectTypeListRequest,
+                    ProjectTypeListResult>(
+                    webview,
+                    serviceProvider,
+                    async (service, request) => await service.ListProjectTypes(request)));
+        }
+        
+        private static Action<string, string> CreateRpcCallback<TService, TRequest, TResponse>(
+            Webview webview,
+            IServiceProvider serviceProvider,
+            Func<TService, TRequest, Task<TResponse>> action)
+            where TService : notnull
+            where TRequest : notnull
+            where TResponse : notnull
+        {
+            return Callback;
+                
             async void Callback(string id, string req)
             {
                 var opts = new JsonSerializerOptions()
@@ -115,15 +158,20 @@ namespace DidacticalEnigma.Next
                 };
                 try
                 {
+                    var parameterArray = JsonSerializer.Deserialize<TRequest[]>(req, opts);
+                    var request = parameterArray != null
+                        ? parameterArray[0] ?? throw new JsonException()
+                        : throw new JsonException();
                     using var scope = serviceProvider.CreateScope();
-                    var request = JsonSerializer.Deserialize<SwitchToProjectRequest[]>(req, opts);
-                    var handler = scope.ServiceProvider.GetRequiredService<ProjectHandler>();
-                    var result = await handler.SwitchToProject(request?[0] ?? throw new ArgumentNullException());
+                    var handler = scope.ServiceProvider.GetRequiredService<TService>();
+                    var result = await action(handler, request); 
                     webview.Return(id, RPCResult.Success, JsonSerializer.Serialize(result, opts));
                 }
                 catch (Exception ex)
                 {
-                    webview.Return(id, RPCResult.Error, JsonSerializer.Serialize(new { Message = ex.Message, Error = ex.GetType().FullName }, opts));
+                    webview.Return(id, RPCResult.Error,
+                        JsonSerializer.Serialize(new { Message = ex.Message, Error = ex.GetType().FullName },
+                            opts));
                 }
             }
         }

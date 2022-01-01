@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClipwatchSharp" Version="0.1.0" />
+    <PackageReference Include="ClipwatchSharp" Version="0.1.1" />
     <PackageReference Include="DidacticalEnigma.Core" Version="0.9.7.4" />
     <PackageReference Include="DidacticalEnigma.IoCModule" Version="0.9.2.1" />
     <PackageReference Include="Gu.Inject" Version="0.3.9" />

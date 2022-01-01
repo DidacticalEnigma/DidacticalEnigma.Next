@@ -104,8 +104,16 @@ namespace DidacticalEnigma.Next
             services.AddSingleton(_ => kernel.Get<XmlRichFormattingRenderer>());
             services.AddSingleton(_ => kernel.Get<DisclaimersGetter>());
             services.AddSingleton<ClipboardWatcher>();
+
+            if (launchConfiguration.PublicMode)
+            {
+                services.AddScoped<IProjectHandler, ReducedFunctionalityProjectHandler>();
+            }
+            else
+            {
+                services.AddScoped<IProjectHandler, ProjectHandler>();
+            }
             
-            services.AddScoped<ProjectHandler>();
             
             services
                 .AddStartupTask<WarmupServicesStartupTask>()
