@@ -69,7 +69,7 @@ namespace DidacticalEnigma.Next
                 
                 using(var webview = webHost.Services.GetRequiredService<Webview>())
                 {
-                    webview.SetTitle("DidacticalEnigma.Next");
+                    webview.SetTitle("Didactical Enigma");
                     webview.SetSize(1024, 768, WebviewHint.None);
                     webview.SetSize(800, 600, WebviewHint.Min);
                     SetupFFI(webview, webHost.Services);

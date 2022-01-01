@@ -96,6 +96,20 @@ async function highlightJapaneseInput(
     textAreaElement.setAttribute("last-highlight-id", (postQueryHighlightId + 1).toString());
 }
 
+export async function japaneseInputResetText(
+    wordInfoLookup: WordInfoLookup,
+    text: string,
+    onWordInfoChange: (selectedText: string, result: WordInfoResponse) => Promise<void>) {
+    const editorElement = document.querySelector(".tabcontrol-tabcontent-selected .japanese-input .editor") as HTMLTextAreaElement;
+    const highlightElement = document.querySelector(".tabcontrol-tabcontent-selected .japanese-input .highlighter") as HTMLDivElement;
+    if (editorElement !== null) {
+        editorElement.value = text;
+        editorElement.selectionStart = 0;
+        editorElement.selectionEnd = 0;
+        await highlightJapaneseInput(wordInfoLookup, highlightElement, editorElement, onWordInfoChange);
+    }
+}
+
 export async function japaneseInputInsertText(
     wordInfoLookup: WordInfoLookup,
     text: string,

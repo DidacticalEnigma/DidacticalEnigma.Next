@@ -3,67 +3,64 @@ import {WordInfoResponse} from "../api/src";
 
 const columnCount = 3;
 
-export function projectInputAttachJs() {
-    const elements = document.getElementsByClassName("project-input");
-    for (const element of elements) {
-        const projectInputElement = element as HTMLDivElement;
-        projectInputElement.appendChild(makeElement({
-            tagName: "div",
-            classes: ["japanese-input"]
-        }));
-        projectInputElement.appendChild(makeElement({
-            tagName: "div",
-            classes: ["project-input-center-panel"],
-            children: [
-                makeElement({
-                    tagName: "div",
-                    classes: ["similar-characters-picker"],
-                    andAlso: (element) => {
-                        addPadding(element, columnCount);
-                    }
-                }),
-                makeElement({
-                    tagName: "div",
-                    classes: ["project-input-center-panel-footer"],
-                    children: [
-                        makeElement({
-                            tagName: "button",
-                            children: [
-                                makeElement({
-                                    tagName: "i",
-                                    classes: ["fas", "fa-arrow-left"]
-                                })
-                            ]
-                        }),
-                        makeElement({
-                            tagName: "button",
-                            children: [
-                                makeElement({
-                                    tagName: "i",
-                                    classes: ["fas", "fa-arrow-right"]
-                                })
-                            ]
-                        })
-                    ]
-                })
-            ]
-        }));
-        projectInputElement.appendChild(makeElement({
-            tagName: "div",
-            classes: ["english-input"],
-            children: [
-                makeElement({
-                    tagName: "textarea",
-                    classes: ["editor"],
-                    attributes: [["placeholder", " English"]]
-                }),
-                makeElement({
-                    tagName: "div",
-                    classes: ["highlighter"]
-                })
-            ]
-        }));
-    }
+export function projectInputAttachJs(element: Element) {
+    const projectInputElement = element as HTMLDivElement;
+    projectInputElement.appendChild(makeElement({
+        tagName: "div",
+        classes: ["japanese-input"]
+    }));
+    projectInputElement.appendChild(makeElement({
+        tagName: "div",
+        classes: ["project-input-center-panel"],
+        children: [
+            makeElement({
+                tagName: "div",
+                classes: ["similar-characters-picker"],
+                andAlso: (element) => {
+                    addPadding(element, columnCount);
+                }
+            }),
+            makeElement({
+                tagName: "div",
+                classes: ["project-input-center-panel-footer"],
+                children: [
+                    makeElement({
+                        tagName: "button",
+                        children: [
+                            makeElement({
+                                tagName: "i",
+                                classes: ["fas", "fa-arrow-left"]
+                            })
+                        ]
+                    }),
+                    makeElement({
+                        tagName: "button",
+                        children: [
+                            makeElement({
+                                tagName: "i",
+                                classes: ["fas", "fa-arrow-right"]
+                            })
+                        ]
+                    })
+                ]
+            })
+        ]
+    }));
+    projectInputElement.appendChild(makeElement({
+        tagName: "div",
+        classes: ["english-input"],
+        children: [
+            makeElement({
+                tagName: "textarea",
+                classes: ["editor"],
+                attributes: [["placeholder", " English"]]
+            }),
+            makeElement({
+                tagName: "div",
+                classes: ["highlighter"]
+            })
+        ]
+    }));
 }
 
 function addPadding(charactersPickerElement: Element, count: number) {

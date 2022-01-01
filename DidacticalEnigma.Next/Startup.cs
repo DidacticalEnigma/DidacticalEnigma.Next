@@ -107,11 +107,11 @@ namespace DidacticalEnigma.Next
 
             if (launchConfiguration.PublicMode)
             {
-                services.AddScoped<IProjectHandler, ReducedFunctionalityProjectHandler>();
+                services.AddSingleton<IProjectHandler, ReducedFunctionalityProjectHandler>();
             }
             else
             {
-                services.AddScoped<IProjectHandler, ProjectHandler>();
+                services.AddSingleton<IProjectHandler, ProjectHandler>();
             }
             
             

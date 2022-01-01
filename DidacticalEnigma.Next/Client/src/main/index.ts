@@ -1,9 +1,14 @@
-import { tabControlAttachJs } from "./tabControl";
+import {tabControlAttachJs, tabControlDynamicJs} from "./tabControl";
 import { RadicalLookup } from "./radicalLookup";
 import { DataSourceLookup } from "./dataSourceLookup";
 import { radicalControlAttachJs } from "./radicalControl";
 import {dataSourceGridAttachJs, dataSourceGridLookup, DataSourceLayoutConfig} from "./dataSourceGrid";
-import {japaneseInputAttachJs, japaneseInputInsertText, japaneseInputReplaceText} from "./japaneseInput";
+import {
+  japaneseInputAttachJs,
+  japaneseInputInsertText,
+  japaneseInputReplaceText,
+  japaneseInputResetText
+} from "./japaneseInput";
 import {WordInfoLookup} from "./wordInfoLookup";
 import {projectWindowAttachJs} from "./projectWindow";
 import {api, isPrivateMode} from "./api";
@@ -13,8 +18,9 @@ import {projectInputAttachJs, updateSimilarCharactersPicker} from "./projectInpu
 import {WordInfoResponse} from "../api/src";
 import {settingsPanelAttachJs} from "./settingsPanel";
 import {map} from "lodash";
-import {promiseDelay} from "./utility";
 import {shim} from "globalthis"
+import {Throttler} from "./throttler";
+import {makeElement} from "./utility";
 
 shim();
 
@@ -42,14 +48,33 @@ window.addEventListener('load', async () => {
   else {
     dataLayouts = sessionConfig.dataSourceGridLayouts;
   }
-  
-  globalThis.clipboardNotification = function(content: string) {
-    console.log(content);
-  }
 
   async function replaceText(text: string) {
     await japaneseInputReplaceText(wordInfoLookup, text, similarCharactersRefresh);
   }
+
+  async function resetText(text: string) {
+    await japaneseInputResetText(wordInfoLookup, text, similarCharactersRefresh);
+  }
+
+  const refreshCurrentDataSources = async (text, position, positionEnd) => {
+    const result = await wordInfoLookup.getWordInfo(text);
+    const charactersRefreshPromise = similarCharactersRefresh(text.substring(position,
+        position == positionEnd
+            ? position + 1
+            : positionEnd
+    ), result);
+    const dataSources = document.querySelector(".tabcontrol-tabcontent-selected .data-sources");
+    if(dataSources) {
+      await dataSourceGridLookup(dataSources, dataSourceLookup, text, position, positionEnd);
+    }
+    await charactersRefreshPromise;
+  };
+  
+  globalThis.clipboardNotification = async function(content: string) {
+    await resetText(content);
+    await refreshCurrentDataSources(content, 0, 0);
+  };  
 
   async function similarCharactersRefresh(selectedText: string, wordInfoResponse: WordInfoResponse) {
     const charactersElement = document.querySelector(".tabcontrol-tabcontent-selected .similar-characters-picker");
@@ -83,27 +108,38 @@ window.addEventListener('load', async () => {
   async function saveLayoutConfigCallback() {
     await saveLayoutConfigThrottler.doAction();
   }
+  
+  const projects = await listProjects({})
 
   settingsPanelAttachJs(sessionConfig);
   aboutSectionAttachJs(sessionConfig);
-  projectInputAttachJs();
-  tabControlAttachJs();
+  for(const tabControl of document.getElementsByClassName("project-inputs-tabs")) {
+    const [addTab] = tabControlDynamicJs(tabControl);
+    for(const project of projects.projects) {
+      const childEl = makeElement({
+        tagName: "div",
+        classes: ["project-input"],
+        andAlso: (childControl) => {
+          projectInputAttachJs(childControl);
+        }
+      });
+      await addTab(
+          project.friendlyName,
+          project.identifier,
+          childEl,
+          project.friendlyName === "Main",
+          async (identifier) => {
+            await switchToProject({projectId: identifier})
+          });
+    }
+  }
+  for(const tabControl of document.getElementsByClassName("main-tabs")) {
+    tabControlAttachJs(tabControl);
+  }
   projectWindowAttachJs();
   const dataSources = await dataSourceLookup.listDataSources();
   const dataSourceGridLoadPromise = dataSourceGridAttachJs(dataLayouts, dataSources, saveLayoutConfigCallback);
-  await japaneseInputAttachJs(wordInfoLookup, async (text, position, positionEnd) => {
-    const result = await wordInfoLookup.getWordInfo(text);
-    const charactersRefreshPromise = similarCharactersRefresh(text.substring(position,
-        position == positionEnd
-            ? position + 1
-            : positionEnd
-    ), result);
-    const dataSources = document.querySelector(".tabcontrol-tabcontent-selected .data-sources");
-    if(dataSources) {
-      await dataSourceGridLookup(dataSources, dataSourceLookup, text, position, positionEnd);
-    }
-    await charactersRefreshPromise;
-  }, similarCharactersRefresh);
+  await japaneseInputAttachJs(wordInfoLookup, refreshCurrentDataSources, similarCharactersRefresh);
   kanaBoardAttachJs(document.getElementsByClassName("kana-board-hiragana")[0] as HTMLDivElement, kana.hiragana, insertText);
   kanaBoardAttachJs(document.getElementsByClassName("kana-board-katakana")[0] as HTMLDivElement, kana.katakana, insertText);
   const radicalControlLoadPromise = radicalControlAttachJs(radicalLookup, insertText);
@@ -121,26 +157,3 @@ window.addEventListener('load', async () => {
   }
 });
 
-class Throttler
-{
-  private _action: () => Promise<void>;
-  private _throttleTime: number;
-  private _requestId: number;
-  
-  public constructor(action: () => Promise<void>, throttleTime: number) {
-    this._action = action;
-    this._throttleTime = throttleTime;
-    this._requestId = 0;
-  }
-  
-  public async doAction() {
-    this._requestId++;
-    const beforeThrottleRequestId = this._requestId;
-    await promiseDelay(this._throttleTime);
-    const afterThrottleRequestId = this._requestId;
-    if(beforeThrottleRequestId !== afterThrottleRequestId) {
-      return;
-    }
-    await this._action();
-  }
-}
