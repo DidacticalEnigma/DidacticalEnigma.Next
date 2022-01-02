@@ -121,13 +121,14 @@ body {
     position: absolute;
     width: 100%;
     height: 100%;
-    overflow-y: scroll;
 }
 .japanese-input .highlighter {
-    margin: 4px 4px;
+    padding: 2px 2px;
+    border: 2px solid #333;
     z-index: 0;
     width: calc(100% - 4px);
     height: calc(100% - 4px);
+    overflow-y: hidden;
 }
 .japanese-input .editor {
     color: transparent;
@@ -137,6 +138,7 @@ body {
     border-width: 2px;
     border-color: #777;
     z-index: 1;
+    overflow-y: scroll;
 }
 input {
     background-color: #333;
@@ -332,7 +334,8 @@ button[disabled] {
     overflow-y: scroll;
 }
 .english-input .highlighter {
-    margin: 4px 4px;
+    padding: 2px 2px;
+    border: 2px solid #777;
     z-index: 0;
     width: calc(100% - 4px);
     height: calc(100% - 4px);
