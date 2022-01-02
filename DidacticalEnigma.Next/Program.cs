@@ -96,16 +96,6 @@ namespace DidacticalEnigma.Next
 
         private static void SetupFFI(Webview webview, IServiceProvider serviceProvider)
         {
-            string? lastOpenDirectory = null;
-            webview.Bind("fileOpenDialog", (id, req) =>
-            {
-                var result = NativeFileDialogSharp.Dialog.FileOpen(defaultPath: lastOpenDirectory);
-                if (result.IsOk)
-                {
-                    lastOpenDirectory = Path.GetDirectoryName(result.Path);
-                }
-                webview.Return(id, RPCResult.Success, JsonSerializer.Serialize(result));
-            });
             webview.Bind("switchToProject",
                 CreateRpcCallback<
                     IProjectHandler,
@@ -138,6 +128,54 @@ namespace DidacticalEnigma.Next
                     webview,
                     serviceProvider,
                     async (service, request) => await service.ListProjectTypes(request)));
+            webview.Bind("didacticalEnigmaMemUpdateAddress",
+                CreateRpcCallback<
+                    IDidacticalEnigmaMemConnectionSetupHandler,
+                    DidacticalEnigmaMemUpdateAddressRequest,
+                    DidacticalEnigmaMemConnectionStatusResult>(
+                    webview,
+                    serviceProvider,
+                    async (service, request) => await service.UpdateAddress(request)));
+            webview.Bind("didacticalEnigmaMemSet",
+                CreateRpcCallback<
+                    IDidacticalEnigmaMemConnectionSetupHandler,
+                    DidacticalEnigmaMemSetRequest,
+                    DidacticalEnigmaMemConnectionStatusResult>(
+                    webview,
+                    serviceProvider,
+                    async (service, request) => await service.Set(request)));
+            webview.Bind("didacticalEnigmaMemReset",
+                CreateRpcCallback<
+                    IDidacticalEnigmaMemConnectionSetupHandler,
+                    DidacticalEnigmaMemResetRequest,
+                    DidacticalEnigmaMemConnectionStatusResult>(
+                    webview,
+                    serviceProvider,
+                    async (service, request) => await service.Reset(request)));
+            webview.Bind("didacticalEnigmaMemLogIn",
+                CreateRpcCallback<
+                    IDidacticalEnigmaMemConnectionSetupHandler,
+                    DidacticalEnigmaMemLogInRequest,
+                    DidacticalEnigmaMemConnectionStatusResult>(
+                    webview,
+                    serviceProvider,
+                    async (service, request) => await service.LogIn(request)));
+            webview.Bind("didacticalEnigmaMemLogOut",
+                CreateRpcCallback<
+                    IDidacticalEnigmaMemConnectionSetupHandler,
+                    DidacticalEnigmaMemLogOutRequest,
+                    DidacticalEnigmaMemConnectionStatusResult>(
+                    webview,
+                    serviceProvider,
+                    async (service, request) => await service.LogOut(request)));
+            webview.Bind("didacticalEnigmaMemCheckState",
+                CreateRpcCallback<
+                    IDidacticalEnigmaMemConnectionSetupHandler,
+                    DidacticalEnigmaMemCheckStateRequest,
+                    DidacticalEnigmaMemConnectionStatusResult>(
+                    webview,
+                    serviceProvider,
+                    async (service, request) => await service.CheckState(request)));
         }
         
         private static Action<string, string> CreateRpcCallback<TService, TRequest, TResponse>(

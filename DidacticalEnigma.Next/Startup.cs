@@ -6,6 +6,7 @@ using DidacticalEnigma.Core.Models.DataSources;
 using DidacticalEnigma.Core.Models.Formatting;
 using DidacticalEnigma.Core.Models.HighLevel.KanjiLookupService;
 using DidacticalEnigma.Core.Models.LanguageService;
+using DidacticalEnigma.Mem.Client;
 using DidacticalEnigma.Next.Auth;
 using DidacticalEnigma.Next.Controllers;
 using DidacticalEnigma.Next.Extensions;
@@ -104,14 +105,21 @@ namespace DidacticalEnigma.Next
             services.AddSingleton(_ => kernel.Get<XmlRichFormattingRenderer>());
             services.AddSingleton(_ => kernel.Get<DisclaimersGetter>());
             services.AddSingleton<ClipboardWatcher>();
+            services.AddSingleton<DidacticalEnigmaMemViewModel>();
 
             if (launchConfiguration.PublicMode)
             {
                 services.AddSingleton<IProjectHandler, ReducedFunctionalityProjectHandler>();
+                services.AddSingleton<
+                    IDidacticalEnigmaMemConnectionSetupHandler,
+                    ReducedFunctionalityDidacticalEnigmaMemConnectionSetupHandler>();
             }
             else
             {
                 services.AddSingleton<IProjectHandler, ProjectHandler>();
+                services.AddSingleton<
+                    IDidacticalEnigmaMemConnectionSetupHandler,
+                    DidacticalEnigmaMemConnectionSetupHandler>();
             }
             
             
