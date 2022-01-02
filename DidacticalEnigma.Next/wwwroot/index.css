@@ -147,6 +147,19 @@ input {
     --select-focus: blue;
     --select-arrow: var(--select-border);
 }
+.settings-panel-didactical-enigma-mem {
+    display: flex;
+    flex-direction: column;
+}
+.settings-panel-didactical-enigma-mem-top-row {
+    display: flex;
+}
+.settings-panel-didactical-enigma-mem-bottom-row {
+    display: flex;
+}
+.settings-panel-didactical-enigma-mem .settings-panel-didactical-enigma-mem-spanner {
+    flex: auto;
+}
 select {
     appearance: none;
     -webkit-appearance: none;

@@ -108,10 +108,25 @@ window.addEventListener('load', async () => {
   async function saveLayoutConfigCallback() {
     await saveLayoutConfigThrottler.doAction();
   }
-  
-  const projects = await listProjects({})
 
-  settingsPanelAttachJs(sessionConfig);
+  const projects = isPrivateMode
+      ? await listProjects({})
+      : {
+        projects: [
+          {
+            type: "4f1b68c1-0760-4ea4-acf3-555f0475828c",
+            friendlyName: "Main",
+            identifier: "a"
+          },
+          {
+            type: "4f1b68c1-0760-4ea4-acf3-555f0475828c",
+            friendlyName: "Scratchpad",
+            identifier: "b"
+          },
+        ]
+      };
+
+  await settingsPanelAttachJs(sessionConfig);
   aboutSectionAttachJs(sessionConfig);
   for(const tabControl of document.getElementsByClassName("project-inputs-tabs")) {
     const [addTab] = tabControlDynamicJs(tabControl);
@@ -129,7 +144,9 @@ window.addEventListener('load', async () => {
           childEl,
           project.friendlyName === "Main",
           async (identifier) => {
-            await switchToProject({projectId: identifier})
+            if(isPrivateMode) {
+              await switchToProject({projectId: identifier});
+            }
           });
     }
   }

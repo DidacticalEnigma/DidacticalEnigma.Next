@@ -44,13 +44,26 @@ export async function japaneseInputAttachJs(
             await highlightJapaneseInput(wordInfoLookup, divElement, textAreaElement, onWordInfoChange);
         }
         
+        function syncScroll() {
+            synchronizeScroll(divElement, textAreaElement);
+        }
+        
         textAreaElement.addEventListener("click", send);
         textAreaElement.addEventListener("focus", send);
         textAreaElement.addEventListener("input", highlight);
+        textAreaElement.addEventListener("keyup", syncScroll);
+        textAreaElement.addEventListener("scroll", syncScroll);
         
         japaneseInput.appendChild(textAreaElement);
         japaneseInput.appendChild(divElement);
     }
+}
+
+function synchronizeScroll(
+    divElement: HTMLDivElement,
+    textAreaElement: HTMLTextAreaElement) {
+    divElement.scrollTop = textAreaElement.scrollTop;
+    divElement.scrollLeft = textAreaElement.scrollLeft;
 }
 
 async function highlightJapaneseInput(
