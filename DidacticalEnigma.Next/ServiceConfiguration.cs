@@ -1,4 +1,6 @@
 ﻿using DidacticalEnigma.IoCModule;
+using DidacticalEnigma.Mem.Client;
+using DidacticalEnigma.Mem.DataSource;
 using Gu.Inject;
 
 namespace DidacticalEnigma.Next
@@ -15,7 +17,9 @@ namespace DidacticalEnigma.Next
         {
             var kernel = new Kernel();
 
-            kernel.BindDidacticalEnigmaCoreServices(dataDir, dataDir);
+            var dataSourceCollection = kernel.BindDidacticalEnigmaCoreServices(dataDir, dataDir);
+            kernel.Bind(get => new DidacticalEnigmaMemViewModel());
+            dataSourceCollection.Add(get => new DidacticalEnigmaMemDataSource(get.Get<DidacticalEnigmaMemViewModel>().ClientAccessor));
 
             return kernel;
         }

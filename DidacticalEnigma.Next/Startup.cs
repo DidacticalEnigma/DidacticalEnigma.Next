@@ -104,8 +104,8 @@ namespace DidacticalEnigma.Next
             services.AddSingleton(_ => kernel.Get<DataSourceDispatcher>());
             services.AddSingleton(_ => kernel.Get<XmlRichFormattingRenderer>());
             services.AddSingleton(_ => kernel.Get<DisclaimersGetter>());
+            services.AddSingleton(_ => kernel.Get<DidacticalEnigmaMemViewModel>());
             services.AddSingleton<ClipboardWatcher>();
-            services.AddSingleton<DidacticalEnigmaMemViewModel>();
 
             if (launchConfiguration.PublicMode)
             {

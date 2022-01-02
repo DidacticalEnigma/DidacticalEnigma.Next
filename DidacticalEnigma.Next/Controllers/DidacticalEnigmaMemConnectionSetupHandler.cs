@@ -1,5 +1,8 @@
+using System;
 using System.Threading.Tasks;
+using DidacticalEnigma.Core.Models.DataSources;
 using DidacticalEnigma.Mem.Client;
+using DidacticalEnigma.Mem.DataSource;
 using DidacticalEnigma.Next.Models;
 
 namespace DidacticalEnigma.Next.Controllers;
@@ -30,7 +33,7 @@ public class DidacticalEnigmaMemConnectionSetupHandler : IDidacticalEnigmaMemCon
         {
             this.vm.Initialize.Execute(null);
         }
-        
+
         return Task.FromResult(Map(this.vm));
     }
     

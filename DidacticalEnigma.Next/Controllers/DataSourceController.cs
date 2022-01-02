@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using DidacticalEnigma.Core.Models.DataSources;
 using DidacticalEnigma.Core.Models.Formatting;
 using DidacticalEnigma.Core.Models.LanguageService;
+using DidacticalEnigma.Mem.Client;
+using DidacticalEnigma.Mem.DataSource;
 using DidacticalEnigma.Next.InternalServices;
 using DidacticalEnigma.Next.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -20,10 +22,17 @@ namespace DidacticalEnigma.Next.Controllers
     [Authorize("AllowAnonymous")]
     public class DataSourceController : ControllerBase
     {
+        private readonly DataSourceDispatcher dataSourceDispatcher;
+
+        public DataSourceController(
+            DataSourceDispatcher dataSourceDispatcher)
+        {
+            this.dataSourceDispatcher = dataSourceDispatcher;
+        }
+
         [HttpGet("list")]
         [SwaggerOperation(OperationId = "ListDataSources")]
-        public IEnumerable<DataSourceInformation> List(
-            [FromServices] DataSourceDispatcher dataSourceDispatcher)
+        public IEnumerable<DataSourceInformation> List()
         {
             return dataSourceDispatcher.DataSourceIdentifiers;
         }
@@ -33,8 +42,7 @@ namespace DidacticalEnigma.Next.Controllers
         public async Task<ActionResult<IEnumerable<DataSourceParseResponse>>> RequestInformation(
             [FromBody] DataSourceParseRequest request,
             [FromServices] XmlRichFormattingRenderer renderer,
-            [FromServices] ISentenceParser parser,
-            [FromServices] DataSourceDispatcher dataSourceDispatcher)
+            [FromServices] ISentenceParser parser)
         {
             var rawText = request.Text.TrimEnd();
             var parsedText = new ParsedText(rawText,
