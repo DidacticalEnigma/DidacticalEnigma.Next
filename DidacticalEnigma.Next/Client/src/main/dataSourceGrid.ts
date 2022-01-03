@@ -203,7 +203,12 @@ function createViewer(
                                         attributes: attributes,
                                         innerText: dataSource.friendlyName
                                     });
-                                })
+                                }),
+                                andAlso: (element) => {
+                                    element.addEventListener("change", async () => {
+                                        await onLayoutChangeCallback();
+                                    });
+                                }
                             })
                         ]
                     }),
@@ -284,7 +289,7 @@ function makeSplit(
                 next.style.userSelect = 'none';
                 next.style.pointerEvents = 'none';
             };
-            const mouseUpHandler = (_ : MouseEvent) => {
+            const mouseUpHandler = async (_ : MouseEvent) => {
                 const previous = element.previousElementSibling as HTMLElement;
                 const next = element.nextElementSibling as HTMLElement;
 
@@ -299,8 +304,10 @@ function makeSplit(
 
                 document.removeEventListener("mousemove", mouseMoveHandler);
                 document.removeEventListener("mouseup", mouseUpHandler);
+
+                await onLayoutChangeCallback();
             };
-            element.addEventListener("mousedown", async (ev) => {
+            element.addEventListener("mousedown", (ev) => {
                 ev.preventDefault();
 
                 x = ev.clientX;
@@ -312,8 +319,6 @@ function makeSplit(
 
                 document.addEventListener("mousemove", mouseMoveHandler);
                 document.addEventListener("mouseup", mouseUpHandler);
-
-                await onLayoutChangeCallback();
             });
         }
     })
