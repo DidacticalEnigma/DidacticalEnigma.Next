@@ -94,7 +94,7 @@ namespace DidacticalEnigma.Next
 
             var config = rawConfig.Get<ServiceConfiguration>();
 
-            var kernel = ServiceConfiguration.Configure(config.DataDirectory);
+            var kernel = ServiceConfiguration.Configure(config);
             
             services.AddSingleton(_ => kernel.Get<ISentenceParser>());
             services.AddSingleton(_ => kernel.Get<IRadicalSearcher>());
@@ -121,11 +121,6 @@ namespace DidacticalEnigma.Next
                     IDidacticalEnigmaMemConnectionSetupHandler,
                     DidacticalEnigmaMemConnectionSetupHandler>();
             }
-            
-            
-            services
-                .AddStartupTask<WarmupServicesStartupTask>()
-                .TryAddSingleton(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
