@@ -93,7 +93,10 @@ namespace DidacticalEnigma.Next.Controllers
 
         private void ClipboardWatcherOnClipboardChanged(object? sender, string e)
         {
-            webview.Evaluate($"clipboardNotification({HttpUtility.JavaScriptStringEncode(e, addDoubleQuotes: true)})");
+            webview.Dispatch(() =>
+            {
+                webview.Evaluate($"clipboardNotification({HttpUtility.JavaScriptStringEncode(e, addDoubleQuotes: true)})");
+            });
         }
     }
 }
