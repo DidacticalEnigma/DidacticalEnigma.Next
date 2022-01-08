@@ -11,5 +11,10 @@ function isLocalhost(url: URL) {
 
 export const api : DidacticalEnigmaNext = new DidacticalEnigmaNext(
     url.origin,{
-        allowInsecureConnection: isLocalhost(url)
+        allowInsecureConnection: isLocalhost(url),
+        retryOptions: {
+            maxRetries: 2,
+            maxRetryDelayInMs: 1000,
+            retryDelayInMs: 200
+        }
     });

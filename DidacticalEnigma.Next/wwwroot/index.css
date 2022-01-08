@@ -256,6 +256,11 @@ button[disabled] {
     white-space: pre-line;
     overflow-y: scroll;
 }
+.loading-error {
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
+}
 .logging-preview {
     overflow-y: scroll;
 }
