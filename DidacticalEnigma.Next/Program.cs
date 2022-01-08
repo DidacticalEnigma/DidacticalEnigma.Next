@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using SharpWebview;
 using SharpWebview.Content;
 
@@ -31,7 +32,7 @@ namespace DidacticalEnigma.Next
             {
                 var section = context.Configuration.GetSection(LaunchConfiguration.SectionName);
                 launchConfiguration = section.Get<LaunchConfiguration>();
-                launchConfiguration.UnsafeDebugMode = true;
+                launchConfiguration.UnsafeDebugMode = false;
                 launchConfiguration.Secret = LaunchConfiguration.GenerateSecret();
                 services.AddSingleton(launchConfiguration);
                 services.AddSingleton(serviceProvider =>
@@ -207,9 +208,11 @@ namespace DidacticalEnigma.Next
                 }
                 catch (Exception ex)
                 {
+                    var logger = serviceProvider.GetRequiredService<ILogger<TService>>();
                     webview.Return(id, RPCResult.Error,
                         JsonSerializer.Serialize(new { Message = ex.Message, Error = ex.GetType().FullName },
                             opts));
+                    logger.LogError(ex, "Error while running service");
                 }
             }
         }

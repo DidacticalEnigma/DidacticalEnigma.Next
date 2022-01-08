@@ -335,6 +335,18 @@ export const ExtendedRadicalInformation: coreClient.CompositeMapper = {
         type: {
           name: "String"
         }
+      },
+      queryNames: {
+        serializedName: "queryNames",
+        required: true,
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "String"
+            }
+          }
+        }
       }
     }
   }

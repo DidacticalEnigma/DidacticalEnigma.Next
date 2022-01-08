@@ -60,6 +60,7 @@ export interface ExtendedRadicalInformation {
   radical: string;
   strokeCount: number;
   alternativeDisplay: string;
+  queryNames: string[];
 }
 
 export interface KanjiLookupResult {

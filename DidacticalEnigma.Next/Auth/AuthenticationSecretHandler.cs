@@ -34,39 +34,30 @@ public class AuthenticationSecretHandler : AuthenticationHandler<AuthenticationS
             MemoryMarshal.AsBytes(content.AsSpan()),
             MemoryMarshal.AsBytes(launchConfiguration.Secret.AsSpan()));
         
-        if (launchConfiguration.UnsafeDebugMode ||
-            launchConfiguration.PublicMode ||
-            hasMatchingSecret)
+        var claims = new List<Claim>()
         {
-            var claims = new List<Claim>()
-            {
-                
-            };
-            if (launchConfiguration.PublicMode)
-            {
-                claims.Add(new Claim(ClaimTypes.Anonymous, "true"));
-            }
-            else if (hasMatchingSecret || launchConfiguration.UnsafeDebugMode)
-            {
-                claims.Add(new Claim(ClaimTypes.Name, "user"));
-            }
-            else
-            {
-                claims.Add(new Claim(ClaimTypes.Anonymous, "true"));
-            }
-            var identity = new ClaimsIdentity(claims, Scheme.Name);
-            var principal = new ClaimsPrincipal(identity);
-            var ticket = new AuthenticationTicket(principal, Scheme.Name);
-            if (!launchConfiguration.PublicMode)
-            {
-                Response.Cookies.Append("secret", launchConfiguration.Secret);
-            }
-
-            return AuthenticateResult.Success(ticket);
+            
+        };
+        if (launchConfiguration.PublicMode)
+        {
+            claims.Add(new Claim(ClaimTypes.Anonymous, "true"));
+        }
+        else if (hasMatchingSecret || launchConfiguration.UnsafeDebugMode)
+        {
+            claims.Add(new Claim(ClaimTypes.Name, "user"));
         }
         else
         {
-            return AuthenticateResult.Fail("missing secret");
+            claims.Add(new Claim(ClaimTypes.Anonymous, "true"));
         }
+        var identity = new ClaimsIdentity(claims, Scheme.Name);
+        var principal = new ClaimsPrincipal(identity);
+        var ticket = new AuthenticationTicket(principal, Scheme.Name);
+        if (!launchConfiguration.PublicMode)
+        {
+            Response.Cookies.Append("secret", launchConfiguration.Secret);
+        }
+
+        return AuthenticateResult.Success(ticket);
     }
 }

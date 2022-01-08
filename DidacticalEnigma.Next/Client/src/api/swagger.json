@@ -368,6 +368,7 @@
     "ExtendedRadicalInformation": {
       "required": [
         "alternativeDisplay",
+        "queryNames",
         "radical",
         "strokeCount"
       ],
@@ -382,6 +383,12 @@
         },
         "alternativeDisplay": {
           "type": "string"
+        },
+        "queryNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
