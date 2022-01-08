@@ -95,7 +95,8 @@ public class SessionController : ControllerBase
         {
             try
             {
-                await using var file = System.IO.File.OpenRead(Path.Combine(dataConfig.ConfigDirectory, configFileName));
+                var configDir = dataConfig.ConfigDirectory ?? dataConfig.GetDefaultConfigDirectory();
+                await using var file = System.IO.File.OpenRead(Path.Combine(configDir, configFileName));
                 var result = await JsonSerializer.DeserializeAsync<Element>(file) ?? throw new JsonException("invalid data");
                 config.IsDefault = false;
                 return result;
@@ -123,7 +124,8 @@ public class SessionController : ControllerBase
             var opt = configuration.DataSourceGridLayouts.ElementAtOrNone(index);
             if (opt.HasValue)
             {
-                await using var file = System.IO.File.Create(Path.Combine(dataConfig.ConfigDirectory, configFilePath));
+                var configDir = dataConfig.ConfigDirectory ?? dataConfig.GetDefaultConfigDirectory();
+                await using var file = System.IO.File.Create(Path.Combine(configDir, configFilePath));
                 await JsonSerializer.SerializeAsync(file, opt.ValueOrFailure());
             }
         }

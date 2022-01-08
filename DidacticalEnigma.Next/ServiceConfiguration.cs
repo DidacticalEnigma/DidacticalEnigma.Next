@@ -1,4 +1,6 @@
-﻿using DidacticalEnigma.IoCModule;
+﻿using System;
+using System.IO;
+using DidacticalEnigma.IoCModule;
 using DidacticalEnigma.Mem.Client;
 using DidacticalEnigma.Mem.DataSource;
 using Gu.Inject;
@@ -9,17 +11,28 @@ namespace DidacticalEnigma.Next
     {
         public const string ConfigurationName = "DataConfiguration";
 
-        public string DataDirectory { get; set; }
+        public string? DataDirectory { get; set; }
         
-        public string ConfigDirectory { get; set; }
+        public string? ConfigDirectory { get; set; }
         
         public string? DidacticalEnigmaMemAddress { get; set; }
+
+        public string GetDefaultDataDirectory()
+        {
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
+        }
+        
+        public string GetDefaultConfigDirectory()
+        {
+            return AppDomain.CurrentDomain.BaseDirectory;
+        }
 
         public static Kernel Configure(ServiceConfiguration config)
         {
             var kernel = new Kernel();
 
-            var dataSourceCollection = kernel.BindDidacticalEnigmaCoreServices(config.DataDirectory, config.DataDirectory);
+            var dataDir = config.DataDirectory ?? config.GetDefaultDataDirectory();
+            var dataSourceCollection = kernel.BindDidacticalEnigmaCoreServices(dataDir, dataDir);
             kernel.Bind(get =>
             {
                 var vm = new DidacticalEnigmaMemViewModel();
