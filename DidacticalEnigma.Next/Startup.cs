@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
 using ClipwatchSharp;
@@ -20,8 +21,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 namespace DidacticalEnigma.Next
 {
@@ -124,8 +127,14 @@ namespace DidacticalEnigma.Next
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
+        public void Configure(
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
+            IHostApplicationLifetime lifetime,
+            ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddSerilog();
+            
             lifetime.ApplicationStarted.Register(
                 () =>
                 {
