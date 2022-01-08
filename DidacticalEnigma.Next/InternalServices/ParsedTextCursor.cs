@@ -1,3 +1,5 @@
+using System;
+
 namespace DidacticalEnigma.Next.InternalServices
 {
     public class ParsedTextCursor
@@ -15,8 +17,14 @@ namespace DidacticalEnigma.Next.InternalServices
             this.characterPosition = characterPosition;
         }
 
-        public string CurrentCharacter =>
-            parsedText.WordInformation[linePosition][wordPosition].RawWord[characterPosition].ToString();
+        public string CurrentCharacter
+        {
+            get
+            {
+                var word = parsedText.WordInformation[linePosition][wordPosition].RawWord;
+                return word[Math.Min(characterPosition, word.Length-1)].ToString();
+            }
+        }
 
         public DidacticalEnigma.Core.Models.LanguageService.WordInfo CurrentWord => parsedText.WordInformation[linePosition][wordPosition];
 
