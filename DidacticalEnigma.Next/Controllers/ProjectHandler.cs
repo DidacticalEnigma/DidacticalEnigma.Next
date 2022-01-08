@@ -9,20 +9,23 @@ using SharpWebview;
 
 namespace DidacticalEnigma.Next.Controllers
 {
-    public class ProjectHandler : IProjectHandler
+    public class ProjectHandler : IProjectHandler, IDisposable
     {
         private readonly ClipboardWatcher clipboardWatcher;
         private readonly Webview webview;
         private readonly ConcurrentBag<ProjectInfoResult> projects;
+        private string currentProjectId; 
         
         private static readonly Guid ClipboardProjectId = new Guid("1DE9DE5E-E5CB-488A-A1F1-FF9DA6F50A22");
         private static readonly Guid NullProjectId = new Guid("4F1B68C1-0760-4EA4-ACF3-555F0475828C");
+        
 
         public ProjectHandler(ClipboardWatcher clipboardWatcher, Webview webview)
         {
             this.clipboardWatcher = clipboardWatcher;
             this.webview = webview;
             this.projects = CreateProjects();
+            this.currentProjectId = this.projects.First(project => project.FriendlyName == "Main").Identifier;
         }
 
         private ConcurrentBag<ProjectInfoResult> CreateProjects()
@@ -53,6 +56,16 @@ namespace DidacticalEnigma.Next.Controllers
         public Task<SwitchToProjectResult> SwitchToProject(SwitchToProjectRequest request)
         {
             var selectedProject = projects.FirstOrDefault(project => project.Identifier == request.ProjectId);
+            if (selectedProject == null)
+            {
+                return Task.FromResult(new SwitchToProjectResult());
+            }
+
+            if (currentProjectId == selectedProject.Identifier)
+            {
+                return Task.FromResult(new SwitchToProjectResult());
+            }
+            
             if (selectedProject?.Type == ClipboardProjectId)
             {
                 clipboardWatcher.ClipboardChanged += ClipboardWatcherOnClipboardChanged;
@@ -97,6 +110,13 @@ namespace DidacticalEnigma.Next.Controllers
             {
                 webview.Evaluate($"clipboardNotification({HttpUtility.JavaScriptStringEncode(e, addDoubleQuotes: true)})");
             });
+        }
+
+
+        public void Dispose()
+        {
+            clipboardWatcher.Stop();
+            clipboardWatcher.ClipboardChanged -= ClipboardWatcherOnClipboardChanged;
         }
     }
 }

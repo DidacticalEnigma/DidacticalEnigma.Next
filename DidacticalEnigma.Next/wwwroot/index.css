@@ -126,9 +126,10 @@ body {
     padding: 2px 2px;
     border: 2px solid #333;
     z-index: 0;
-    width: calc(100% - 4px);
+    width: calc(100% - 8px);
     height: calc(100% - 4px);
     overflow-y: hidden;
+    white-space: pre-wrap;
 }
 .japanese-input .editor {
     color: transparent;
@@ -337,8 +338,9 @@ button[disabled] {
     padding: 2px 2px;
     border: 2px solid #777;
     z-index: 0;
-    width: calc(100% - 4px);
+    width: calc(100% - 8px);
     height: calc(100% - 4px);
+    white-space: pre-wrap;
 }
 .english-input .editor {
     color: white;
