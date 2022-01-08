@@ -183,3 +183,13 @@ window.addEventListener('load', async () => {
     }
 });
 
+window.addEventListener("unhandledrejection", (ev) => {
+    const loadingElements = document.getElementsByClassName("logging-preview");
+    for (const loadingElement of loadingElements) {
+        loadingElement.appendChild(makeElement({
+            tagName: "p",
+            classes: ["logging-preview-entry"],
+            innerText: ev.reason
+        }))
+    }
+})

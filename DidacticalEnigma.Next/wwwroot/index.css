@@ -164,12 +164,13 @@ input {
     flex: auto;
 }
 .about-panel {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
     height: 100%;
+    width: 100%;
 }
-.about-panel div {
-    flex: 1;
+.about-panel > div {
+    width: 100%;
 }
 select {
     appearance: none;
@@ -263,6 +264,7 @@ button[disabled] {
 }
 .logging-preview {
     overflow-y: scroll;
+    overflow-wrap: anywhere;
 }
 .data-source-viewer {
     height: 100%;
