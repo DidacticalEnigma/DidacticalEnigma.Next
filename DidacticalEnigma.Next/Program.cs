@@ -41,17 +41,11 @@ namespace DidacticalEnigma.Next
 
             var webHost = hostBuilder.Build();
             
-            var startupTasks = webHost.Services.GetServices<IStartupTask>();
-            var tasks = new List<Task>();
-            tasks.Add(webHost.RunAsync(cancellationTokenSource.Token));
+            var serverTask = webHost.RunAsync(cancellationTokenSource.Token);
 
             if (launchConfiguration?.HeadlessMode == true)
             {
-                foreach (var startupTask in startupTasks)
-                {
-                    tasks.Add(startupTask.ExecuteAsync(cancellationTokenSource.Token));
-                }
-                await Task.WhenAll(tasks);
+                await serverTask;
             }
             else
             {
@@ -91,7 +85,7 @@ namespace DidacticalEnigma.Next
                 }
 
                 cancellationTokenSource.Cancel();
-                await Task.WhenAll(tasks);
+                await Task.WhenAny(serverTask, Task.Delay(TimeSpan.FromMilliseconds(500)));
             }
         }
 

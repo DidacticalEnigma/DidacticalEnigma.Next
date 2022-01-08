@@ -8,19 +8,26 @@ async function selectTab(
     onDeselect: ((identifier: string) => Promise<void>) | undefined) {
     const currentlySelected = tabControl.getElementsByClassName("tabcontrol-tabcontent-selected")[0];
     if (currentlySelected) {
-        currentlySelected.classList.remove("tabcontrol-tabcontent-selected");
         const selectedTab = tabControl.getElementsByClassName("tabcontrol-tab-selected")[0];
         if (selectedTab) {
             if (onDeselect) {
                 await onDeselect(selectedTab.getAttribute("data-identifier") ?? "")
             }
-            selectedTab.classList.remove("tabcontrol-tab-selected");
         }
     }
 
     if (onSelect) {
         await onSelect(tab.getAttribute("data-identifier") ?? "")
     }
+    
+    if (currentlySelected) {
+        currentlySelected.classList.remove("tabcontrol-tabcontent-selected");
+        const selectedTab = tabControl.getElementsByClassName("tabcontrol-tab-selected")[0];
+        if (selectedTab) {
+            selectedTab.classList.remove("tabcontrol-tab-selected");
+        }
+    }
+    
     tab.classList.add("tabcontrol-tab-selected");
     tabContent.classList.add("tabcontrol-tabcontent-selected");
 }

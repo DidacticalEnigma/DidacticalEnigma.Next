@@ -163,6 +163,14 @@ input {
 .settings-panel-didactical-enigma-mem .settings-panel-didactical-enigma-mem-spanner {
     flex: auto;
 }
+.about-panel {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+.about-panel div {
+    flex: 1;
+}
 select {
     appearance: none;
     -webkit-appearance: none;
@@ -222,6 +230,7 @@ button[disabled] {
     height: 100%;
     width: 100%;
     display: grid;
+    font-size: 1.2em;
 }
 .data-sources {
     display: flex;
@@ -245,6 +254,10 @@ button[disabled] {
 }
 .about-section {
     white-space: pre-line;
+    overflow-y: scroll;
+}
+.logging-preview {
+    overflow-y: scroll;
 }
 .data-source-viewer {
     height: 100%;
