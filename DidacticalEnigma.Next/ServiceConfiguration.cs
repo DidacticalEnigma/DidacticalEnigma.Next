@@ -17,26 +17,34 @@ namespace DidacticalEnigma.Next
         
         public string? DidacticalEnigmaMemAddress { get; set; }
 
-        public string GetDefaultDataDirectory()
+        public string GetDataDirectory()
         {
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
+            var dir = string.IsNullOrWhiteSpace(this.DataDirectory)
+                ? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data")
+                : this.DataDirectory;
+            Console.WriteLine(dir);
+            return dir;
         }
         
-        public string GetDefaultConfigDirectory()
+        public string GetConfigDirectory()
         {
-            return AppDomain.CurrentDomain.BaseDirectory;
+            var dir = string.IsNullOrWhiteSpace(this.ConfigDirectory)
+                ? AppDomain.CurrentDomain.BaseDirectory
+                : this.ConfigDirectory;
+            Console.WriteLine(dir);
+            return dir;
         }
 
         public static Kernel Configure(ServiceConfiguration config)
         {
             var kernel = new Kernel();
 
-            var dataDir = config.DataDirectory ?? config.GetDefaultDataDirectory();
+            var dataDir = config.GetDataDirectory();
             var dataSourceCollection = kernel.BindDidacticalEnigmaCoreServices(dataDir, dataDir);
             kernel.Bind(get =>
             {
                 var vm = new DidacticalEnigmaMemViewModel();
-                if (config.DidacticalEnigmaMemAddress != null)
+                if (!string.IsNullOrWhiteSpace(config.DidacticalEnigmaMemAddress))
                 {
                     vm.Uri = config.DidacticalEnigmaMemAddress;
                     vm.Initialize.Execute(null);

@@ -26,7 +26,7 @@ public class KanaController : ControllerBase
             return result;
         }
 
-        var dataDir = config.Value.DataDirectory;
+        var dataDir = config.Value.GetDataDirectory();
 
         using var hiraganaReader = System.IO.File.OpenText(Path.Combine(dataDir, "character", "hiragana_romaji.txt"));
         using var katakanaReader = System.IO.File.OpenText(Path.Combine(dataDir, "character", "katakana_romaji.txt"));
