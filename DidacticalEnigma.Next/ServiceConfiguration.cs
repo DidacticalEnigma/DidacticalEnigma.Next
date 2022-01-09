@@ -22,7 +22,6 @@ namespace DidacticalEnigma.Next
             var dir = string.IsNullOrWhiteSpace(this.DataDirectory)
                 ? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data")
                 : this.DataDirectory;
-            Console.WriteLine(dir);
             return dir;
         }
         
@@ -31,7 +30,6 @@ namespace DidacticalEnigma.Next
             var dir = string.IsNullOrWhiteSpace(this.ConfigDirectory)
                 ? AppDomain.CurrentDomain.BaseDirectory
                 : this.ConfigDirectory;
-            Console.WriteLine(dir);
             return dir;
         }
 
