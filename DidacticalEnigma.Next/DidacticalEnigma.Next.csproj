@@ -7,6 +7,7 @@
     <SpaRoot>Client\</SpaRoot>
     <PackageVersion>1.0.0</PackageVersion>
     <AssemblyVersion>0.9.7.1</AssemblyVersion>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +22,6 @@
     <PackageReference Include="Optional" Version="4.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="SharpWebview" Version="0.6.2-mlem" />
@@ -60,6 +60,11 @@
   </Target>
 
   <ItemGroup>
+    <Content Include="icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Client" />
     <Folder Include="Protos" />
   </ItemGroup>
 
