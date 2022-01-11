@@ -87,7 +87,7 @@ export interface ProgramConfigurationSetRequest {
 }
 
 export interface WordInfoResponse {
-  wordInformation: WordInfo[][];
+  wordInformation: WordInfo[];
   /** Dictionary of <components·14obqe6·schemas·wordinforesponse·properties·similarletters·additionalproperties> */
   similarLetters: { [propertyName: string]: SimilarLetter[] };
 }

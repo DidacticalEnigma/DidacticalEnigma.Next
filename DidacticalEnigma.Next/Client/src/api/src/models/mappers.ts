@@ -498,13 +498,8 @@ export const WordInfoResponse: coreClient.CompositeMapper = {
           name: "Sequence",
           element: {
             type: {
-              name: "Sequence",
-              element: {
-                type: {
-                  name: "Composite",
-                  className: "WordInfo"
-                }
-              }
+              name: "Composite",
+              className: "WordInfo"
             }
           }
         }

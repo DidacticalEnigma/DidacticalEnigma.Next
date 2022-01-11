@@ -46,9 +46,7 @@ namespace DidacticalEnigma.Next.Controllers
         {
             var rawText = request.Text.TrimEnd();
             var parsedText = new ParsedText(rawText,
-                parser.BreakIntoSentences(rawText)
-                    .Select(x => x.ToList())
-                    .ToList());
+                parser.BreakIntoWords(rawText).ToList());
             var result = new List<DataSourceParseResponse>();
             foreach (var position in request.Positions)
             {

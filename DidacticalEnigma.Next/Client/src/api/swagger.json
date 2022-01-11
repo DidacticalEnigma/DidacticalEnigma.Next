@@ -620,10 +620,7 @@
         "wordInformation": {
           "type": "array",
           "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/definitions/WordInfo"
-            }
+            "$ref": "#/definitions/WordInfo"
           }
         },
         "similarLetters": {

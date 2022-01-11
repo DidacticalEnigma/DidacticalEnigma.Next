@@ -24,20 +24,17 @@ namespace DidacticalEnigma.Next.Controllers
             [FromServices] IRelated related)
         {
             var parsedText = new ParsedText(fullText,
-                parser.BreakIntoSentences(fullText)
-                    .Select(x => x.ToList())
-                    .ToList());
+                parser.BreakIntoWords(fullText).ToList());
             return new WordInfoResponse()
             {
                 WordInformation = parsedText.WordInformation
-                    .Select(sentence =>
-                        sentence.Select(word => new Models.WordInfo()
+                    .Select(word => new Models.WordInfo()
                         {
                             DictionaryForm = word.DictionaryForm,
                             Reading = word.Reading,
                             Text = word.RawWord,
                             Type = Map(word.EstimatedPartOfSpeech)
-                        })),
+                        }),
                 SimilarLetters = fullText.AsCodePoints()
                     .Distinct()
                     .Select(cp =>

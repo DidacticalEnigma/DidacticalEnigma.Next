@@ -96,22 +96,20 @@ async function highlightJapaneseInput(
     await onWordInfoChange(selectedText, result);
     divElement.innerText = "";
     let index = 0;
-    for (const line of result.wordInformation) {
-        for (const word of line) {
-            const newIndex = newText.indexOf(word.text, index);
-            if(index !== newIndex) {
-                divElement.appendChild(makeElement({
-                    tagName: "span",
-                    innerText: newText.substring(index, newIndex)
-                }));
-            }
-            index = newIndex + word.text.length;
+    for (const word of result.wordInformation) {
+        const newIndex = newText.indexOf(word.text, index);
+        if(index !== newIndex) {
             divElement.appendChild(makeElement({
                 tagName: "span",
-                classes: mapWordTypeToClassList(word.type),
-                innerText: word.text
+                innerText: newText.substring(index, newIndex)
             }));
         }
+        index = newIndex + word.text.length;
+        divElement.appendChild(makeElement({
+            tagName: "span",
+            classes: mapWordTypeToClassList(word.type),
+            innerText: word.text
+        }));
     }
     textAreaElement.setAttribute("last-highlight-id", (postQueryHighlightId + 1).toString());
 }

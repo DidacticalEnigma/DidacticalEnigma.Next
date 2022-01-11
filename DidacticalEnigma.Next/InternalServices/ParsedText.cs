@@ -7,23 +7,20 @@ namespace DidacticalEnigma.Next.InternalServices
 {
     public class ParsedText
     {
-        private List<KeyValuePair<int, (int outerIndex, int innerIndex)>> positionInformation;
+        private List<KeyValuePair<int, int>> positionInformation;
 
-        public ParsedText(string fullText, IReadOnlyList<IReadOnlyList<WordInfo>> wordInformation)
+        public ParsedText(string fullText, IReadOnlyList<WordInfo> wordInformation)
         {
             this.FullText = fullText;
             WordInformation = wordInformation;
 
-            var positionInformation = new List<KeyValuePair<int, (int outerIndex, int innerIndex)>>();
+            var positionInformation = new List<KeyValuePair<int, int>>();
             int position = 0;
-            foreach (var (outer, outerIndex) in wordInformation.Indexed())
+            foreach (var (word, index) in wordInformation.Indexed())
             {
-                foreach (var (inner, innerIndex) in outer.Indexed())
-                {
-                    position = fullText.IndexOf(inner.RawWord, position, StringComparison.InvariantCulture);
-                    positionInformation.Add(
-                        KeyValuePair.Create(position, (outerIndex, innerIndex)));
-                }
+                position = fullText.IndexOf(word.RawWord, position, StringComparison.InvariantCulture);
+                positionInformation.Add(
+                    KeyValuePair.Create(position, index));
             }
 
             this.positionInformation = positionInformation;
@@ -31,16 +28,16 @@ namespace DidacticalEnigma.Next.InternalServices
 
         public string FullText { get; }
 
-        public IReadOnlyList<IReadOnlyList<Core.Models.LanguageService.WordInfo>> WordInformation { get; }
+        public IReadOnlyList<Core.Models.LanguageService.WordInfo> WordInformation { get; }
 
         public ParsedTextCursor GetCursor(int position)
         {
-            var (wordPosition, outerIndex, innerIndex) = GetIndicesAtPosition(position);
+            var (wordPosition, index) = GetIndicesAtPosition(position);
 
-            return new ParsedTextCursor(this, outerIndex, innerIndex, position - wordPosition);
+            return new ParsedTextCursor(this, index, position - wordPosition);
         }
         
-        private (int wordPosition, int outerIndex, int innerIndex) GetIndicesAtPosition(int position)
+        private (int wordPosition, int index) GetIndicesAtPosition(int position)
         {
             if(position < 0)
                 throw new ArgumentException(nameof(position));
@@ -55,7 +52,7 @@ namespace DidacticalEnigma.Next.InternalServices
                 result = positionInformation.Count - 1;
             if (position < positionInformation[result].Key)
                 result--;
-            return (positionInformation[result].Key, positionInformation[result].Value.outerIndex, positionInformation[result].Value.innerIndex);
+            return (positionInformation[result].Key, positionInformation[result].Value);
         }
 
         private static int LowerBound<T, TKey>(Func<int, T> lookup, int len, TKey lookupKey, Func<T, TKey> selector, IComparer<TKey> comparer)

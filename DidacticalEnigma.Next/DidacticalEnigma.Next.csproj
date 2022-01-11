@@ -12,8 +12,8 @@
 
   <ItemGroup>
     <PackageReference Include="ClipwatchSharp" Version="0.1.2" />
-    <PackageReference Include="DidacticalEnigma.Core" Version="0.9.7.10" />
-    <PackageReference Include="DidacticalEnigma.IoCModule" Version="0.9.3.1" />
+    <PackageReference Include="DidacticalEnigma.Core" Version="0.9.7.12" />
+    <PackageReference Include="DidacticalEnigma.IoCModule" Version="0.9.3.3" />
     <PackageReference Include="DidacticalEnigma.Mem.Client" Version="0.9.0.8" />
     <PackageReference Include="DidacticalEnigma.Mem.DataSource" Version="0.9.1" />
     <PackageReference Include="Gu.Inject" Version="0.3.9" />
