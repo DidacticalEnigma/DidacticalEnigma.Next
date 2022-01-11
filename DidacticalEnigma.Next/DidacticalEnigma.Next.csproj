@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="ClipwatchSharp" Version="0.1.2" />
-    <PackageReference Include="DidacticalEnigma.Core" Version="0.9.7.13" />
+    <PackageReference Include="DidacticalEnigma.Core" Version="0.9.7.15" />
     <PackageReference Include="DidacticalEnigma.IoCModule" Version="0.9.3.3" />
     <PackageReference Include="DidacticalEnigma.Mem.Client" Version="0.9.0.8" />
     <PackageReference Include="DidacticalEnigma.Mem.DataSource" Version="0.9.1" />
@@ -35,6 +35,10 @@
     <Content Remove="$(SpaRoot)**" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    <None Remove="download_and_install_requirements.ps1" />
+    <Content Include="download_and_install_requirements.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <Target Name="NpmInstall" Inputs="Client/package.json" Outputs="Client/node_modules/.install-stamp">

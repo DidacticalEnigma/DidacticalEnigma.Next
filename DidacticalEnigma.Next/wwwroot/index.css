@@ -106,7 +106,9 @@ body {
 *::-webkit-scrollbar-track {
     background: #2a2a2c;
 }
-
+.kana-board button {
+    font-size: 24px;
+}
 *::-webkit-scrollbar-thumb {
     background-color: #7d7d7e;
     border-radius: 20px;
@@ -231,7 +233,6 @@ button[disabled] {
     height: 100%;
     width: 100%;
     display: grid;
-    font-size: 1.2em;
 }
 .data-sources {
     display: flex;
@@ -409,7 +410,7 @@ input.radicals-searchbox {
 .radicals-radicalselectoroption {
     width: 3em;
     height: 3em;
-    font-size: 1.2em;
+    font-size: 24px;
     text-align: center;
 }
 .radicals-radicalselectoroption-hidden {
@@ -418,7 +419,7 @@ input.radicals-searchbox {
 .radicals-kanjiresult {
     width: 3em;
     height: 3em;
-    font-size: 1.2em;
+    font-size: 24px;
     text-align: center;
 }
 .radicals-radicalselected {
