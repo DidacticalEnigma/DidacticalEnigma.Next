@@ -66,7 +66,7 @@ namespace DidacticalEnigma.Next.Controllers
                 return Task.FromResult(new SwitchToProjectResult());
             }
             
-            if (selectedProject?.Type == ClipboardProjectId)
+            if (selectedProject.Type == ClipboardProjectId)
             {
                 clipboardWatcher.ClipboardChanged += ClipboardWatcherOnClipboardChanged;
                 clipboardWatcher.Start();
@@ -76,6 +76,8 @@ namespace DidacticalEnigma.Next.Controllers
                 clipboardWatcher.Stop();
                 clipboardWatcher.ClipboardChanged -= ClipboardWatcherOnClipboardChanged;
             }
+
+            currentProjectId = selectedProject.Identifier;
 
             return Task.FromResult(new SwitchToProjectResult());
         }
