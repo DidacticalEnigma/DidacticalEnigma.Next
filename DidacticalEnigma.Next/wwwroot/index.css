@@ -132,6 +132,7 @@ body {
     height: calc(100% - 4px);
     overflow-y: hidden;
     white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 .japanese-input .editor {
     color: transparent;
@@ -142,6 +143,7 @@ body {
     border-color: #777;
     z-index: 1;
     overflow-y: scroll;
+    overflow-wrap: anywhere;
 }
 input {
     background-color: #333;

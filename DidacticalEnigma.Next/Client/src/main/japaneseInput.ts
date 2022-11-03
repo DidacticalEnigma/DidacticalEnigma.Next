@@ -47,9 +47,10 @@ export async function japaneseInputAttachJs(
         function syncScroll() {
             synchronizeScroll(divElement, textAreaElement);
         }
-        
-        textAreaElement.addEventListener("click", send);
-        textAreaElement.addEventListener("focus", send);
+
+        textAreaElement.addEventListener("mouseup", send);
+        textAreaElement.addEventListener("select", send);
+        textAreaElement.addEventListener("keyup", send);
         textAreaElement.addEventListener("input", highlight);
         textAreaElement.addEventListener("keyup", syncScroll);
         textAreaElement.addEventListener("scroll", syncScroll);
@@ -108,6 +109,7 @@ async function highlightJapaneseInput(
         divElement.appendChild(makeElement({
             tagName: "span",
             classes: mapWordTypeToClassList(word.type),
+            attributes: [["title", word.reading]],
             innerText: word.text
         }));
     }
