@@ -184,8 +184,12 @@ window.addEventListener('load', async () => {
 });
 
 window.addEventListener("unhandledrejection", (ev) => {
+    const maxElements = 100;
     const loadingElements = document.getElementsByClassName("logging-preview");
     for (const loadingElement of loadingElements) {
+        if(loadingElement.childElementCount > maxElements && loadingElement.firstChild) {
+            loadingElement.removeChild(loadingElement.firstChild);
+        }
         loadingElement.appendChild(makeElement({
             tagName: "p",
             classes: ["logging-preview-entry"],
