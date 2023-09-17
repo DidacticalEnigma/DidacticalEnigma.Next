@@ -284,6 +284,7 @@ button[disabled] {
 .data-source-text {
     overflow-y: scroll;
     height: 100%;
+    overflow-wrap: anywhere;
 }
 .data-source-viewer-header-button {
     flex: 0 1;
