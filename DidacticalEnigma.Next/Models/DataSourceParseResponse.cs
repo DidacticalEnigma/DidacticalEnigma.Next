@@ -15,5 +15,7 @@ namespace DidacticalEnigma.Next.Models
         public string? Context { get; set; }
 
         public string? Error { get; set; }
+        
+        public double ProcessingTime { get; set; }
     }
 }

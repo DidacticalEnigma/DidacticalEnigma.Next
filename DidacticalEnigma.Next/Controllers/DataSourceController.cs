@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using DidacticalEnigma.Core.Models.DataSources;
@@ -11,6 +12,7 @@ using DidacticalEnigma.Next.InternalServices;
 using DidacticalEnigma.Next.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Optional;
 using Swashbuckle.AspNetCore.Annotations;
 using Utility.Utils;
 using WordInfo = DidacticalEnigma.Core.Models.LanguageService.WordInfo;
@@ -53,11 +55,24 @@ namespace DidacticalEnigma.Next.Controllers
                 var dataSourceRequest = DataSourceRequestFromParsedText(parsedText, position.Position, position.PositionEnd);
 
                 var requestedDataSources = request.RequestedDataSources.Distinct();
-                foreach (var identifier in requestedDataSources)
+
+                var stopwatch = Stopwatch.StartNew();
+                var responseTasks = requestedDataSources
+                    .Select(async identifier =>
+                    {
+                        var response = await dataSourceDispatcher.GetAnswer(
+                            identifier,
+                            dataSourceRequest);
+                        return (identifier, response);
+                    })
+                    .ToList();
+
+                while (responseTasks.Count != 0)
                 {
-                    var answerOpt = await dataSourceDispatcher.GetAnswer(
-                        identifier,
-                        dataSourceRequest);
+                    var responseTask = await Task.WhenAny(responseTasks);
+                    responseTasks.Remove(responseTask);
+                    var (identifier, answerOpt) = await responseTask;
+                    var elapsed = stopwatch.Elapsed.TotalMilliseconds;
                     result.Add(new DataSourceParseResponse()
                     {
                         Position = position.Position,
@@ -66,7 +81,8 @@ namespace DidacticalEnigma.Next.Controllers
                         Context = answerOpt
                             .Map(a => renderer.Render(a).OuterXml)
                             .ValueOr(null as string),
-                        Error = !answerOpt.HasValue ? "nothing found" : null
+                        Error = !answerOpt.HasValue ? "nothing found" : null,
+                        ProcessingTime = elapsed,
                     });
                 }
             }
