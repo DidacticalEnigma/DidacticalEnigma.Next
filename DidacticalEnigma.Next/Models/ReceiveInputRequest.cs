@@ -2,8 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DidacticalEnigma.Next.Models;
 
-public class SwitchToProjectRequest
+public class ReceiveInputRequest
 {
     [Required]
-    public string ProjectId { get; set; }
+    public string Input { get; set; }
 }

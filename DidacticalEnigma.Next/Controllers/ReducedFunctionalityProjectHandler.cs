@@ -51,4 +51,10 @@ public class ReducedFunctionalityProjectHandler : IProjectHandler
             ProjectTypes = Array.Empty<ProjectTypeResult>()
         });
     }
+
+    public Task ReceiveInput(string input)
+    {
+        // do nothing
+        return Task.CompletedTask;
+    }
 }

@@ -75,6 +75,11 @@ window.addEventListener('load', async () => {
             await refreshCurrentDataSources(content, 0, 0);
         };
 
+        globalThis.restReceiverNotification = async function (content: string) {
+            await resetText(content);
+            await refreshCurrentDataSources(content, 0, 0);
+        };
+
         async function similarCharactersRefresh(selectedText: string, wordInfoResponse: WordInfoResponse) {
             const charactersElement = document.querySelector(".tabcontrol-tabcontent-selected .similar-characters-picker");
             if (charactersElement) {

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using DidacticalEnigma.Next.Models;
 
@@ -12,4 +13,6 @@ public interface IProjectHandler
     Task<OpenProjectResult> OpenProject(OpenProjectRequest request);
 
     Task<ProjectTypeListResult> ListProjectTypes(ProjectTypeListRequest request);
+
+    Task ReceiveInput(string input);
 }

@@ -132,4 +132,15 @@ public class SessionController : ControllerBase
 
         return Ok();
     }
+
+    [Authorize("AllowAnonymous")]
+    [HttpPost("inputReceive")]
+    [SwaggerOperation(OperationId = "RestReceiveInput")]
+    public async Task<ActionResult<ReceiveInputResponse>> ReceiveInput(
+        [FromServices] IProjectHandler projectHandler,
+        [FromBody] ReceiveInputRequest request)
+    {
+        await projectHandler.ReceiveInput(request.Input);
+        return new ReceiveInputResponse();
+    }
 }

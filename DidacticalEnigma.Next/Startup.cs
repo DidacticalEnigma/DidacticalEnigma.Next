@@ -149,6 +149,9 @@ namespace DidacticalEnigma.Next
                         }
                         else
                         {
+                            var builder = new UriBuilder(uri);
+                            builder.Host = "127.0.0.1";
+                            secretProvider.LocalAddress = builder.Uri;
                             secretProvider.UnsafeDebugMode = false;
                         }
                     }
