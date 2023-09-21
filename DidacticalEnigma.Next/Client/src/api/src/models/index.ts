@@ -31,6 +31,7 @@ export interface DataSourceParseResponse {
   dataSource: string;
   context?: string;
   error?: string;
+  processingTime?: number;
 }
 
 export interface KanaResult {
@@ -86,6 +87,10 @@ export interface ProgramConfigurationSetRequest {
   dataSourceGridLayouts: any[];
 }
 
+export interface ReceiveInputRequest {
+  input: string;
+}
+
 export interface WordInfoResponse {
   wordInformation: WordInfo[];
   /** Dictionary of <components·14obqe6·schemas·wordinforesponse·properties·similarletters·additionalproperties> */
@@ -107,10 +112,15 @@ export interface SimilarLetter {
 
 /** Known values of {@link WordInfoType} that the service accepts. */
 export enum KnownWordInfoType {
+  /** Other */
   Other = "Other",
+  /** Noun */
   Noun = "Noun",
+  /** Verb */
   Verb = "Verb",
+  /** Particle */
   Particle = "Particle",
+  /** Pronoun */
   Pronoun = "Pronoun"
 }
 
@@ -188,6 +198,15 @@ export type LoadSessionResponse = ProgramConfigurationGetResult;
 export interface SaveSessionOptionalParams extends coreClient.OperationOptions {
   body?: ProgramConfigurationSetRequest;
 }
+
+/** Optional parameters. */
+export interface RestReceiveInputOptionalParams
+  extends coreClient.OperationOptions {
+  body?: ReceiveInputRequest;
+}
+
+/** Contains response data for the restReceiveInput operation. */
+export type RestReceiveInputResponse = Record<string, unknown>;
 
 /** Optional parameters. */
 export interface GetWordInformationOptionalParams

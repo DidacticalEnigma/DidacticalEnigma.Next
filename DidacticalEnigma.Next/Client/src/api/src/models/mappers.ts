@@ -169,6 +169,12 @@ export const DataSourceParseResponse: coreClient.CompositeMapper = {
         type: {
           name: "String"
         }
+      },
+      processingTime: {
+        serializedName: "processingTime",
+        type: {
+          name: "Number"
+        }
       }
     }
   }
@@ -480,6 +486,22 @@ export const ProgramConfigurationSetRequest: coreClient.CompositeMapper = {
               name: "any"
             }
           }
+        }
+      }
+    }
+  }
+};
+
+export const ReceiveInputRequest: coreClient.CompositeMapper = {
+  type: {
+    name: "Composite",
+    className: "ReceiveInputRequest",
+    modelProperties: {
+      input: {
+        serializedName: "input",
+        required: true,
+        type: {
+          name: "String"
         }
       }
     }

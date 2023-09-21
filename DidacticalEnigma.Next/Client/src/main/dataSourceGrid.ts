@@ -1,9 +1,9 @@
-import { DataSourceLookup } from "./dataSourceLookup";
-import { map, filter } from "lodash";
+import {DataSourceLookup} from "./dataSourceLookup";
+import {map, filter} from "lodash";
 import {notNull, makeElement, findFirstParentWithClass, zipShortest} from "./utility";
-import { generateHtmlFromRichFormatting } from "./richFormatting"
+import {generateHtmlFromRichFormatting} from "./richFormatting"
 import {ListDataSourcesResponse} from "../api/src";
-import { LayoutConfig } from "./layoutConfig";
+import {LayoutConfig} from "./layoutConfig";
 
 export async function dataSourceGridAttachJs(
     layouts: any[],
@@ -13,7 +13,7 @@ export async function dataSourceGridAttachJs(
 
     const config = new DataSourceLayoutConfig(dataSources, onLayoutChangeCallback);
 
-    for(const [dataSourceElement, rawLayout] of zipShortest(dataSourceElements, layouts)) {
+    for (const [dataSourceElement, rawLayout] of zipShortest(dataSourceElements, layouts)) {
         const tree = config.makeTree(rawLayout);
         dataSourceElement.appendChild(tree);
     }
@@ -31,7 +31,7 @@ export class DataSourceLayoutConfig extends LayoutConfig<HTMLElement, HTMLElemen
         this._onLayoutChangeCallback = onLayoutChangeCallback;
     }
 
-    protected makeHSplit(left: HTMLElement, right: HTMLElement, ratio: number): HTMLElement  {
+    protected makeHSplit(left: HTMLElement, right: HTMLElement, ratio: number): HTMLElement {
         return makeSplit(left, right, "horizontal", ratio, this._onLayoutChangeCallback);
     }
 
@@ -43,25 +43,25 @@ export class DataSourceLayoutConfig extends LayoutConfig<HTMLElement, HTMLElemen
         return tree;
     }
 
-    protected makeVSplit(top: HTMLElement, bottom: HTMLElement, ratio: number): HTMLElement  {
+    protected makeVSplit(top: HTMLElement, bottom: HTMLElement, ratio: number): HTMLElement {
         return makeSplit(top, bottom, "vertical", ratio, this._onLayoutChangeCallback);
     }
-    
+
     private getRatio(widthOrHeight: string): number {
         return parseFloat(widthOrHeight.replace("%", ""));
     }
 
     private getType(node: HTMLDivElement): "vsplit" | "hsplit" | "leaf" {
-        if(node.classList.contains("data-source-viewer")) {
+        if (node.classList.contains("data-source-viewer")) {
             return "leaf";
         }
-        if(node.classList.contains("data-source-vsplit")) {
+        if (node.classList.contains("data-source-vsplit")) {
             return "vsplit";
         }
-        if(node.classList.contains("data-source-hsplit")) {
+        if (node.classList.contains("data-source-hsplit")) {
             return "hsplit";
         }
-        
+
         throw "FUCK";
     }
 
@@ -70,10 +70,10 @@ export class DataSourceLayoutConfig extends LayoutConfig<HTMLElement, HTMLElemen
             child.classList.contains("data-source-viewer") ||
             child.classList.contains("data-source-vsplit") ||
             child.classList.contains("data-source-hsplit"));
-        
+
         const leftChild = children[0] as HTMLDivElement;
         const rightChild = children[1] as HTMLDivElement;
-        
+
         return {
             left: leftChild,
             right: rightChild,
@@ -92,27 +92,27 @@ export class DataSourceLayoutConfig extends LayoutConfig<HTMLElement, HTMLElemen
     }
 
     protected serializeVisitRoot(root: HTMLElement): { tree: HTMLElement; treeType: "vsplit" | "hsplit" | "leaf" } {
-        for(const child of root.children) {
-            if(child.classList.contains("data-source-viewer")) {
+        for (const child of root.children) {
+            if (child.classList.contains("data-source-viewer")) {
                 return {
                     tree: child as HTMLElement,
                     treeType: "leaf"
                 };
             }
-            if(child.classList.contains("data-source-vsplit")) {
+            if (child.classList.contains("data-source-vsplit")) {
                 return {
                     tree: child as HTMLElement,
                     treeType: "vsplit"
                 };
             }
-            if(child.classList.contains("data-source-hsplit")) {
+            if (child.classList.contains("data-source-hsplit")) {
                 return {
                     tree: child as HTMLElement,
                     treeType: "hsplit"
                 };
             }
         }
-        
+
         throw "FUCK";
     }
 
@@ -137,7 +137,7 @@ export class DataSourceLayoutConfig extends LayoutConfig<HTMLElement, HTMLElemen
 
 function createViewer(
     dataSources: ListDataSourcesResponse,
-    identifier : string | undefined,
+    identifier: string | undefined,
     onLayoutChangeCallback: () => Promise<void>) {
     return makeElement({
         tagName: "div",
@@ -193,8 +193,8 @@ function createViewer(
                                 tagName: "select",
                                 classes: ["data-source-viewer-header-selector"],
                                 children: map(dataSources, (dataSource) => {
-                                    const attributes : [[string, string]] = [["value", dataSource.identifier]];
-                                    if(dataSource.identifier == identifier) {
+                                    const attributes: [[string, string]] = [["value", dataSource.identifier]];
+                                    if (dataSource.identifier == identifier) {
                                         attributes.push(["selected", "selected"]);
                                     }
 
@@ -243,11 +243,11 @@ function makeSplit(
     type: "horizontal" | "vertical",
     ratio: number | undefined,
     onLayoutChangeCallback: () => Promise<void>): HTMLElement {
-    const typeSuffix = function() {
-        if(type == "horizontal") {
+    const typeSuffix = function () {
+        if (type == "horizontal") {
             return "hsplit";
         }
-        if(type == "vertical") {
+        if (type == "vertical") {
             return "vsplit";
         }
     }();
@@ -262,43 +262,42 @@ function makeSplit(
             let x = 0;
             let y = 0;
             let length = 0;
-            const mouseMoveHandler = (ev : MouseEvent) => {
+            const mouseMoveHandler = (ev: MouseEvent) => {
                 const dx = ev.clientX - x;
                 const dy = ev.clientY - y;
 
                 const previous = element.previousElementSibling as HTMLElement;
                 const next = element.nextElementSibling as HTMLElement;
                 const parent = element.parentElement as HTMLElement;
-                
-                if(type == "vertical") {
+
+                if (type == "vertical") {
                     const newLeftWidth = ((length + dx) * 100) / parent.getBoundingClientRect().width;
                     previous.style.width = `${newLeftWidth}%`;
                     next.style.width = `${100 - newLeftWidth}%`;
                     document.body.style.cursor = 'col-resize';
-                }
-                else {
+                } else {
                     const newTopHeight = ((length + dy) * 100) / parent.getBoundingClientRect().height;
                     previous.style.height = `${newTopHeight}%`;
                     next.style.height = `${100 - newTopHeight}%`;
                     document.body.style.cursor = 'row-resize';
                 }
-                
+
                 previous.style.userSelect = 'none';
                 previous.style.pointerEvents = 'none';
-            
+
                 next.style.userSelect = 'none';
                 next.style.pointerEvents = 'none';
             };
-            const mouseUpHandler = async (_ : MouseEvent) => {
+            const mouseUpHandler = async (_: MouseEvent) => {
                 const previous = element.previousElementSibling as HTMLElement;
                 const next = element.nextElementSibling as HTMLElement;
 
                 element.style.removeProperty('cursor');
                 document.body.style.removeProperty('cursor');
-            
+
                 previous.style.removeProperty('user-select');
                 previous.style.removeProperty('pointer-events');
-            
+
                 next.style.removeProperty('user-select');
                 next.style.removeProperty('pointer-events');
 
@@ -329,13 +328,13 @@ function makeSplit(
     const firstRatioString = ratio ? `${ratio * 100}%` : "50%";
     const secondRatioString = ratio ? `${(1 - ratio) * 100}%` : "50%";
 
-    if(type == "horizontal") {
+    if (type == "horizontal") {
         firstChild.style.width = "100%";
         firstChild.style.height = firstRatioString;
         secondChild.style.width = "100%";
         secondChild.style.height = secondRatioString;
     }
-    if(type == "vertical") {
+    if (type == "vertical") {
         firstChild.style.width = firstRatioString;
         firstChild.style.height = "100%";
         secondChild.style.width = secondRatioString;
@@ -351,15 +350,15 @@ function createSplit(
     type: "horizontal" | "vertical",
     onLayoutChangeCallback: () => Promise<void>) {
     const parent = dataSourceViewer.parentElement;
-    if(parent == null) {
+    if (parent == null) {
         throw "Should not be a root node";
     }
-    if(parent.classList.contains("data-sources") ||
-       parent.classList.contains("data-source-vsplit") ||
-       parent.classList.contains("data-source-hsplit")) {
+    if (parent.classList.contains("data-sources") ||
+        parent.classList.contains("data-source-vsplit") ||
+        parent.classList.contains("data-source-hsplit")) {
         const dummy = document.createElement("div");
         dataSourceViewer.replaceWith(dummy);
-        
+
         const newWidth = dataSourceViewer.style.width;
         const newHeight = dataSourceViewer.style.height;
         const one = dataSourceViewer;
@@ -373,20 +372,20 @@ function createSplit(
 
 function closeSplit(dataSourceViewer: HTMLElement) {
     const parent = dataSourceViewer.parentElement;
-    if(parent == null) {
+    if (parent == null) {
         throw "Should not be a root node";
     }
-    if(parent.classList.contains("data-sources")) {
+    if (parent.classList.contains("data-sources")) {
         return;
     }
-    if(parent.classList.contains("data-source-vsplit") ||
-       parent.classList.contains("data-source-hsplit")) {
+    if (parent.classList.contains("data-source-vsplit") ||
+        parent.classList.contains("data-source-hsplit")) {
         dataSourceViewer.remove();
-        for(const child of parent.children) {
-            if(child.classList.contains("data-source-vsplit") ||
-               child.classList.contains("data-source-hsplit") || 
-               child.classList.contains("data-source-viewer")) {
-                if(child instanceof HTMLElement) {
+        for (const child of parent.children) {
+            if (child.classList.contains("data-source-vsplit") ||
+                child.classList.contains("data-source-hsplit") ||
+                child.classList.contains("data-source-viewer")) {
+                if (child instanceof HTMLElement) {
                     child.style.width = parent.style.width;
                     child.style.height = parent.style.height;
 
@@ -404,30 +403,44 @@ export async function dataSourceGridLookup(dataSourceGrid: Element, dataSourceLo
         map(viewers, (viewer) => (viewer.getElementsByTagName("select")[0]).selectedOptions[0].value),
         notNull);
 
-    const result = await dataSourceLookup.lookup(text, position, positionEnd, dataSourceIdentifiers);
-
+    const dataSourceMapping = new Map<string, [Element]>();
     for (const viewer of viewers) {
-        const dataIdentifier = (viewer.getElementsByTagName("select")[0]).selectedOptions[0].value;
-        if (dataIdentifier == null) {
-            continue;
+        const identifier = (viewer.getElementsByTagName("select")[0]).selectedOptions[0].value;
+        const value = dataSourceMapping.get(identifier);
+        if (value === undefined) {
+            dataSourceMapping.set(identifier, [viewer]);
+        } else {
+            value.push(viewer);
         }
+    }
 
-        for(const dataSourceText of viewer.getElementsByClassName("data-source-text")) {
-            dataSourceText.remove();
-        }
+    const resultsTasks = dataSourceLookup.lookup(text, position, positionEnd, dataSourceIdentifiers);
+    for (const resultsTask of resultsTasks) {
+        for (const [identifier, response] of await resultsTask) {
+            const viewers = dataSourceMapping.get(identifier) ?? [];
+            for (const viewer of viewers) {
+                const dataIdentifier = (viewer.getElementsByTagName("select")[0]).selectedOptions[0].value;
+                if (dataIdentifier == null) {
+                    continue;
+                }
 
-        let content = result.get(dataIdentifier)?.context;
-        if(content) {
-            const el = generateHtmlFromRichFormatting(content);
-            el.classList.add("data-source-text");
-            viewer.appendChild(el);
-        }
-        else {
-            viewer.appendChild(makeElement({
-                tagName: "div",
-                classes: ["data-source-text"],
-                innerText: result.get(dataIdentifier)!.error ?? ""
-            }));
+                for (const dataSourceText of viewer.getElementsByClassName("data-source-text")) {
+                    dataSourceText.remove();
+                }
+
+                let content = response.context;
+                if (content) {
+                    const el = generateHtmlFromRichFormatting(content);
+                    el.classList.add("data-source-text");
+                    viewer.appendChild(el);
+                } else {
+                    viewer.appendChild(makeElement({
+                        tagName: "div",
+                        classes: ["data-source-text"],
+                        innerText: response.error ?? ""
+                    }));
+                }
+            }
         }
     }
 }

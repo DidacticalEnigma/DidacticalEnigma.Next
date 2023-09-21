@@ -226,6 +226,41 @@
         }
       }
     },
+    "/session/inputReceive": {
+      "post": {
+        "tags": [
+          "Session"
+        ],
+        "operationId": "RestReceiveInput",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/ReceiveInputRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ReceiveInputResponse"
+            }
+          }
+        }
+      }
+    },
     "/wordInfo": {
       "get": {
         "tags": [
@@ -362,6 +397,10 @@
         },
         "error": {
           "type": "string"
+        },
+        "processingTime": {
+          "format": "double",
+          "type": "number"
         }
       }
     },
@@ -560,6 +599,20 @@
           "type": "boolean"
         }
       }
+    },
+    "ReceiveInputRequest": {
+      "required": [
+        "input"
+      ],
+      "type": "object",
+      "properties": {
+        "input": {
+          "type": "string"
+        }
+      }
+    },
+    "ReceiveInputResponse": {
+      "type": "object"
     },
     "SimilarLetter": {
       "required": [

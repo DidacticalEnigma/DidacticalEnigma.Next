@@ -5,7 +5,8 @@ import {
 } from "@azure/core-client";
 import {
   DataSourceParseRequest as DataSourceParseRequestMapper,
-  ProgramConfigurationSetRequest as ProgramConfigurationSetRequestMapper
+  ProgramConfigurationSetRequest as ProgramConfigurationSetRequestMapper,
+  ReceiveInputRequest as ReceiveInputRequestMapper
 } from "../models/mappers";
 
 export const accept: OperationParameter = {
@@ -102,6 +103,11 @@ export const deselect: OperationQueryParameter = {
 export const body1: OperationParameter = {
   parameterPath: ["options", "body"],
   mapper: ProgramConfigurationSetRequestMapper
+};
+
+export const body2: OperationParameter = {
+  parameterPath: ["options", "body"],
+  mapper: ReceiveInputRequestMapper
 };
 
 export const fullText: OperationQueryParameter = {

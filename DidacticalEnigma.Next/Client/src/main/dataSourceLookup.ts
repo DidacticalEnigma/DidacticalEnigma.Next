@@ -1,23 +1,47 @@
-import { DataSourceParseResponse } from "../api/src";
 import { api } from "./api"
+import {DataSourceParseResponse, RequestInformationFromDataSourcesResponse} from "../api/src";
+import {tuple} from "./utility";
 
 export class DataSourceLookup {
     public async listDataSources() {
         return await api.listDataSources();
     }
+    
+    private slowSources = new Set<string>();
 
-    public async lookup(text: string, position: number, positionEnd: number | undefined, dataSourceIdentifiers: string[]) {
-        const result = await api.requestInformationFromDataSources({
+    public lookup(text: string, position: number, positionEnd: number | undefined, dataSourceIdentifiers: string[]): Promise<[string, DataSourceParseResponse][]>[] {
+        const fastResultsTask = api.requestInformationFromDataSources({
             body: {
                 text: text,
                 positions: [{ position: position, positionEnd: positionEnd }],
-                requestedDataSources: dataSourceIdentifiers
+                requestedDataSources: dataSourceIdentifiers.filter(id => !this.slowSources.has(id))
             }
         });
-        const map = new Map<string, DataSourceParseResponse>();
-        for (const response of result) {
-            map.set(response.dataSource, response);
+        let slowResultTask = this.slowSources.size > 0
+            ? api.requestInformationFromDataSources({
+                body: {
+                    text: text,
+                    positions: [{position: position, positionEnd: positionEnd}],
+                    requestedDataSources: dataSourceIdentifiers.filter(id => this.slowSources.has(id))
+                }
+            })
+            : Promise.resolve([]);
+
+        const processResponse = async (task: Promise<RequestInformationFromDataSourcesResponse>) => {
+            const responses = await task;
+            for (const response of responses) {
+                if (response.processingTime && response.processingTime > 500) {
+                    this.slowSources.add(response.dataSource);
+                }
+            }
+
+            return responses.map(response => tuple(response.dataSource, response));
         }
-        return map;
+        
+        return [fastResultsTask, slowResultTask].map(task => {
+            return processResponse(task);
+        });
     }
 }
+
+

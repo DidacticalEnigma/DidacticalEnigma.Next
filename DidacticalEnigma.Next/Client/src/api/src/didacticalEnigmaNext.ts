@@ -1,7 +1,6 @@
 import * as coreClient from "@azure/core-client";
 import * as Parameters from "./models/parameters";
 import * as Mappers from "./models/mappers";
-import { DidacticalEnigmaNextContext } from "./didacticalEnigmaNextContext";
 import {
   DidacticalEnigmaNextOptionalParams,
   RunAutomaticGlossOptionalParams,
@@ -19,18 +18,50 @@ import {
   LoadSessionOptionalParams,
   LoadSessionResponse,
   SaveSessionOptionalParams,
+  RestReceiveInputOptionalParams,
+  RestReceiveInputResponse,
   GetWordInformationOptionalParams,
   GetWordInformationResponse
 } from "./models";
 
-export class DidacticalEnigmaNext extends DidacticalEnigmaNextContext {
+export class DidacticalEnigmaNext extends coreClient.ServiceClient {
+  $host: string;
+
   /**
    * Initializes a new instance of the DidacticalEnigmaNext class.
    * @param $host server parameter
    * @param options The parameter options
    */
   constructor($host: string, options?: DidacticalEnigmaNextOptionalParams) {
-    super($host, options);
+    if ($host === undefined) {
+      throw new Error("'$host' cannot be null");
+    }
+
+    // Initializing default values for options
+    if (!options) {
+      options = {};
+    }
+    const defaults: DidacticalEnigmaNextOptionalParams = {
+      requestContentType: "application/json; charset=utf-8"
+    };
+
+    const packageDetails = `azsdk-js-didacticalEnigmaNext/1.0.0-beta.1`;
+    const userAgentPrefix =
+      options.userAgentOptions && options.userAgentOptions.userAgentPrefix
+        ? `${options.userAgentOptions.userAgentPrefix} ${packageDetails}`
+        : `${packageDetails}`;
+
+    const optionsWithDefaults = {
+      ...defaults,
+      ...options,
+      userAgentOptions: {
+        userAgentPrefix
+      },
+      endpoint: options.endpoint ?? options.baseUri ?? "{$host}"
+    };
+    super(optionsWithDefaults);
+    // Parameter assignments
+    this.$host = $host;
   }
 
   /** @param options The options parameters. */
@@ -89,6 +120,16 @@ export class DidacticalEnigmaNext extends DidacticalEnigmaNextContext {
   /** @param options The options parameters. */
   saveSession(options?: SaveSessionOptionalParams): Promise<void> {
     return this.sendOperationRequest({ options }, saveSessionOperationSpec);
+  }
+
+  /** @param options The options parameters. */
+  restReceiveInput(
+    options?: RestReceiveInputOptionalParams
+  ): Promise<RestReceiveInputResponse> {
+    return this.sendOperationRequest(
+      { options },
+      restReceiveInputOperationSpec
+    );
   }
 
   /** @param options The options parameters. */
@@ -218,6 +259,22 @@ const saveSessionOperationSpec: coreClient.OperationSpec = {
   requestBody: Parameters.body1,
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.contentType],
+  mediaType: "json",
+  serializer
+};
+const restReceiveInputOperationSpec: coreClient.OperationSpec = {
+  path: "/session/inputReceive",
+  httpMethod: "POST",
+  responses: {
+    200: {
+      bodyMapper: {
+        type: { name: "Dictionary", value: { type: { name: "any" } } }
+      }
+    }
+  },
+  requestBody: Parameters.body2,
+  urlParameters: [Parameters.$host],
+  headerParameters: [Parameters.accept, Parameters.contentType],
   mediaType: "json",
   serializer
 };

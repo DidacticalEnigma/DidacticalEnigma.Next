@@ -1,6 +1,7 @@
 import {makeElement, promiseDelay, removeAllChildElements} from "./utility";
 import {WordInfoLookup} from "./wordInfoLookup";
 import {KnownWordInfoType, WordInfoResponse, WordInfoType} from "../api/src";
+import {Throttler} from "./throttler";
 
 function mapWordTypeToClassList(type: WordInfoType) {
     switch (type) {
@@ -32,12 +33,16 @@ export async function japaneseInputAttachJs(
             classes: ["highlighter"]
         });
 
-        async function send() {
+        const updateThrottler = new Throttler(async () => {
             if(textAreaElement.value.length === 0) {
                 return;
             }
 
             await onchange(textAreaElement.value, textAreaElement.selectionStart, textAreaElement.selectionEnd);
+        }, 50);
+        
+        async function send() {
+            await updateThrottler.doAction();
         }
         
         async function highlight() {

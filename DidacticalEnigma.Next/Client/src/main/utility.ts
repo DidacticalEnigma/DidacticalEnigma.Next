@@ -88,3 +88,22 @@ export function findFirstParentWithClass(element: Node | null, className: string
 export function promiseDelay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+export async function awaitAnySelect<T>(
+    iterable: [PromiseLike<T>]): Promise<T>
+{
+    return Promise.all(
+        iterable.map(promise => {
+            return new Promise((resolve, reject) =>
+                Promise.resolve(promise).then(reject, resolve)
+            );
+        })
+    ).then(
+        errors => Promise.reject(errors),
+        value => Promise.resolve<T>(value)
+    );
+}
+
+export function tuple<T extends any[]> (...items: T): T {
+    return items;
+}
