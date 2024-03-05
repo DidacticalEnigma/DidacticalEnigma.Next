@@ -21,7 +21,7 @@ import {
   RestReceiveInputOptionalParams,
   RestReceiveInputResponse,
   GetWordInformationOptionalParams,
-  GetWordInformationResponse
+  GetWordInformationResponse,
 } from "./models";
 
 export class DidacticalEnigmaNext extends coreClient.ServiceClient {
@@ -42,7 +42,7 @@ export class DidacticalEnigmaNext extends coreClient.ServiceClient {
       options = {};
     }
     const defaults: DidacticalEnigmaNextOptionalParams = {
-      requestContentType: "application/json; charset=utf-8"
+      requestContentType: "application/json; charset=utf-8",
     };
 
     const packageDetails = `azsdk-js-didacticalEnigmaNext/1.0.0-beta.1`;
@@ -55,9 +55,9 @@ export class DidacticalEnigmaNext extends coreClient.ServiceClient {
       ...defaults,
       ...options,
       userAgentOptions: {
-        userAgentPrefix
+        userAgentPrefix,
       },
-      endpoint: options.endpoint ?? options.baseUri ?? "{$host}"
+      endpoint: options.endpoint ?? options.baseUri ?? "{$host}",
     };
     super(optionsWithDefaults);
     // Parameter assignments
@@ -66,28 +66,28 @@ export class DidacticalEnigmaNext extends coreClient.ServiceClient {
 
   /** @param options The options parameters. */
   runAutomaticGloss(
-    options?: RunAutomaticGlossOptionalParams
+    options?: RunAutomaticGlossOptionalParams,
   ): Promise<RunAutomaticGlossResponse> {
     return this.sendOperationRequest(
       { options },
-      runAutomaticGlossOperationSpec
+      runAutomaticGlossOperationSpec,
     );
   }
 
   /** @param options The options parameters. */
   listDataSources(
-    options?: ListDataSourcesOptionalParams
+    options?: ListDataSourcesOptionalParams,
   ): Promise<ListDataSourcesResponse> {
     return this.sendOperationRequest({ options }, listDataSourcesOperationSpec);
   }
 
   /** @param options The options parameters. */
   requestInformationFromDataSources(
-    options?: RequestInformationFromDataSourcesOptionalParams
+    options?: RequestInformationFromDataSourcesOptionalParams,
   ): Promise<RequestInformationFromDataSourcesResponse> {
     return this.sendOperationRequest(
       { options },
-      requestInformationFromDataSourcesOperationSpec
+      requestInformationFromDataSourcesOperationSpec,
     );
   }
 
@@ -98,21 +98,21 @@ export class DidacticalEnigmaNext extends coreClient.ServiceClient {
 
   /** @param options The options parameters. */
   listRadicals(
-    options?: ListRadicalsOptionalParams
+    options?: ListRadicalsOptionalParams,
   ): Promise<ListRadicalsResponse> {
     return this.sendOperationRequest({ options }, listRadicalsOperationSpec);
   }
 
   /** @param options The options parameters. */
   selectRadicals(
-    options?: SelectRadicalsOptionalParams
+    options?: SelectRadicalsOptionalParams,
   ): Promise<SelectRadicalsResponse> {
     return this.sendOperationRequest({ options }, selectRadicalsOperationSpec);
   }
 
   /** @param options The options parameters. */
   loadSession(
-    options?: LoadSessionOptionalParams
+    options?: LoadSessionOptionalParams,
   ): Promise<LoadSessionResponse> {
     return this.sendOperationRequest({ options }, loadSessionOperationSpec);
   }
@@ -124,21 +124,21 @@ export class DidacticalEnigmaNext extends coreClient.ServiceClient {
 
   /** @param options The options parameters. */
   restReceiveInput(
-    options?: RestReceiveInputOptionalParams
+    options?: RestReceiveInputOptionalParams,
   ): Promise<RestReceiveInputResponse> {
     return this.sendOperationRequest(
       { options },
-      restReceiveInputOperationSpec
+      restReceiveInputOperationSpec,
     );
   }
 
   /** @param options The options parameters. */
   getWordInformation(
-    options?: GetWordInformationOptionalParams
+    options?: GetWordInformationOptionalParams,
   ): Promise<GetWordInformationResponse> {
     return this.sendOperationRequest(
       { options },
-      getWordInformationOperationSpec
+      getWordInformationOperationSpec,
     );
   }
 }
@@ -150,13 +150,13 @@ const runAutomaticGlossOperationSpec: coreClient.OperationSpec = {
   httpMethod: "GET",
   responses: {
     200: {
-      bodyMapper: Mappers.AutoGlossResult
-    }
+      bodyMapper: Mappers.AutoGlossResult,
+    },
   },
   queryParameters: [Parameters.input],
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.accept],
-  serializer
+  serializer,
 };
 const listDataSourcesOperationSpec: coreClient.OperationSpec = {
   path: "/dataSource/list",
@@ -167,90 +167,91 @@ const listDataSourcesOperationSpec: coreClient.OperationSpec = {
         type: {
           name: "Sequence",
           element: {
-            type: { name: "Composite", className: "DataSourceInformation" }
-          }
-        }
-      }
-    }
+            type: { name: "Composite", className: "DataSourceInformation" },
+          },
+        },
+      },
+    },
   },
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.accept],
-  serializer
+  serializer,
 };
-const requestInformationFromDataSourcesOperationSpec: coreClient.OperationSpec = {
-  path: "/dataSource/request",
-  httpMethod: "POST",
-  responses: {
-    200: {
-      bodyMapper: {
-        type: {
-          name: "Sequence",
-          element: {
-            type: { name: "Composite", className: "DataSourceParseResponse" }
-          }
-        }
-      }
-    }
-  },
-  requestBody: Parameters.body,
-  urlParameters: [Parameters.$host],
-  headerParameters: [Parameters.accept, Parameters.contentType],
-  mediaType: "json",
-  serializer
-};
+const requestInformationFromDataSourcesOperationSpec: coreClient.OperationSpec =
+  {
+    path: "/dataSource/request",
+    httpMethod: "POST",
+    responses: {
+      200: {
+        bodyMapper: {
+          type: {
+            name: "Sequence",
+            element: {
+              type: { name: "Composite", className: "DataSourceParseResponse" },
+            },
+          },
+        },
+      },
+    },
+    requestBody: Parameters.body,
+    urlParameters: [Parameters.$host],
+    headerParameters: [Parameters.accept, Parameters.contentType],
+    mediaType: "json",
+    serializer,
+  };
 const listKanaOperationSpec: coreClient.OperationSpec = {
   path: "/kana/list",
   httpMethod: "GET",
   responses: {
     200: {
-      bodyMapper: Mappers.KanaResult
-    }
+      bodyMapper: Mappers.KanaResult,
+    },
   },
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.accept],
-  serializer
+  serializer,
 };
 const listRadicalsOperationSpec: coreClient.OperationSpec = {
   path: "/radicals/list",
   httpMethod: "GET",
   responses: {
     200: {
-      bodyMapper: Mappers.ListRadicalsResult
-    }
+      bodyMapper: Mappers.ListRadicalsResult,
+    },
   },
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.accept],
-  serializer
+  serializer,
 };
 const selectRadicalsOperationSpec: coreClient.OperationSpec = {
   path: "/radicals/select",
   httpMethod: "GET",
   responses: {
     200: {
-      bodyMapper: Mappers.KanjiLookupResult
-    }
+      bodyMapper: Mappers.KanjiLookupResult,
+    },
   },
   queryParameters: [
     Parameters.query,
     Parameters.sort,
     Parameters.select,
-    Parameters.deselect
+    Parameters.deselect,
   ],
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.accept],
-  serializer
+  serializer,
 };
 const loadSessionOperationSpec: coreClient.OperationSpec = {
   path: "/session",
   httpMethod: "GET",
   responses: {
     200: {
-      bodyMapper: Mappers.ProgramConfigurationGetResult
-    }
+      bodyMapper: Mappers.ProgramConfigurationGetResult,
+    },
   },
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.accept],
-  serializer
+  serializer,
 };
 const saveSessionOperationSpec: coreClient.OperationSpec = {
   path: "/session",
@@ -260,7 +261,7 @@ const saveSessionOperationSpec: coreClient.OperationSpec = {
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.contentType],
   mediaType: "json",
-  serializer
+  serializer,
 };
 const restReceiveInputOperationSpec: coreClient.OperationSpec = {
   path: "/session/inputReceive",
@@ -268,26 +269,26 @@ const restReceiveInputOperationSpec: coreClient.OperationSpec = {
   responses: {
     200: {
       bodyMapper: {
-        type: { name: "Dictionary", value: { type: { name: "any" } } }
-      }
-    }
+        type: { name: "Dictionary", value: { type: { name: "any" } } },
+      },
+    },
   },
   requestBody: Parameters.body2,
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.accept, Parameters.contentType],
   mediaType: "json",
-  serializer
+  serializer,
 };
 const getWordInformationOperationSpec: coreClient.OperationSpec = {
   path: "/wordInfo",
   httpMethod: "GET",
   responses: {
     200: {
-      bodyMapper: Mappers.WordInfoResponse
-    }
+      bodyMapper: Mappers.WordInfoResponse,
+    },
   },
   queryParameters: [Parameters.fullText],
   urlParameters: [Parameters.$host],
   headerParameters: [Parameters.accept],
-  serializer
+  serializer,
 };

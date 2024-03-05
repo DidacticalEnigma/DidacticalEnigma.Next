@@ -1,12 +1,12 @@
 import {
   OperationParameter,
   OperationURLParameter,
-  OperationQueryParameter
+  OperationQueryParameter,
 } from "@azure/core-client";
 import {
   DataSourceParseRequest as DataSourceParseRequestMapper,
   ProgramConfigurationSetRequest as ProgramConfigurationSetRequestMapper,
-  ReceiveInputRequest as ReceiveInputRequestMapper
+  ReceiveInputRequest as ReceiveInputRequestMapper,
 } from "../models/mappers";
 
 export const accept: OperationParameter = {
@@ -16,9 +16,9 @@ export const accept: OperationParameter = {
     isConstant: true,
     serializedName: "Accept",
     type: {
-      name: "String"
-    }
-  }
+      name: "String",
+    },
+  },
 };
 
 export const $host: OperationURLParameter = {
@@ -27,10 +27,10 @@ export const $host: OperationURLParameter = {
     serializedName: "$host",
     required: true,
     type: {
-      name: "String"
-    }
+      name: "String",
+    },
   },
-  skipEncoding: true
+  skipEncoding: true,
 };
 
 export const input: OperationQueryParameter = {
@@ -38,9 +38,9 @@ export const input: OperationQueryParameter = {
   mapper: {
     serializedName: "input",
     type: {
-      name: "String"
-    }
-  }
+      name: "String",
+    },
+  },
 };
 
 export const contentType: OperationParameter = {
@@ -50,14 +50,14 @@ export const contentType: OperationParameter = {
     isConstant: true,
     serializedName: "Content-Type",
     type: {
-      name: "String"
-    }
-  }
+      name: "String",
+    },
+  },
 };
 
 export const body: OperationParameter = {
   parameterPath: ["options", "body"],
-  mapper: DataSourceParseRequestMapper
+  mapper: DataSourceParseRequestMapper,
 };
 
 export const query: OperationQueryParameter = {
@@ -65,9 +65,9 @@ export const query: OperationQueryParameter = {
   mapper: {
     serializedName: "query",
     type: {
-      name: "String"
-    }
-  }
+      name: "String",
+    },
+  },
 };
 
 export const sort: OperationQueryParameter = {
@@ -75,9 +75,9 @@ export const sort: OperationQueryParameter = {
   mapper: {
     serializedName: "sort",
     type: {
-      name: "String"
-    }
-  }
+      name: "String",
+    },
+  },
 };
 
 export const select: OperationQueryParameter = {
@@ -85,9 +85,9 @@ export const select: OperationQueryParameter = {
   mapper: {
     serializedName: "select",
     type: {
-      name: "String"
-    }
-  }
+      name: "String",
+    },
+  },
 };
 
 export const deselect: OperationQueryParameter = {
@@ -95,19 +95,19 @@ export const deselect: OperationQueryParameter = {
   mapper: {
     serializedName: "deselect",
     type: {
-      name: "String"
-    }
-  }
+      name: "String",
+    },
+  },
 };
 
 export const body1: OperationParameter = {
   parameterPath: ["options", "body"],
-  mapper: ProgramConfigurationSetRequestMapper
+  mapper: ProgramConfigurationSetRequestMapper,
 };
 
 export const body2: OperationParameter = {
   parameterPath: ["options", "body"],
-  mapper: ReceiveInputRequestMapper
+  mapper: ReceiveInputRequestMapper,
 };
 
 export const fullText: OperationQueryParameter = {
@@ -115,7 +115,7 @@ export const fullText: OperationQueryParameter = {
   mapper: {
     serializedName: "fullText",
     type: {
-      name: "String"
-    }
-  }
+      name: "String",
+    },
+  },
 };

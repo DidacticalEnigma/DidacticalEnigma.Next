@@ -121,7 +121,7 @@ export enum KnownWordInfoType {
   /** Particle */
   Particle = "Particle",
   /** Pronoun */
-  Pronoun = "Pronoun"
+  Pronoun = "Pronoun",
 }
 
 /**
@@ -160,7 +160,8 @@ export interface RequestInformationFromDataSourcesOptionalParams
 }
 
 /** Contains response data for the requestInformationFromDataSources operation. */
-export type RequestInformationFromDataSourcesResponse = DataSourceParseResponse[];
+export type RequestInformationFromDataSourcesResponse =
+  DataSourceParseResponse[];
 
 /** Optional parameters. */
 export interface ListKanaOptionalParams extends coreClient.OperationOptions {}

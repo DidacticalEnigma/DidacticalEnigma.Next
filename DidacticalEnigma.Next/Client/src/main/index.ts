@@ -4,6 +4,7 @@ import {DataSourceLookup} from "./dataSourceLookup";
 import {radicalControlAttachJs} from "./radicalControl";
 import {dataSourceGridAttachJs, dataSourceGridLookup, DataSourceLayoutConfig} from "./dataSourceGrid";
 import {
+    englishInputResetText,
     japaneseInputAttachJs,
     japaneseInputInsertText,
     japaneseInputReplaceText,
@@ -56,6 +57,10 @@ window.addEventListener('load', async () => {
             await japaneseInputResetText(wordInfoLookup, text, similarCharactersRefresh);
         }
 
+        async function englishResetText(text: string) {
+            await englishInputResetText(text);
+        }
+
         const refreshCurrentDataSources = async (text, position, positionEnd) => {
             const result = await wordInfoLookup.getWordInfo(text);
             const charactersRefreshPromise = similarCharactersRefresh(text.substring(position,
@@ -76,8 +81,12 @@ window.addEventListener('load', async () => {
         };
 
         globalThis.restReceiverNotification = async function (content: string) {
-            await resetText(content);
-            await refreshCurrentDataSources(content, 0, 0);
+            const obj = JSON.parse(content);
+            if(obj.englishInput) {
+                await englishResetText(obj.englishInput);
+            }
+            await resetText(obj.input);
+            await refreshCurrentDataSources(obj.input, 0, 0);
         };
 
         async function similarCharactersRefresh(selectedText: string, wordInfoResponse: WordInfoResponse) {

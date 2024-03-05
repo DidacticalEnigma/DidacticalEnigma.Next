@@ -140,7 +140,7 @@ public class SessionController : ControllerBase
         [FromServices] IProjectHandler projectHandler,
         [FromBody] ReceiveInputRequest request)
     {
-        await projectHandler.ReceiveInput(request.Input);
+        await projectHandler.ReceiveInput(request);
         return new ReceiveInputResponse();
     }
 }

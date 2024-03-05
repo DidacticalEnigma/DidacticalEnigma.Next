@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
 using ClipwatchSharp;
@@ -113,17 +114,22 @@ namespace DidacticalEnigma.Next.Controllers
             });
         }
 
-        public Task ReceiveInput(string input)
+        public Task ReceiveInput(ReceiveInputRequest request)
         {
             var p = projects.FirstOrDefault(p => p.Type == RestReceiverProjectType);
             if (p == null || p.Identifier != currentProjectId)
             {
                 return Task.CompletedTask;
             }
+
+            var deserialized = JsonSerializer.Serialize(request, new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
             
             webview.Dispatch(() =>
             {
-                webview.Evaluate($"restReceiverNotification({HttpUtility.JavaScriptStringEncode(input, addDoubleQuotes: true)})");
+                webview.Evaluate($"restReceiverNotification({HttpUtility.JavaScriptStringEncode(deserialized, addDoubleQuotes: true)})");
             });
             return Task.CompletedTask;
         }

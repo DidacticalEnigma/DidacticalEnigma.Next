@@ -52,7 +52,7 @@ public class ReducedFunctionalityProjectHandler : IProjectHandler
         });
     }
 
-    public Task ReceiveInput(string input)
+    public Task ReceiveInput(ReceiveInputRequest request)
     {
         // do nothing
         return Task.CompletedTask;

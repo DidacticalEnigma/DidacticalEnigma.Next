@@ -14,5 +14,5 @@ public interface IProjectHandler
 
     Task<ProjectTypeListResult> ListProjectTypes(ProjectTypeListRequest request);
 
-    Task ReceiveInput(string input);
+    Task ReceiveInput(ReceiveInputRequest request);
 }

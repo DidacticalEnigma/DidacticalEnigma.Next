@@ -13,13 +13,13 @@ export const AutoGlossResult: coreClient.CompositeMapper = {
           element: {
             type: {
               name: "Composite",
-              className: "AutoGlossEntry"
-            }
-          }
-        }
-      }
-    }
-  }
+              className: "AutoGlossEntry",
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export const AutoGlossEntry: coreClient.CompositeMapper = {
@@ -31,8 +31,8 @@ export const AutoGlossEntry: coreClient.CompositeMapper = {
         serializedName: "word",
         required: true,
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       definitions: {
         serializedName: "definitions",
@@ -41,13 +41,13 @@ export const AutoGlossEntry: coreClient.CompositeMapper = {
           name: "Sequence",
           element: {
             type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    }
-  }
+              name: "String",
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export const DataSourceInformation: coreClient.CompositeMapper = {
@@ -59,18 +59,18 @@ export const DataSourceInformation: coreClient.CompositeMapper = {
         serializedName: "identifier",
         required: true,
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       friendlyName: {
         serializedName: "friendlyName",
         required: true,
         type: {
-          name: "String"
-        }
-      }
-    }
-  }
+          name: "String",
+        },
+      },
+    },
+  },
 };
 
 export const DataSourceParseRequest: coreClient.CompositeMapper = {
@@ -84,16 +84,16 @@ export const DataSourceParseRequest: coreClient.CompositeMapper = {
           name: "Sequence",
           element: {
             type: {
-              name: "String"
-            }
-          }
-        }
+              name: "String",
+            },
+          },
+        },
       },
       text: {
         serializedName: "text",
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       positions: {
         serializedName: "positions",
@@ -102,13 +102,13 @@ export const DataSourceParseRequest: coreClient.CompositeMapper = {
           element: {
             type: {
               name: "Composite",
-              className: "DataSourceParseRequestPosition"
-            }
-          }
-        }
-      }
-    }
-  }
+              className: "DataSourceParseRequestPosition",
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export const DataSourceParseRequestPosition: coreClient.CompositeMapper = {
@@ -120,17 +120,17 @@ export const DataSourceParseRequestPosition: coreClient.CompositeMapper = {
         serializedName: "position",
         required: true,
         type: {
-          name: "Number"
-        }
+          name: "Number",
+        },
       },
       positionEnd: {
         serializedName: "positionEnd",
         type: {
-          name: "Number"
-        }
-      }
-    }
-  }
+          name: "Number",
+        },
+      },
+    },
+  },
 };
 
 export const DataSourceParseResponse: coreClient.CompositeMapper = {
@@ -142,42 +142,42 @@ export const DataSourceParseResponse: coreClient.CompositeMapper = {
         serializedName: "position",
         required: true,
         type: {
-          name: "Number"
-        }
+          name: "Number",
+        },
       },
       positionEnd: {
         serializedName: "positionEnd",
         type: {
-          name: "Number"
-        }
+          name: "Number",
+        },
       },
       dataSource: {
         serializedName: "dataSource",
         required: true,
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       context: {
         serializedName: "context",
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       error: {
         serializedName: "error",
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       processingTime: {
         serializedName: "processingTime",
         type: {
-          name: "Number"
-        }
-      }
-    }
-  }
+          name: "Number",
+        },
+      },
+    },
+  },
 };
 
 export const KanaResult: coreClient.CompositeMapper = {
@@ -189,18 +189,18 @@ export const KanaResult: coreClient.CompositeMapper = {
         serializedName: "hiragana",
         type: {
           name: "Composite",
-          className: "KanaBoard"
-        }
+          className: "KanaBoard",
+        },
       },
       katakana: {
         serializedName: "katakana",
         type: {
           name: "Composite",
-          className: "KanaBoard"
-        }
-      }
-    }
-  }
+          className: "KanaBoard",
+        },
+      },
+    },
+  },
 };
 
 export const KanaBoard: coreClient.CompositeMapper = {
@@ -212,23 +212,23 @@ export const KanaBoard: coreClient.CompositeMapper = {
         serializedName: "width",
         required: true,
         type: {
-          name: "Number"
-        }
+          name: "Number",
+        },
       },
       height: {
         serializedName: "height",
         required: true,
         type: {
-          name: "Number"
-        }
+          name: "Number",
+        },
       },
       layout: {
         defaultValue: "TopToBottomLeftToRight",
         isConstant: true,
         serializedName: "layout",
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       characters: {
         serializedName: "characters",
@@ -238,13 +238,13 @@ export const KanaBoard: coreClient.CompositeMapper = {
           element: {
             type: {
               name: "Composite",
-              className: "KanaCharacter"
-            }
-          }
-        }
-      }
-    }
-  }
+              className: "KanaCharacter",
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export const KanaCharacter: coreClient.CompositeMapper = {
@@ -256,18 +256,18 @@ export const KanaCharacter: coreClient.CompositeMapper = {
         serializedName: "kana",
         required: true,
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       romaji: {
         serializedName: "romaji",
         required: true,
         type: {
-          name: "String"
-        }
-      }
-    }
-  }
+          name: "String",
+        },
+      },
+    },
+  },
 };
 
 export const ListRadicalsResult: coreClient.CompositeMapper = {
@@ -282,10 +282,10 @@ export const ListRadicalsResult: coreClient.CompositeMapper = {
           name: "Sequence",
           element: {
             type: {
-              name: "String"
-            }
-          }
-        }
+              name: "String",
+            },
+          },
+        },
       },
       radicalInformation: {
         serializedName: "radicalInformation",
@@ -295,10 +295,10 @@ export const ListRadicalsResult: coreClient.CompositeMapper = {
           element: {
             type: {
               name: "Composite",
-              className: "ExtendedRadicalInformation"
-            }
-          }
-        }
+              className: "ExtendedRadicalInformation",
+            },
+          },
+        },
       },
       sortingCriteria: {
         serializedName: "sortingCriteria",
@@ -307,13 +307,13 @@ export const ListRadicalsResult: coreClient.CompositeMapper = {
           name: "Sequence",
           element: {
             type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    }
-  }
+              name: "String",
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export const ExtendedRadicalInformation: coreClient.CompositeMapper = {
@@ -325,22 +325,22 @@ export const ExtendedRadicalInformation: coreClient.CompositeMapper = {
         serializedName: "radical",
         required: true,
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       strokeCount: {
         serializedName: "strokeCount",
         required: true,
         type: {
-          name: "Number"
-        }
+          name: "Number",
+        },
       },
       alternativeDisplay: {
         serializedName: "alternativeDisplay",
         required: true,
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       queryNames: {
         serializedName: "queryNames",
@@ -349,13 +349,13 @@ export const ExtendedRadicalInformation: coreClient.CompositeMapper = {
           name: "Sequence",
           element: {
             type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    }
-  }
+              name: "String",
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export const KanjiLookupResult: coreClient.CompositeMapper = {
@@ -367,8 +367,8 @@ export const KanjiLookupResult: coreClient.CompositeMapper = {
         serializedName: "newQuery",
         required: true,
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       kanji: {
         serializedName: "kanji",
@@ -377,10 +377,10 @@ export const KanjiLookupResult: coreClient.CompositeMapper = {
           name: "Sequence",
           element: {
             type: {
-              name: "String"
-            }
-          }
-        }
+              name: "String",
+            },
+          },
+        },
       },
       radicals: {
         serializedName: "radicals",
@@ -390,13 +390,13 @@ export const KanjiLookupResult: coreClient.CompositeMapper = {
           element: {
             type: {
               name: "Composite",
-              className: "RadicalState"
-            }
-          }
-        }
-      }
-    }
-  }
+              className: "RadicalState",
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export const RadicalState: coreClient.CompositeMapper = {
@@ -408,25 +408,25 @@ export const RadicalState: coreClient.CompositeMapper = {
         serializedName: "radical",
         required: true,
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       isAvailable: {
         serializedName: "isAvailable",
         required: true,
         type: {
-          name: "Boolean"
-        }
+          name: "Boolean",
+        },
       },
       isSelected: {
         serializedName: "isSelected",
         required: true,
         type: {
-          name: "Boolean"
-        }
-      }
-    }
-  }
+          name: "Boolean",
+        },
+      },
+    },
+  },
 };
 
 export const ProgramConfigurationGetResult: coreClient.CompositeMapper = {
@@ -438,22 +438,22 @@ export const ProgramConfigurationGetResult: coreClient.CompositeMapper = {
         serializedName: "isDefault",
         required: true,
         type: {
-          name: "Boolean"
-        }
+          name: "Boolean",
+        },
       },
       aboutSection: {
         serializedName: "aboutSection",
         required: true,
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       version: {
         serializedName: "version",
         required: true,
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       dataSourceGridLayouts: {
         serializedName: "dataSourceGridLayouts",
@@ -462,13 +462,13 @@ export const ProgramConfigurationGetResult: coreClient.CompositeMapper = {
           name: "Sequence",
           element: {
             type: {
-              name: "any"
-            }
-          }
-        }
-      }
-    }
-  }
+              name: "any",
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export const ProgramConfigurationSetRequest: coreClient.CompositeMapper = {
@@ -483,13 +483,13 @@ export const ProgramConfigurationSetRequest: coreClient.CompositeMapper = {
           name: "Sequence",
           element: {
             type: {
-              name: "any"
-            }
-          }
-        }
-      }
-    }
-  }
+              name: "any",
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export const ReceiveInputRequest: coreClient.CompositeMapper = {
@@ -501,11 +501,11 @@ export const ReceiveInputRequest: coreClient.CompositeMapper = {
         serializedName: "input",
         required: true,
         type: {
-          name: "String"
-        }
-      }
-    }
-  }
+          name: "String",
+        },
+      },
+    },
+  },
 };
 
 export const WordInfoResponse: coreClient.CompositeMapper = {
@@ -521,10 +521,10 @@ export const WordInfoResponse: coreClient.CompositeMapper = {
           element: {
             type: {
               name: "Composite",
-              className: "WordInfo"
-            }
-          }
-        }
+              className: "WordInfo",
+            },
+          },
+        },
       },
       similarLetters: {
         serializedName: "similarLetters",
@@ -535,14 +535,14 @@ export const WordInfoResponse: coreClient.CompositeMapper = {
             type: {
               name: "Sequence",
               element: {
-                type: { name: "Composite", className: "SimilarLetter" }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+                type: { name: "Composite", className: "SimilarLetter" },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export const WordInfo: coreClient.CompositeMapper = {
@@ -554,32 +554,32 @@ export const WordInfo: coreClient.CompositeMapper = {
         serializedName: "text",
         required: true,
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       dictionaryForm: {
         serializedName: "dictionaryForm",
         required: true,
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       reading: {
         serializedName: "reading",
         required: true,
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       type: {
         serializedName: "type",
         required: true,
         type: {
-          name: "String"
-        }
-      }
-    }
-  }
+          name: "String",
+        },
+      },
+    },
+  },
 };
 
 export const SimilarLetter: coreClient.CompositeMapper = {
@@ -591,23 +591,23 @@ export const SimilarLetter: coreClient.CompositeMapper = {
         serializedName: "letter",
         required: true,
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       description: {
         serializedName: "description",
         required: true,
         type: {
-          name: "String"
-        }
+          name: "String",
+        },
       },
       category: {
         serializedName: "category",
         required: true,
         type: {
-          name: "String"
-        }
-      }
-    }
-  }
+          name: "String",
+        },
+      },
+    },
+  },
 };

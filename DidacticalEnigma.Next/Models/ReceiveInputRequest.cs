@@ -6,4 +6,6 @@ public class ReceiveInputRequest
 {
     [Required]
     public string Input { get; set; }
+    
+    public string? EnglishInput { get; set; }
 }
